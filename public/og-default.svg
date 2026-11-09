@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Vint</title>
+  <desc id="desc">Vint personal blog default Open Graph image.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f6efe3" />
+      <stop offset="50%" stop-color="#e8d6bd" />
+      <stop offset="100%" stop-color="#c5baa6" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" rx="36" />
+  <rect x="48" y="48" width="1104" height="534" rx="28" fill="rgba(250,246,238,0.72)" stroke="rgba(92,68,40,0.18)" />
+  <text x="96" y="190" fill="#5c4428" font-family="'Times New Roman', serif" font-size="42" letter-spacing="8">VINT</text>
+  <text x="96" y="318" fill="#22170f" font-family="'Times New Roman', serif" font-size="96">Write the life</text>
+  <text x="96" y="412" fill="#4b3a29" font-family="'Times New Roman', serif" font-size="46">you can still recognize years later.</text>
+  <text x="96" y="518" fill="#6b5640" font-family="'Times New Roman', serif" font-size="32">Personal editorial notebook</text>
+</svg>

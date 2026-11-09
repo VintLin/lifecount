@@ -1,0 +1,23 @@
+{
+  "name": "lifecount",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "deploy:pages": "npm run check && npm run build && gh-pages -d dist --branch gh-pages --dotfiles --nojekyll"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource/dm-mono": "^5.3.0",
+    "astro": "^7.4.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "gh-pages": "^6.3.0",
+    "typescript": "^6.0.3"
+  }
+}

@@ -1,0 +1,148 @@
+:root {
+  --bg: #fafaf9;
+  --bg-rgb: 250 250 249;
+  --panel: rgb(255 255 255 / 0.72);
+  --panel-strong: rgb(255 255 255 / 0.92);
+  --fg: #3f3f46;
+  --fg-soft: #57534e;
+  --fg-muted: #78716c;
+  --fg-strong: #18181b;
+  --border: rgb(24 24 27 / 0.09);
+  --border-strong: rgb(24 24 27 / 0.14);
+  --noise-dot-rgb: 24 24 27;
+  --noise-dot-alpha: 0.22;
+  color-scheme: light;
+}
+
+html.dark {
+  --bg: #050505;
+  --bg-rgb: 5 5 5;
+  --panel: rgb(17 17 17 / 0.66);
+  --panel-strong: rgb(12 12 12 / 0.92);
+  --fg: #bbbbbb;
+  --fg-soft: #a1a1aa;
+  --fg-muted: #787881;
+  --fg-strong: #f5f5f5;
+  --border: rgb(255 255 255 / 0.09);
+  --border-strong: rgb(255 255 255 / 0.12);
+  --noise-dot-rgb: 245 245 245;
+  --noise-dot-alpha: 0.42;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  overflow-x: hidden;
+  background: var(--bg);
+  scrollbar-color: color-mix(in srgb, var(--fg-muted) 30%, transparent) var(--bg);
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  margin: 0;
+  color: var(--fg);
+  background: transparent;
+  font-family:
+    "Inter Variable",
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    "Noto Sans",
+    "Noto Sans SC",
+    "PingFang SC",
+    "Microsoft YaHei",
+    sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body::before {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgb(var(--bg-rgb) / 0.12), rgb(var(--bg-rgb) / 0.76) 72%, var(--bg)),
+    radial-gradient(circle at 50% 0%, rgb(255 255 255 / 0.035), transparent 44%);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--fg-strong) 48%, transparent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgb(136 136 136 / 0.28);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--fg-muted) 22%, transparent);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--fg-muted) 40%, transparent);
+}
+
+.page-kicker {
+  margin: 0 0 0.85rem;
+  color: var(--fg-muted);
+  font-family: "DM Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  letter-spacing: 0;
+  opacity: 0.5;
+}
+
+@keyframes slide-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slide-enter {
+    animation: slide-enter 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}

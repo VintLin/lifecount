@@ -1,0 +1,103 @@
+---
+import "@fontsource-variable/inter";
+import "@fontsource/dm-mono";
+import "@/styles/global.css";
+import NoiseDriftBackground from "@/components/NoiseDriftBackground.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+  ogImage?: string;
+  type?: "website" | "article";
+  lang?: string;
+  noIndex?: boolean;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title = "LifeCount | Vint",
+  description,
+  canonical,
+  lang = "zh-CN",
+  noIndex = false,
+  schema
+} = Astro.props;
+
+const siteRoot = Astro.site ?? new URL("https://vintlin.com/");
+const canonicalUrl =
+  canonical ?? new URL(import.meta.env.BASE_URL, siteRoot).toString();
+const faviconUrl = new URL(`${import.meta.env.BASE_URL}favicon.png`, siteRoot);
+const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-default.svg`, siteRoot);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050505" />
+    <script is:inline>
+      (() => {
+        const storageKey = "vint-color-scheme";
+        try {
+          const saved = localStorage.getItem(storageKey);
+          document.documentElement.classList.toggle("dark", saved !== "light");
+          document
+            .querySelector('meta[name="theme-color"]')
+            ?.setAttribute("content", saved === "light" ? "#fafaf9" : "#050505");
+        } catch {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" href={faviconUrl} />
+    <link rel="shortcut icon" href={faviconUrl} />
+    <link rel="apple-touch-icon" href={faviconUrl} />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImageUrl} />
+    {noIndex && <meta name="robots" content="noindex,nofollow" />}
+    {import.meta.env.PROD && (
+      <script
+        is:inline
+        defer
+        data-domain="vintlin.com"
+        src="https://plausible.io/js/script.js"
+      ></script>
+    )}
+    {schema && (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+    )}
+  </head>
+  <body data-background-visible="true">
+    <NoiseDriftBackground />
+    <main class="lifecount-standalone-main">
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  .lifecount-standalone-main {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 2.5rem 1.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .lifecount-standalone-main {
+      padding: 2rem 1rem;
+    }
+  }
+</style>

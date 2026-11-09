@@ -1,0 +1,626 @@
+---
+import LifeCountLayout from "@/layouts/LifeCountLayout.astro";
+import { lifeCountConfig } from "@/data/lifecount";
+import { lifeCountMessages } from "@/i18n/lifecount";
+
+const messages = lifeCountMessages["zh-CN"];
+const canonical = new URL(import.meta.env.BASE_URL, Astro.site).toString();
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: messages.documentTitle,
+  url: canonical,
+  description: messages.description,
+  inLanguage: "zh-CN"
+};
+---
+
+<LifeCountLayout
+  title={messages.documentTitle}
+  description={messages.description}
+  canonical={canonical}
+  lang="zh-CN"
+  schema={schema}
+>
+  <section class="lifecount-page" data-lifecount>
+    <header class="lifecount-header slide-enter">
+      <p class="page-kicker">[ life count ]</p>
+      <h1 data-lifecount-title>人生计数</h1>
+    </header>
+
+    <div class="lifecount-toolbar slide-enter">
+      <div class="lifecount-toolbar-leading">
+        <button
+          class="lifecount-toolbar-button"
+          type="button"
+          data-lifecount-settings
+          aria-label="人生计数设置"
+          title="人生计数设置"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </button>
+        <button
+          class="lifecount-toolbar-button"
+          type="button"
+          data-lifecount-stages
+          aria-label="查看人生阶段"
+          aria-expanded="false"
+          title="查看人生阶段"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 5h13"></path>
+            <path d="M13 12h8"></path>
+            <path d="M13 19h8"></path>
+            <path d="M3 10a2 2 0 0 0 2 2h3"></path>
+            <path d="M3 5v12a2 2 0 0 0 2 2h3"></path>
+          </svg>
+        </button>
+        <button
+          class="lifecount-toolbar-button lifecount-language-button"
+          type="button"
+          data-lifecount-language
+          aria-label="View this page in English"
+          title="View this page in English"
+        >
+          EN
+        </button>
+      </div>
+      <div class="lifecount-summary" aria-live="polite">
+        <strong data-lifecount-age></strong>
+        <span data-lifecount-summary></span>
+      </div>
+      <div class="lifecount-unit-switch" role="group" aria-label="选择时间单位">
+        {(["day", "week", "month", "year"] as const).map((unit) => (
+          <button
+            type="button"
+            data-lifecount-unit={unit}
+            aria-pressed="false"
+          >
+            {unit === "day" ? "日" : unit === "week" ? "周" : unit === "month" ? "月" : "年"}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="lifecount-panel slide-enter" data-lifecount-map-wrap>
+      <div class="lifecount-map-shell">
+        <div class="lifecount-map" data-lifecount-map></div>
+      </div>
+      <div class="lifecount-legend" data-lifecount-legend role="list" aria-label="图例"></div>
+    </div>
+
+    <div class="lifecount-stages-overlay" data-lifecount-stages-overlay hidden>
+      <aside class="lifecount-stages-drawer" data-lifecount-stages-drawer aria-label="人生阶段">
+        <div class="lifecount-stages-header">
+          <h2 data-lifecount-stages-title>人生阶段</h2>
+          <div class="lifecount-preset-select">
+            <select data-lifecount-preset aria-label="选择人生阶段预设"></select>
+            <svg class="lifecount-preset-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"></path>
+            </svg>
+          </div>
+          <button class="lifecount-toolbar-button" type="button" data-lifecount-stages-close aria-label="关闭人生阶段" title="关闭人生阶段">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="lifecount-stage-list" data-lifecount-stage-list></div>
+      </aside>
+    </div>
+
+    <dialog class="lifecount-settings-dialog" data-lifecount-settings-dialog aria-labelledby="lifecount-settings-title">
+      <form method="dialog" data-lifecount-settings-form>
+        <h2 id="lifecount-settings-title" data-lifecount-settings-title>人生计数设置</h2>
+        <label class="lifecount-settings-field">
+          <span data-lifecount-birthday-label>出生日期</span>
+          <input type="date" data-lifecount-birthday required />
+        </label>
+        <label class="lifecount-settings-field">
+          <span data-lifecount-display-age-label>最高年龄</span>
+          <input type="number" data-lifecount-display-age min="1" max="120" step="1" required />
+        </label>
+        <div class="lifecount-settings-actions">
+          <button type="button" data-lifecount-settings-cancel>取消</button>
+          <button type="submit" data-lifecount-settings-save>保存</button>
+        </div>
+      </form>
+    </dialog>
+
+  </section>
+
+  <script type="application/json" id="lifecount-config" set:html={JSON.stringify(lifeCountConfig)}></script>
+  <script>
+    import { initLifeCount } from "@/scripts/lifecount";
+
+    initLifeCount();
+  </script>
+</LifeCountLayout>
+
+<style is:global>
+  .lifecount-page {
+    --life-blue: #5c6ef2;
+    --life-cyan: #1ca8b8;
+    --life-green: #4b9b68;
+    --life-orange: #d98332;
+    --life-pink: #d45b93;
+    --life-purple: #936bd1;
+    --life-red: #c85a5a;
+    width: min(100%, 74rem);
+    margin: 0 auto;
+    padding-inline: clamp(1rem, 4vw, 4rem);
+  }
+
+  html.dark .lifecount-page {
+    --life-blue: #8490ff;
+    --life-cyan: #59cbd3;
+    --life-green: #78c68c;
+    --life-orange: #f3a25d;
+    --life-pink: #ef88b8;
+    --life-purple: #bd96ef;
+    --life-red: #ef8484;
+  }
+
+  .lifecount-header {
+    width: min(100%, 60rem);
+    margin: 0 auto 2rem;
+  }
+
+  .lifecount-header h1 {
+    margin: 0.6rem 0 0;
+    color: var(--fg-strong);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    letter-spacing: -0.05em;
+  }
+
+  .lifecount-header p:last-child {
+    margin: 0.65rem 0 0;
+    color: var(--fg-muted);
+  }
+
+  .lifecount-toolbar,
+  .lifecount-panel {
+    width: min(100%, 60rem);
+    margin-inline: auto;
+  }
+
+  .lifecount-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .lifecount-toolbar-leading {
+    display: inline-flex;
+    flex: none;
+    gap: 0.25rem;
+  }
+
+  .lifecount-toolbar-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 0.45rem;
+    background: transparent;
+    color: var(--fg-muted);
+    cursor: pointer;
+    transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+  }
+
+  .lifecount-toolbar-button svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .lifecount-language-button {
+    width: auto;
+    min-width: 2rem;
+    padding-inline: 0.45rem;
+    font-family: "DM Mono", "SFMono-Regular", Consolas, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+
+  .lifecount-toolbar-button:hover,
+  .lifecount-toolbar-button:focus-visible,
+  .lifecount-toolbar-button[aria-expanded="true"] {
+    border-color: var(--border-strong);
+    background: color-mix(in srgb, var(--panel) 72%, transparent);
+    color: var(--fg-strong);
+  }
+
+  .lifecount-summary {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    min-width: 0;
+  }
+
+  .lifecount-summary strong {
+    color: var(--fg-strong);
+    font-family: "DM Mono", "SFMono-Regular", Consolas, monospace;
+    font-size: 0.95rem;
+  }
+
+  .lifecount-summary span {
+    color: var(--fg-muted);
+    font-size: 0.85rem;
+  }
+
+  .lifecount-unit-switch {
+    display: inline-flex;
+    flex: none;
+    gap: 0.15rem;
+    padding: 0.2rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--panel) 76%, transparent);
+  }
+
+  .lifecount-unit-switch button {
+    min-width: 2.2rem;
+    padding: 0.28rem 0.55rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--fg-muted);
+    cursor: pointer;
+    transition: background 160ms ease, color 160ms ease;
+  }
+
+  .lifecount-unit-switch button:hover,
+  .lifecount-unit-switch button:focus-visible,
+  .lifecount-unit-switch button.is-active {
+    background: var(--fg-strong);
+    color: var(--bg);
+  }
+
+  .lifecount-panel {
+    position: relative;
+    padding: 0;
+  }
+
+  .lifecount-map-shell {
+    position: relative;
+    overflow: visible;
+    min-height: 0;
+    max-height: none;
+    padding: 0;
+    border-radius: 0.6rem;
+    scrollbar-color: color-mix(in srgb, var(--fg-muted) 34%, transparent) transparent;
+  }
+
+  .lifecount-map {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    outline: 0;
+  }
+
+  .lifecount-map:focus-visible {
+    outline: 1px solid color-mix(in srgb, var(--fg-strong) 55%, transparent);
+    outline-offset: 0.35rem;
+  }
+
+  .lifecount-canvas {
+    display: block;
+    width: 100%;
+    image-rendering: auto;
+  }
+
+  .lifecount-map-month,
+  .lifecount-map-year {
+    display: grid;
+    --lifecount-cell-gap: 3px;
+    --lifecount-cell-size: 1.5rem;
+    grid-auto-rows: var(--lifecount-cell-size);
+    gap: var(--lifecount-cell-gap);
+    justify-content: start;
+  }
+
+  .lifecount-map-year {
+    --lifecount-cell-gap: 5px;
+  }
+
+  .lifecount-cell {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    width: var(--lifecount-cell-size);
+    height: var(--lifecount-cell-size);
+    justify-self: stretch;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--fg-muted) 14%, transparent);
+    border-radius: 0.26rem;
+    background: var(--cell-color, var(--bg));
+    cursor: pointer;
+    transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+  }
+
+  .lifecount-cell[data-status="current"] {
+    border-color: var(--fg-strong);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg-strong) 22%, transparent);
+  }
+
+  .lifecount-cell:hover,
+  .lifecount-cell:focus-visible {
+    z-index: 1;
+    transform: scale(1.12);
+    border-color: var(--fg-strong);
+    outline: 0;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg-strong) 18%, transparent);
+  }
+
+  .lifecount-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    margin-top: 1rem;
+    color: var(--fg-muted);
+    font-size: 0.76rem;
+  }
+
+  .lifecount-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .lifecount-legend-item i {
+    display: inline-block;
+    width: 0.65rem;
+    height: 0.65rem;
+    border: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--legend-color) 72%, var(--bg));
+  }
+
+  .lifecount-legend-item i[style] {
+    background: color-mix(in srgb, var(--legend-color) 72%, var(--bg));
+  }
+
+  .lifecount-stages-overlay {
+    position: fixed;
+    z-index: 40;
+    inset: 0;
+    background: rgb(0 0 0 / 0.32);
+  }
+
+  .lifecount-stages-drawer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: min(21rem, calc(100vw - 2rem));
+    padding: 1rem;
+    overflow: auto;
+    border-right: 1px solid var(--border-strong);
+    background: var(--bg);
+    box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 0.18);
+    animation: lifecount-drawer-enter 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .lifecount-stages-header {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .lifecount-stages-header h2 {
+    margin: 0;
+    color: var(--fg-strong);
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+
+  .lifecount-preset-select {
+    position: relative;
+    min-width: 0;
+  }
+
+  .lifecount-stages-header select {
+    appearance: none;
+    width: 100%;
+    min-width: 0;
+    height: 2rem;
+    padding: 0.25rem 2.25rem 0.25rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, var(--panel) 72%, transparent);
+    color: var(--fg-strong);
+    font: inherit;
+    font-size: 0.76rem;
+    text-overflow: ellipsis;
+  }
+
+  .lifecount-preset-chevron {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    width: 0.9rem;
+    height: 0.9rem;
+    color: var(--fg-muted);
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: color 140ms ease;
+  }
+
+  .lifecount-stages-header select:hover,
+  .lifecount-stages-header select:focus-visible {
+    border-color: var(--border-strong);
+    outline: 0;
+  }
+
+  .lifecount-preset-select:focus-within .lifecount-preset-chevron,
+  .lifecount-preset-select:hover .lifecount-preset-chevron {
+    color: var(--fg-strong);
+  }
+
+  .lifecount-stage-list {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .lifecount-stage-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.8rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid transparent;
+    border-radius: 0.55rem;
+    transition: background 140ms ease;
+  }
+
+  .lifecount-stage-row:hover {
+    background: color-mix(in srgb, var(--panel) 64%, transparent);
+  }
+
+  .lifecount-stage-dot {
+    flex: none;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+
+  .lifecount-stage-copy {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.15rem 0.55rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .lifecount-stage-copy strong {
+    color: var(--fg-strong);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .lifecount-stage-copy span {
+    color: var(--fg-muted);
+    font-family: "DM Mono", "SFMono-Regular", Consolas, monospace;
+    font-size: 0.7rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  @keyframes lifecount-drawer-enter {
+    from {
+      opacity: 0;
+      transform: translateX(-1rem);
+    }
+  }
+
+  .lifecount-settings-dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(24rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
+    padding: 0;
+    border: 1px solid var(--border-strong);
+    border-radius: 0.8rem;
+    background: var(--panel-strong);
+    color: var(--fg);
+    box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 0.22);
+    transform: none;
+  }
+
+  .lifecount-settings-dialog::backdrop {
+    background: rgb(0 0 0 / 0.32);
+  }
+
+  .lifecount-settings-dialog form {
+    display: grid;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  .lifecount-settings-dialog h2 {
+    margin: 0;
+    color: var(--fg-strong);
+    font-size: 1.05rem;
+  }
+
+  .lifecount-settings-field {
+    display: grid;
+    gap: 0.35rem;
+    color: var(--fg-muted);
+    font-size: 0.78rem;
+  }
+
+  .lifecount-settings-field input {
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 0.45rem;
+    background: var(--bg);
+    color: var(--fg-strong);
+  }
+
+  .lifecount-settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+  }
+
+  .lifecount-settings-actions button {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 0.4rem;
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
+  }
+
+  .lifecount-settings-actions button[type="submit"] {
+    border-color: var(--fg-strong);
+    background: var(--fg-strong);
+    color: var(--bg);
+  }
+
+  @media (max-width: 640px) {
+    .lifecount-toolbar {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .lifecount-unit-switch {
+      align-self: stretch;
+      justify-content: space-between;
+    }
+
+    .lifecount-unit-switch button {
+      flex: 1;
+    }
+
+    .lifecount-toolbar-leading {
+      width: 100%;
+    }
+
+    .lifecount-map-shell {
+      min-height: 0;
+      max-height: none;
+    }
+
+    .lifecount-map-year {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+</style>

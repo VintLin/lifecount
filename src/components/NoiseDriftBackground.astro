@@ -1,0 +1,260 @@
+<div class="noise-drift-background" data-noise-drift-root transition:persist aria-hidden="true">
+  <canvas data-noise-drift-background></canvas>
+</div>
+
+<script>
+  import NoiseDriftWorker from "@/workers/noise-drift.worker.ts?worker";
+  import { NoiseDriftRenderer, type NoiseDriftStyle } from "@/utils/noise-drift";
+
+  interface NoiseDriftController {
+    root: HTMLDivElement;
+    destroy: () => void;
+    syncPageState: () => void;
+    setTransitionPaused: (paused: boolean) => void;
+  }
+
+  declare global {
+    interface Window {
+      __noiseDriftBackground?: NoiseDriftController;
+    }
+  }
+
+  const root = document.querySelector<HTMLDivElement>("[data-noise-drift-root]");
+  const canvas = root?.querySelector<HTMLCanvasElement>("[data-noise-drift-background]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const shouldShowBackground = (): boolean =>
+    document.body?.dataset.backgroundVisible !== "false";
+  const shouldRenderBackground = (): boolean =>
+    shouldShowBackground() && document.visibilityState !== "hidden";
+
+  const resolveStyle = (): NoiseDriftStyle => {
+    const styles = getComputedStyle(document.documentElement);
+    const rawColor = styles.getPropertyValue("--noise-dot-rgb").trim();
+    const rawAlpha = Number.parseFloat(styles.getPropertyValue("--noise-dot-alpha").trim());
+    const color = rawColor
+      .split(/\s+/)
+      .map(Number)
+      .filter(Number.isFinite)
+      .slice(0, 3);
+
+    return {
+      color: color.length === 3 ? [color[0], color[1], color[2]] : [24, 24, 27],
+      alpha: Number.isFinite(rawAlpha) ? rawAlpha : 0.22
+    };
+  };
+
+  if (root && canvas) {
+    const existingBackground = window.__noiseDriftBackground;
+
+    if (existingBackground?.root === root) {
+      existingBackground.syncPageState();
+    } else {
+      existingBackground?.destroy();
+
+      const rootElement = root;
+      const canvasElement = canvas;
+      const cleanups: Array<() => void> = [];
+      let syncRendererStyle = (): void => {};
+      let syncRendererSize = (): void => {};
+      let syncRendererMotion = (): void => {};
+      let syncRendererVisibility = (): void => {};
+      let destroyRenderer = (): void => {};
+      let activeCanvas = canvasElement;
+      let fallbackActive = false;
+      let destroyed = false;
+      let transitionPaused = false;
+      const supportsWorkerCanvas =
+        typeof canvasElement.transferControlToOffscreen === "function" &&
+        typeof Worker !== "undefined";
+      const shouldRenderCanvas = (): boolean => shouldRenderBackground() && !transitionPaused;
+
+      const startMainThreadRenderer = (targetCanvas: HTMLCanvasElement): void => {
+        const context = targetCanvas.getContext("2d");
+
+        if (context) {
+          const renderer = new NoiseDriftRenderer(targetCanvas, context);
+          let animationFrame = 0;
+          let animating = false;
+
+          const drawFrame = (now: number): void => {
+            renderer.drawFrame(now);
+            if (animating) animationFrame = window.requestAnimationFrame(drawFrame);
+          };
+          const stopAnimation = (): void => {
+            animating = false;
+            window.cancelAnimationFrame(animationFrame);
+          };
+          const startAnimation = (): void => {
+            stopAnimation();
+            if (!shouldRenderCanvas()) return;
+            renderer.setStyle(resolveStyle());
+            renderer.resize(window.innerWidth, window.innerHeight, window.devicePixelRatio || 1);
+            animating = !reduceMotion.matches;
+            drawFrame(performance.now());
+          };
+
+          syncRendererStyle = () => {
+            renderer.setStyle(resolveStyle());
+            if (reduceMotion.matches && shouldRenderCanvas()) drawFrame(performance.now());
+          };
+          syncRendererSize = () => {
+            renderer.resize(window.innerWidth, window.innerHeight, window.devicePixelRatio || 1);
+            if (reduceMotion.matches && shouldRenderCanvas()) drawFrame(performance.now());
+          };
+          syncRendererMotion = () => {
+            renderer.restart();
+            startAnimation();
+          };
+          syncRendererVisibility = startAnimation;
+          destroyRenderer = stopAnimation;
+          startAnimation();
+        }
+      };
+
+      const activateFallback = (replaceTransferredCanvas: boolean): void => {
+        if (destroyed || fallbackActive) return;
+        fallbackActive = true;
+
+        if (replaceTransferredCanvas) {
+          const replacement = document.createElement("canvas");
+          replacement.dataset.noiseDriftBackground = "";
+          activeCanvas.replaceWith(replacement);
+          activeCanvas = replacement;
+        }
+
+        startMainThreadRenderer(activeCanvas);
+      };
+
+      if (supportsWorkerCanvas) {
+        let worker: Worker | null = null;
+        let canvasTransferred = false;
+
+        try {
+          worker = new NoiseDriftWorker();
+          const activeWorker = worker;
+          const handleWorkerFailure = (): void => {
+            activeWorker.terminate();
+            activateFallback(canvasTransferred);
+          };
+
+          activeWorker.addEventListener("error", handleWorkerFailure, { once: true });
+          activeWorker.addEventListener("messageerror", handleWorkerFailure, { once: true });
+          activeWorker.addEventListener("message", (event) => {
+            if (event.data?.type === "unavailable") handleWorkerFailure();
+          });
+
+          const offscreenCanvas = activeCanvas.transferControlToOffscreen();
+          canvasTransferred = true;
+          activeWorker.postMessage(
+            {
+              type: "init",
+              canvas: offscreenCanvas,
+              width: window.innerWidth,
+              height: window.innerHeight,
+              devicePixelRatio: window.devicePixelRatio || 1,
+              style: resolveStyle(),
+              reducedMotion: reduceMotion.matches,
+              visible: shouldRenderBackground()
+            },
+            [offscreenCanvas]
+          );
+
+          syncRendererStyle = () =>
+            activeWorker.postMessage({ type: "style", style: resolveStyle() });
+          syncRendererSize = () =>
+            activeWorker.postMessage({
+              type: "resize",
+              width: window.innerWidth,
+              height: window.innerHeight,
+              devicePixelRatio: window.devicePixelRatio || 1
+            });
+          syncRendererMotion = () =>
+            activeWorker.postMessage({ type: "motion", reducedMotion: reduceMotion.matches });
+          syncRendererVisibility = () =>
+            activeWorker.postMessage({ type: "visibility", visible: shouldRenderCanvas() });
+          destroyRenderer = () => {
+            activeWorker.postMessage({ type: "destroy" });
+            activeWorker.terminate();
+          };
+        } catch {
+          worker?.terminate();
+          activateFallback(canvasTransferred);
+        }
+      } else {
+        activateFallback(false);
+      }
+
+      const syncPageState = (): void => {
+        const visible = shouldShowBackground();
+        rootElement.toggleAttribute("data-hidden", !visible);
+        syncRendererVisibility();
+      };
+      const onResize = (): void => {
+        if (shouldShowBackground()) syncRendererSize();
+      };
+      const onThemeChange = (): void => {
+        if (shouldShowBackground()) syncRendererStyle();
+      };
+      const onMotionChange = (): void => syncRendererMotion();
+      const onVisibilityChange = (): void => syncRendererVisibility();
+      const themeObserver = new MutationObserver(onThemeChange);
+      const destroy = (): void => {
+        destroyed = true;
+        destroyRenderer();
+        cleanups.forEach((cleanup) => cleanup());
+        themeObserver.disconnect();
+
+        if (window.__noiseDriftBackground?.root === rootElement) {
+          delete window.__noiseDriftBackground;
+        }
+      };
+
+      const setTransitionPaused = (paused: boolean): void => {
+        transitionPaused = paused;
+        syncRendererVisibility();
+      };
+
+      window.__noiseDriftBackground = { root: rootElement, destroy, syncPageState, setTransitionPaused };
+      syncPageState();
+
+      window.addEventListener("resize", onResize, { passive: true });
+      reduceMotion.addEventListener("change", onMotionChange);
+      document.addEventListener("visibilitychange", onVisibilityChange);
+      document.addEventListener("astro:after-swap", syncPageState);
+      document.addEventListener("astro:page-load", syncPageState);
+      cleanups.push(
+        () => window.removeEventListener("resize", onResize),
+        () => reduceMotion.removeEventListener("change", onMotionChange),
+        () => document.removeEventListener("visibilitychange", onVisibilityChange),
+        () => document.removeEventListener("astro:after-swap", syncPageState),
+        () => document.removeEventListener("astro:page-load", syncPageState)
+      );
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+    }
+  }
+</script>
+
+<style>
+  .noise-drift-background {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    transition: opacity 180ms ease, visibility 180ms ease;
+  }
+
+  .noise-drift-background[data-hidden] {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .noise-drift-background canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+</style>
