@@ -42,6 +42,18 @@ const DOM_GRID_GAP_BY_UNIT: Record<"month" | "year", number> = {
   month: 3,
   year: 5
 };
+const THEME_STORAGE_KEY = "vint-color-scheme";
+const themeTransitionState: {
+  generation: number;
+  running: boolean;
+  transition: ViewTransition | null;
+  animation: Animation | null;
+} = {
+  generation: 0,
+  running: false,
+  transition: null,
+  animation: null
+};
 
 interface LifeCountState {
   locale: LifeCountLocale;
@@ -249,13 +261,193 @@ function renderStaticCopy(
   setLabel(root, "[data-lifecount-stages]", messages.stagesOpen);
   setLabel(root, "[data-lifecount-stages-close]", messages.close);
   setLabel(root, "[data-lifecount-language]", messages.languageButtonLabel);
+  setLabel(root, "[data-lifecount-github]", messages.githubRepository);
   setText(root, "[data-lifecount-language]", messages.languageButton);
   setLabel(root, "[data-lifecount-legend]", messages.legend);
+
+  const isDark = document.documentElement.classList.contains("dark");
+  setLabel(
+    root,
+    "[data-lifecount-theme]",
+    isDark ? messages.themeLight : messages.themeDark
+  );
 
   const drawer = root.querySelector<HTMLElement>("[data-lifecount-stages-drawer]");
   drawer?.setAttribute("aria-label", messages.stages);
   const unitGroup = root.querySelector<HTMLElement>(".lifecount-unit-switch");
   unitGroup?.setAttribute("aria-label", messages.selectUnit);
+}
+
+function persistTheme(theme: "light" | "dark") {
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  } catch {
+    // Theme switching still works when storage is unavailable.
+  }
+}
+
+function applyTheme(
+  theme: "light" | "dark",
+  renderPage: () => void
+) {
+  const isDark = theme === "dark";
+  document.documentElement.classList.toggle("dark", isDark);
+  document
+    .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+    ?.setAttribute("content", isDark ? "#050505" : "#fafaf9");
+  renderPage();
+}
+
+function resolveThemeTransitionOrigin(button: HTMLButtonElement) {
+  const rect = button.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+  return rect.width > 0 && rect.height > 0 && Number.isFinite(x) && Number.isFinite(y)
+    ? { x, y }
+    : null;
+}
+
+function resolveThemeTransitionRadius({ x, y }: { x: number; y: number }) {
+  return Math.hypot(
+    Math.max(x, window.innerWidth - x),
+    Math.max(y, window.innerHeight - y)
+  );
+}
+
+function setThemeButtonBusy(busy: boolean) {
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-lifecount-theme]")
+    .forEach((button) => {
+      button.toggleAttribute("aria-disabled", busy);
+      button.toggleAttribute("aria-busy", busy);
+    });
+}
+
+function setBackgroundTransitionPaused(paused: boolean) {
+  (
+    window as Window & {
+      __noiseDriftBackground?: {
+        setTransitionPaused?: (value: boolean) => void;
+      };
+    }
+  ).__noiseDriftBackground?.setTransitionPaused?.(paused);
+}
+
+function stopThemeTransition() {
+  themeTransitionState.generation += 1;
+  themeTransitionState.running = false;
+
+  try {
+    themeTransitionState.animation?.cancel();
+  } catch {
+    // The animation may already be finished.
+  }
+
+  try {
+    themeTransitionState.transition?.skipTransition();
+  } catch {
+    // The transition may already be finished.
+  }
+
+  setBackgroundTransitionPaused(false);
+  setThemeButtonBusy(false);
+  themeTransitionState.animation = null;
+  themeTransitionState.transition = null;
+}
+
+function finishThemeTransition(generation: number) {
+  if (themeTransitionState.generation !== generation) return;
+  themeTransitionState.running = false;
+  themeTransitionState.animation = null;
+  themeTransitionState.transition = null;
+  setBackgroundTransitionPaused(false);
+  setThemeButtonBusy(false);
+}
+
+function animateThemeTransition(
+  button: HTMLButtonElement,
+  nextTheme: "light" | "dark",
+  renderPage: () => void
+) {
+  const origin = resolveThemeTransitionOrigin(button);
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!origin || reducedMotion || typeof document.startViewTransition !== "function") {
+    applyTheme(nextTheme, renderPage);
+    return;
+  }
+
+  const generation = themeTransitionState.generation + 1;
+  themeTransitionState.generation = generation;
+  themeTransitionState.running = true;
+  setThemeButtonBusy(true);
+  setBackgroundTransitionPaused(true);
+
+  const radius = resolveThemeTransitionRadius(origin);
+  const originX = `${(origin.x / window.innerWidth) * 100}%`;
+  const originY = `${(origin.y / window.innerHeight) * 100}%`;
+  const from = `circle(0px at ${originX} ${originY})`;
+  const to = `circle(${radius}px at ${originX} ${originY})`;
+  const isExpanding = nextTheme === "light";
+
+  let transition: ViewTransition;
+  try {
+    transition = document.startViewTransition(() => {
+      applyTheme(nextTheme, renderPage);
+    });
+    themeTransitionState.transition = transition;
+  } catch {
+    applyTheme(nextTheme, renderPage);
+    finishThemeTransition(generation);
+    return;
+  }
+
+  transition.ready
+    .then(() => {
+      if (themeTransitionState.generation !== generation) return;
+      const animation = document.documentElement.animate(
+        { clipPath: isExpanding ? [from, to] : [to, from] },
+        {
+          duration: isExpanding ? 400 : 370,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+          composite: "replace",
+          fill: "both",
+          pseudoElement: isExpanding
+            ? "::view-transition-new(root)"
+            : "::view-transition-old(root)"
+        }
+      );
+      themeTransitionState.animation = animation;
+      return Promise.all([animation.finished, transition.finished]);
+    })
+    .catch(() => {
+      try {
+        transition.skipTransition();
+      } catch {
+        // The browser may have already completed the transition.
+      }
+    })
+    .finally(() => finishThemeTransition(generation));
+}
+
+function setupThemeToggle(root: HTMLElement, renderPage: () => void) {
+  const button = root.querySelector<HTMLButtonElement>("[data-lifecount-theme]");
+  if (!button) return;
+
+  button.addEventListener("click", () => {
+    if (themeTransitionState.running) return;
+    const nextTheme = document.documentElement.classList.contains("dark")
+      ? "light"
+      : "dark";
+    persistTheme(nextTheme);
+    animateThemeTransition(button, nextTheme, renderPage);
+  });
+
+  window.addEventListener("storage", (event) => {
+    if (event.key !== THEME_STORAGE_KEY) return;
+    stopThemeTransition();
+    applyTheme(event.newValue === "light" ? "light" : "dark", renderPage);
+  });
 }
 
 function setupSettings(
@@ -613,6 +805,7 @@ export function initLifeCount() {
   setupSettings(root, config, renderPage);
   setupStageDrawer(root, state, renderPage);
   setupLanguageSwitcher(root, state, renderPage);
+  setupThemeToggle(root, renderPage);
 
   root.querySelectorAll<HTMLButtonElement>("[data-lifecount-unit]").forEach((button) => {
     button.addEventListener("click", () => {

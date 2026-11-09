@@ -39,6 +39,9 @@ export interface LifeCountMessages {
   cellStatus: Record<"elapsed" | "current" | "future", string>;
   languageButton: string;
   languageButtonLabel: string;
+  themeLight: string;
+  themeDark: string;
+  githubRepository: string;
   stageLabels: Record<LifeStageId, string>;
   countryLabels: Record<LifePresetCountryId, string>;
   pathLabels: Record<LifePresetPathId, string>;
@@ -87,6 +90,9 @@ const zhCN: LifeCountMessages = {
   },
   languageButton: "EN",
   languageButtonLabel: "View this page in English",
+  themeLight: "切换到浅色模式",
+  themeDark: "切换到深色模式",
+  githubRepository: "在 GitHub 查看 LifeCount",
   stageLabels: {
     preschool: "学前",
     kindergarten: "幼儿园",
@@ -159,6 +165,9 @@ const en: LifeCountMessages = {
   },
   languageButton: "中",
   languageButtonLabel: "以中文查看此页面",
+  themeLight: "Switch to light mode",
+  themeDark: "Switch to dark mode",
+  githubRepository: "View LifeCount on GitHub",
   stageLabels: {
     preschool: "Preschool",
     kindergarten: "Kindergarten",

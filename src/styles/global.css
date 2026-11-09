@@ -30,6 +30,42 @@ html.dark {
   color-scheme: dark;
 }
 
+::view-transition {
+  background: #050505;
+}
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+::view-transition-group(root) {
+  animation: none;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+  will-change: clip-path;
+}
+
+::view-transition-old(root) {
+  z-index: 2;
+}
+
+::view-transition-new(root) {
+  z-index: 3;
+}
+
+html.dark::view-transition-old(root) {
+  z-index: 3;
+}
+
+html.dark::view-transition-new(root) {
+  z-index: 2;
+}
+
 *,
 *::before,
 *::after {
