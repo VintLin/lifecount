@@ -1,0 +1,565 @@
+{
+  "testedAt": "2026-11-09T09:35:33.683Z",
+  "fallback": {
+    "selected": "cn-undergraduate-work",
+    "datasetPreset": "cn-undergraduate-work",
+    "urlPreset": "cn-undergraduate-work",
+    "hasErrorPage": false
+  },
+  "locale": "en",
+  "desktop": {
+    "viewport": [
+      1482,
+      763
+    ],
+    "groups": [
+      {
+        "label": "China",
+        "options": 3
+      },
+      {
+        "label": "United States",
+        "options": 3
+      },
+      {
+        "label": "France",
+        "options": 3
+      },
+      {
+        "label": "United Kingdom",
+        "options": 3
+      },
+      {
+        "label": "Russia",
+        "options": 3
+      },
+      {
+        "label": "Japan",
+        "options": 3
+      },
+      {
+        "label": "India",
+        "options": 3
+      }
+    ],
+    "uniqueValues": 21,
+    "drawerWidth": 336,
+    "selectWidth": 303,
+    "selectFits": true,
+    "documentWidth": 1482,
+    "selectedText": "India · NEP stages → four-year bachelor",
+    "hasErrorPage": false
+  },
+  "mobile": {
+    "viewport": [
+      390,
+      844
+    ],
+    "drawerWidth": 336,
+    "selectWidth": 303,
+    "selectFits": true,
+    "documentWidth": 390,
+    "bodyWidth": 390
+  },
+  "passed": 21,
+  "total": 21,
+  "failures": [],
+  "desktopScreenshot": "/Users/Vint/Repos/01_Project_Personal/011_LifeCount/artifacts/lifecount-presets-en.png",
+  "mobileScreenshot": "/Users/Vint/Repos/01_Project_Personal/011_LifeCount/artifacts/lifecount-presets-mobile-en.png",
+  "results": [
+    {
+      "id": "cn-undergraduate-work",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "cn-undergraduate-work",
+      "lang": "en",
+      "selected": "cn-undergraduate-work",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "cn-undergraduate-work",
+      "optionText": "China · General secondary → bachelor → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "cn-academic-graduate",
+      "expectedStages": 8,
+      "ok": true,
+      "preset": "cn-academic-graduate",
+      "lang": "en",
+      "selected": "cn-academic-graduate",
+      "optionCount": 21,
+      "stageRows": 8,
+      "legendItems": 8,
+      "urlPreset": "cn-academic-graduate",
+      "optionText": "China · General secondary → bachelor → master → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Bachelor degree",
+        "Graduate school",
+        "Work"
+      ]
+    },
+    {
+      "id": "cn-secondary-vocational",
+      "expectedStages": 6,
+      "ok": true,
+      "preset": "cn-secondary-vocational",
+      "lang": "en",
+      "selected": "cn-secondary-vocational",
+      "optionCount": 21,
+      "stageRows": 6,
+      "legendItems": 6,
+      "urlPreset": "cn-secondary-vocational",
+      "optionText": "China · Lower secondary → vocational school → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "Upper-secondary vocational",
+        "Work"
+      ]
+    },
+    {
+      "id": "us-bachelor-work",
+      "expectedStages": 8,
+      "ok": true,
+      "preset": "us-bachelor-work",
+      "lang": "en",
+      "selected": "us-bachelor-work",
+      "optionCount": 21,
+      "stageRows": 8,
+      "legendItems": 8,
+      "urlPreset": "us-bachelor-work",
+      "optionText": "United States · K–12 → four-year college → work",
+      "stageLabels": [
+        "Early childhood",
+        "Preschool",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "us-community-college-transfer",
+      "expectedStages": 9,
+      "ok": true,
+      "preset": "us-community-college-transfer",
+      "lang": "en",
+      "selected": "us-community-college-transfer",
+      "optionCount": 21,
+      "stageRows": 9,
+      "legendItems": 9,
+      "urlPreset": "us-community-college-transfer",
+      "optionText": "United States · K–12 → community college → bachelor transfer",
+      "stageLabels": [
+        "Early childhood",
+        "Preschool",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Associate degree",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "us-high-school-work",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "us-high-school-work",
+      "lang": "en",
+      "selected": "us-high-school-work",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "us-high-school-work",
+      "optionText": "United States · K–12 → direct employment",
+      "stageLabels": [
+        "Early childhood",
+        "Preschool",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Work"
+      ]
+    },
+    {
+      "id": "fr-licence-work",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "fr-licence-work",
+      "lang": "en",
+      "selected": "fr-licence-work",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "fr-licence-work",
+      "optionText": "France · General lycée → licence → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "fr-licence-master",
+      "expectedStages": 8,
+      "ok": true,
+      "preset": "fr-licence-master",
+      "lang": "en",
+      "selected": "fr-licence-master",
+      "optionCount": 21,
+      "stageRows": 8,
+      "legendItems": 8,
+      "urlPreset": "fr-licence-master",
+      "optionText": "France · General lycée → licence → master",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Bachelor degree",
+        "Graduate school",
+        "Work"
+      ]
+    },
+    {
+      "id": "fr-vocational-bts",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "fr-vocational-bts",
+      "lang": "en",
+      "selected": "fr-vocational-bts",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "fr-vocational-bts",
+      "optionText": "France · Vocational lycée → BTS → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "Upper-secondary vocational",
+        "Tertiary vocational",
+        "Work"
+      ]
+    },
+    {
+      "id": "uk-england-alevel-bachelor",
+      "expectedStages": 8,
+      "ok": true,
+      "preset": "uk-england-alevel-bachelor",
+      "lang": "en",
+      "selected": "uk-england-alevel-bachelor",
+      "optionCount": 21,
+      "stageRows": 8,
+      "legendItems": 8,
+      "urlPreset": "uk-england-alevel-bachelor",
+      "optionText": "United Kingdom · England: A levels → bachelor",
+      "stageLabels": [
+        "Early childhood",
+        "Preschool",
+        "Reception",
+        "Primary school",
+        "Secondary school",
+        "Sixth form",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "uk-england-tlevel-work",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "uk-england-tlevel-work",
+      "lang": "en",
+      "selected": "uk-england-tlevel-work",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "uk-england-tlevel-work",
+      "optionText": "United Kingdom · England: T Level → work",
+      "stageLabels": [
+        "Early childhood",
+        "Preschool",
+        "Reception",
+        "Primary school",
+        "Secondary school",
+        "Upper-secondary vocational",
+        "Work"
+      ]
+    },
+    {
+      "id": "uk-scotland-bachelor",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "uk-scotland-bachelor",
+      "lang": "en",
+      "selected": "uk-scotland-bachelor",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "uk-scotland-bachelor",
+      "optionText": "United Kingdom · Scotland: secondary → four-year bachelor",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Secondary school",
+        "High school",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "ru-eleven-year-bachelor",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "ru-eleven-year-bachelor",
+      "lang": "en",
+      "selected": "ru-eleven-year-bachelor",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "ru-eleven-year-bachelor",
+      "optionText": "Russia · 11-year general school → bachelor",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "ru-eleven-year-specialist",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "ru-eleven-year-specialist",
+      "lang": "en",
+      "selected": "ru-eleven-year-specialist",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "ru-eleven-year-specialist",
+      "optionText": "Russia · 11-year general school → specialist degree",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Specialist degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "ru-after-grade9-vocational",
+      "expectedStages": 6,
+      "ok": true,
+      "preset": "ru-after-grade9-vocational",
+      "lang": "en",
+      "selected": "ru-after-grade9-vocational",
+      "optionCount": 21,
+      "stageRows": 6,
+      "legendItems": 6,
+      "urlPreset": "ru-after-grade9-vocational",
+      "optionText": "Russia · After grade 9 → secondary vocational college",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "Upper-secondary vocational",
+        "Work"
+      ]
+    },
+    {
+      "id": "jp-university-work",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "jp-university-work",
+      "lang": "en",
+      "selected": "jp-university-work",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "jp-university-work",
+      "optionText": "Japan · High school → four-year university → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "jp-senmon-work",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "jp-senmon-work",
+      "lang": "en",
+      "selected": "jp-senmon-work",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "jp-senmon-work",
+      "optionText": "Japan · High school → professional training college → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "High school",
+        "Tertiary vocational",
+        "Work"
+      ]
+    },
+    {
+      "id": "jp-kosen-work",
+      "expectedStages": 6,
+      "ok": true,
+      "preset": "jp-kosen-work",
+      "lang": "en",
+      "selected": "jp-kosen-work",
+      "optionCount": 21,
+      "stageRows": 6,
+      "legendItems": 6,
+      "urlPreset": "jp-kosen-work",
+      "optionText": "Japan · Junior high → five-year KOSEN → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "Integrated technical education",
+        "Work"
+      ]
+    },
+    {
+      "id": "in-traditional-10plus2-bachelor3",
+      "expectedStages": 8,
+      "ok": true,
+      "preset": "in-traditional-10plus2-bachelor3",
+      "lang": "en",
+      "selected": "in-traditional-10plus2-bachelor3",
+      "optionCount": 21,
+      "stageRows": 8,
+      "legendItems": 8,
+      "urlPreset": "in-traditional-10plus2-bachelor3",
+      "optionText": "India · 10+2 → three-year bachelor",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "Secondary school",
+        "High school",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "in-nep-four-year-bachelor",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "in-nep-four-year-bachelor",
+      "lang": "en",
+      "selected": "in-nep-four-year-bachelor",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "in-nep-four-year-bachelor",
+      "optionText": "India · NEP stages → four-year bachelor",
+      "stageLabels": [
+        "Early childhood",
+        "Foundation stage",
+        "Preparatory stage",
+        "Middle school",
+        "High school",
+        "Bachelor degree",
+        "Work"
+      ]
+    },
+    {
+      "id": "in-class10-iti",
+      "expectedStages": 7,
+      "ok": true,
+      "preset": "in-class10-iti",
+      "lang": "en",
+      "selected": "in-class10-iti",
+      "optionCount": 21,
+      "stageRows": 7,
+      "legendItems": 7,
+      "urlPreset": "in-class10-iti",
+      "optionText": "India · Class 10 → ITI vocational training → work",
+      "stageLabels": [
+        "Early childhood",
+        "Kindergarten",
+        "Primary school",
+        "Middle school",
+        "Secondary school",
+        "Vocational training",
+        "Work"
+      ]
+    }
+  ],
+  "chineseSample": {
+    "lang": "zh-CN",
+    "title": "人生计数 · LifeCount | Vint",
+    "groups": [
+      "中国",
+      "美国",
+      "法国",
+      "英国",
+      "俄罗斯",
+      "日本",
+      "印度"
+    ],
+    "optionCount": 21,
+    "selectedText": "法国 · 普通高中→Licence→Master",
+    "stages": [
+      "婴幼儿期",
+      "幼儿园",
+      "小学",
+      "初中",
+      "高中",
+      "本科",
+      "研究生",
+      "工作"
+    ],
+    "urlPreset": "fr-licence-master",
+    "urlLang": "zh-CN",
+    "screenshot": "/Users/Vint/Repos/01_Project_Personal/011_LifeCount/artifacts/lifecount-presets-zh.png"
+  }
+}

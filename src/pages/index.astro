@@ -4,6 +4,7 @@ import { lifeCountConfig } from "@/data/lifecount";
 import { lifeCountMessages } from "@/i18n/lifecount";
 
 const messages = lifeCountMessages["zh-CN"];
+const iconBase = import.meta.env.BASE_URL;
 const canonical = new URL(import.meta.env.BASE_URL, Astro.site).toString();
 const schema = {
   "@context": "https://schema.org",
@@ -40,6 +41,30 @@ const schema = {
               <path d="m12.301 0h.093c2.242 0 4.34.613 6.137 1.68l-.055-.031c1.871 1.094 3.386 2.609 4.449 4.422l.031.058c1.04 1.769 1.654 3.896 1.654 6.166 0 5.406-3.483 10-8.327 11.658l-.087.026c-.063.02-.135.031-.209.031-.162 0-.312-.054-.433-.144l.002.001c-.128-.115-.208-.281-.208-.466 0-.005 0-.01 0-.014v.001q0-.048.008-1.226t.008-2.154c.007-.075.011-.161.011-.249 0-.792-.323-1.508-.844-2.025.618-.061 1.176-.163 1.718-.305l-.076.017c.573-.16 1.073-.373 1.537-.642l-.031.017c.508-.28.938-.636 1.292-1.058l.006-.007c.372-.476.663-1.036.84-1.645l.009-.035c.209-.683.329-1.468.329-2.281 0-.045 0-.091-.001-.136v.007c0-.022.001-.047.001-.072 0-1.248-.482-2.383-1.269-3.23l.003.003c.168-.44.265-.948.265-1.479 0-.649-.145-1.263-.404-1.814l.011.026c-.115-.022-.246-.035-.381-.035-.334 0-.649.078-.929.216l.012-.005c-.568.21-1.054.448-1.512.726l.038-.022-.609.384c-.922-.264-1.981-.416-3.075-.416s-2.153.152-3.157.436l.081-.02q-.256-.176-.681-.433c-.373-.214-.814-.421-1.272-.595l-.066-.022c-.293-.154-.64-.244-1.009-.244-.124 0-.246.01-.364.03l.013-.002c-.248.524-.393 1.139-.393 1.788 0 .531.097 1.04.275 1.509l-.01-.029c-.785.844-1.266 1.979-1.266 3.227 0 .025 0 .051.001.076v-.004c-.001.039-.001.084-.001.13 0 .809.12 1.591.344 2.327l-.015-.057c.189.643.476 1.202.85 1.693l-.009-.013c.354.435.782.793 1.267 1.062l.022.011c.432.252.933.465 1.46.614l.046.011c.466.125 1.024.227 1.595.284l.046.004c-.431.428-.718 1-.784 1.638l-.001.012c-.207.101-.448.183-.699.236l-.021.004c-.256.051-.549.08-.85.08-.022 0-.044 0-.066 0h.003c-.394-.008-.756-.136-1.055-.348l.006.004c-.371-.259-.671-.595-.881-.986l-.007-.015c-.198-.336-.459-.614-.768-.827l-.009-.006c-.225-.169-.49-.301-.776-.38l-.016-.004-.32-.048c-.023-.002-.05-.003-.077-.003-.14 0-.273.028-.394.077l.007-.003q-.128.072-.08.184c.039.086.087.16.145.225l-.001-.001c.061.072.13.135.205.19l.003.002.112.08c.283.148.516.354.693.603l.004.006c.191.237.359.505.494.792l.01.024.16.368c.135.402.38.738.7.981l.005.004c.3.234.662.402 1.057.478l.016.002c.33.064.714.104 1.106.112h.007c.045.002.097.002.15.002.261 0 .517-.021.767-.062l-.027.004.368-.064q0 .609.008 1.418t.008.873v.014c0 .185-.08.351-.208.466h-.001c-.119.089-.268.143-.431.143-.075 0-.147-.011-.214-.032l.005.001c-4.929-1.689-8.409-6.283-8.409-11.69 0-2.268.612-4.393 1.681-6.219l-.032.058c1.094-1.871 2.609-3.386 4.422-4.449l.058-.031c1.739-1.034 3.835-1.645 6.073-1.645h.098-.005zm-7.64 17.666q.048-.112-.112-.192-.16-.048-.208.032-.048.112.112.192.144.096.208-.032zm.497.545q.112-.08-.032-.256-.16-.144-.256-.048-.112.08.032.256.159.157.256.047zm.48.72q.144-.112 0-.304-.128-.208-.272-.096-.144.08 0 .288t.272.112zm.672.673q.128-.128-.064-.304-.192-.192-.32-.048-.144.128.064.304.192.192.32.044zm.913.4q.048-.176-.208-.256-.24-.064-.304.112t.208.24q.24.097.304-.096zm1.009.08q0-.208-.272-.176-.256 0-.256.176 0 .208.272.176.256.001.256-.175zm.929-.16q-.032-.176-.288-.144-.256.048-.224.24t.288.128.225-.224z"></path>
             </svg>
           </a>
+          <button
+            class="lifecount-header-button lifecount-language-button"
+            type="button"
+            data-lifecount-language
+            aria-label="View this page in English"
+            title="View this page in English"
+          >
+            <img
+              class="lifecount-language-icon"
+              data-lifecount-language-icon="en"
+              src={`${iconBase}icons/english.svg`}
+              alt=""
+              aria-hidden="true"
+            />
+            <img
+              class="lifecount-language-icon"
+              data-lifecount-language-icon="zh"
+              src={`${iconBase}icons/chinese.svg`}
+              alt=""
+              aria-hidden="true"
+              hidden
+            />
+            <span class="lifecount-visually-hidden" data-lifecount-language-label>EN</span>
+          </button>
           <button
             class="lifecount-header-button lifecount-theme-button"
             type="button"
@@ -90,14 +115,44 @@ const schema = {
           </svg>
         </button>
         <button
-          class="lifecount-toolbar-button lifecount-language-button"
+          class="lifecount-toolbar-button lifecount-annotation-toggle"
           type="button"
-          data-lifecount-language
-          aria-label="View this page in English"
-          title="View this page in English"
+          data-lifecount-stage-annotations-toggle
+          aria-pressed="false"
+          aria-label="显示或隐藏典型人生阶段和事件"
+          title="典型人生阶段和事件"
         >
-          EN
+          <img src={`${iconBase}icons/scroll-text.svg`} alt="" aria-hidden="true" />
+          <span class="lifecount-visually-hidden" data-lifecount-stage-label>阶段</span>
         </button>
+        <button
+          class="lifecount-toolbar-button lifecount-annotation-toggle"
+          type="button"
+          data-lifecount-celebrity-annotations-toggle
+          aria-pressed="false"
+          aria-label="显示或隐藏名人去世时间"
+          title="名人去世时间"
+        >
+          <img src={`${iconBase}icons/tombstone.svg`} alt="" aria-hidden="true" />
+          <span class="lifecount-visually-hidden" data-lifecount-celebrity-label>名人</span>
+        </button>
+        <button
+          class="lifecount-toolbar-button lifecount-annotation-toggle"
+          type="button"
+          data-lifecount-biography-toggle
+          aria-pressed="false"
+          aria-label="显示或隐藏名人履历"
+          title="名人履历"
+        >
+          <img src={`${iconBase}icons/user.svg`} alt="" aria-hidden="true" />
+          <span class="lifecount-visually-hidden" data-lifecount-biography-label>名人履历</span>
+        </button>
+        <div class="lifecount-biography-picker" data-lifecount-biography-picker hidden>
+          <select data-lifecount-biography aria-label="选择名人"></select>
+          <svg class="lifecount-biography-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6"></path>
+          </svg>
+        </div>
       </div>
       <div class="lifecount-summary" aria-live="polite">
         <strong data-lifecount-age></strong>
@@ -118,7 +173,12 @@ const schema = {
 
     <div class="lifecount-panel slide-enter" data-lifecount-map-wrap>
       <div class="lifecount-map-shell">
-        <div class="lifecount-map" data-lifecount-map></div>
+        <div class="lifecount-map-stage">
+          <div class="lifecount-map" data-lifecount-map></div>
+          <div class="lifecount-map-axis-x" data-lifecount-axis-x aria-hidden="true"></div>
+          <div class="lifecount-map-axis-y" data-lifecount-axis-y aria-hidden="true"></div>
+          <div class="lifecount-annotations" data-lifecount-annotations aria-label="关键人生节点"></div>
+        </div>
       </div>
       <div class="lifecount-legend" data-lifecount-legend role="list" aria-label="图例"></div>
     </div>
@@ -127,11 +187,25 @@ const schema = {
       <aside class="lifecount-stages-drawer" data-lifecount-stages-drawer aria-label="人生阶段">
         <div class="lifecount-stages-header">
           <h2 data-lifecount-stages-title>人生阶段</h2>
-          <div class="lifecount-preset-select">
-            <select data-lifecount-preset aria-label="选择人生阶段预设"></select>
-            <svg class="lifecount-preset-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="m6 9 6 6 6-6"></path>
-            </svg>
+          <div class="lifecount-preset-controls">
+            <div class="lifecount-select-shell lifecount-country-select">
+              <select data-lifecount-country aria-label="选择国家"></select>
+              <svg class="lifecount-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </div>
+            <div class="lifecount-select-shell lifecount-preset-select">
+              <select data-lifecount-preset aria-label="选择典型人生案例"></select>
+              <svg class="lifecount-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </div>
+            <div class="lifecount-select-shell lifecount-gender-select">
+              <select data-lifecount-gender aria-label="选择性别，用于计算退休年龄"></select>
+              <svg class="lifecount-select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </div>
           </div>
           <button class="lifecount-toolbar-button" type="button" data-lifecount-stages-close aria-label="关闭人生阶段" title="关闭人生阶段">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -181,6 +255,7 @@ const schema = {
     --life-pink: #d45b93;
     --life-purple: #936bd1;
     --life-red: #c85a5a;
+    --life-sand: #b88a55;
     width: min(100%, 74rem);
     margin: 0 auto;
     padding-inline: clamp(1rem, 4vw, 4rem);
@@ -194,6 +269,7 @@ const schema = {
     --life-pink: #ef88b8;
     --life-purple: #bd96ef;
     --life-red: #ef8484;
+    --life-sand: #d7ae7d;
   }
 
   .lifecount-header {
@@ -324,12 +400,50 @@ const schema = {
   }
 
   .lifecount-language-button {
-    width: auto;
-    min-width: 2rem;
-    padding-inline: 0.45rem;
     font-family: "DM Mono", "SFMono-Regular", Consolas, monospace;
     font-size: 0.68rem;
     letter-spacing: 0.04em;
+  }
+
+  .lifecount-language-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  html.dark .lifecount-language-icon {
+    filter: invert(1);
+  }
+
+  .lifecount-annotation-toggle {
+    width: 2rem;
+    min-width: 2rem;
+    padding: 0;
+  }
+
+  .lifecount-annotation-toggle img {
+    width: 1rem;
+    height: 1rem;
+    filter: var(--lifecount-icon-filter, none);
+  }
+
+  .lifecount-annotation-toggle[aria-pressed="true"] img {
+    filter: invert(1);
+  }
+
+  .dark .lifecount-annotation-toggle[aria-pressed="true"] img {
+    filter: none;
+  }
+
+  .lifecount-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .lifecount-toolbar-button:hover,
@@ -338,6 +452,59 @@ const schema = {
     border-color: var(--border-strong);
     background: color-mix(in srgb, var(--panel) 72%, transparent);
     color: var(--fg-strong);
+  }
+
+  .lifecount-annotation-toggle[aria-pressed="true"] {
+    border-color: var(--fg-strong);
+    background: var(--fg-strong);
+    color: var(--bg);
+  }
+
+  .lifecount-toolbar-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.38;
+  }
+
+  .lifecount-stages-header select:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .lifecount-biography-picker {
+    position: relative;
+    width: 9.5rem;
+    min-width: 0;
+  }
+
+  .lifecount-biography-picker select {
+    appearance: none;
+    width: 100%;
+    height: 2rem;
+    padding: 0.25rem 1.8rem 0.25rem 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, var(--panel) 72%, transparent);
+    color: var(--fg-strong);
+    font: inherit;
+    font-size: 0.76rem;
+    text-overflow: ellipsis;
+  }
+
+  .lifecount-biography-picker select:hover,
+  .lifecount-biography-picker select:focus-visible {
+    border-color: var(--border-strong);
+    outline: 0;
+  }
+
+  .lifecount-biography-chevron {
+    position: absolute;
+    top: 50%;
+    right: 0.55rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    color: var(--fg-muted);
+    pointer-events: none;
+    transform: translateY(-50%);
   }
 
   .lifecount-summary {
@@ -394,7 +561,7 @@ const schema = {
 
   .lifecount-map-shell {
     position: relative;
-    overflow: visible;
+    overflow-x: auto;
     min-height: 0;
     max-height: none;
     padding: 0;
@@ -402,11 +569,127 @@ const schema = {
     scrollbar-color: color-mix(in srgb, var(--fg-muted) 34%, transparent) transparent;
   }
 
-  .lifecount-map {
+  .lifecount-map-stage {
+    --annotation-rail-width: 168px;
+    --annotation-grid-gap: 48px;
+    --lifecount-grid-gutter: calc(var(--annotation-rail-width) + var(--annotation-grid-gap));
     position: relative;
     width: 100%;
+    min-width: 720px;
+  }
+
+  .lifecount-map {
+    position: relative;
+    width: calc(100% - (var(--lifecount-grid-gutter) * 2));
+    margin-inline: var(--lifecount-grid-gutter);
     min-width: 0;
     outline: 0;
+  }
+
+  .lifecount-map-axis-x,
+  .lifecount-map-axis-y {
+    position: absolute;
+    pointer-events: none;
+    z-index: 4;
+    color: var(--fg-muted);
+    font-family: "DM Mono", "SFMono-Regular", Consolas, monospace;
+    font-size: 0.62rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .lifecount-map-axis-x .lifecount-axis-label {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+  }
+
+  .lifecount-map-axis-y .lifecount-axis-label {
+    position: absolute;
+    right: 0.55rem;
+    transform: translateY(-50%);
+  }
+
+  .lifecount-annotations {
+    --lifecount-annotation-stroke: 2px;
+    --lifecount-annotation-pin-size: 1.2rem;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 3;
+  }
+
+  .lifecount-annotation-group {
+    position: absolute;
+    inset: 0;
+  }
+
+  .lifecount-stage-pin {
+    position: absolute;
+    width: var(--lifecount-annotation-pin-size);
+    height: var(--lifecount-annotation-pin-size);
+    border: var(--lifecount-annotation-stroke) solid var(--fg-strong);
+    border-radius: 50%;
+    background: transparent;
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+  }
+
+  .lifecount-connector {
+    position: absolute;
+    height: var(--lifecount-annotation-stroke);
+    background: var(--fg-strong);
+    transform-origin: left center;
+  }
+
+  .lifecount-annotation-text {
+    position: absolute;
+    display: grid;
+    gap: 4px;
+    box-sizing: border-box;
+    color: var(--fg-strong);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .lifecount-annotation-text strong {
+    font-weight: 600;
+  }
+
+  .lifecount-annotation-heading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .lifecount-annotation-text-left .lifecount-annotation-heading {
+    justify-content: flex-end;
+  }
+
+  .lifecount-annotation-text-left:has(.lifecount-source-link) > span {
+    padding-right: 1.2rem;
+  }
+
+  .lifecount-annotation-text > span {
+    color: var(--fg-muted);
+    font-size: 0.68rem;
+  }
+
+  .lifecount-annotation-text > span:empty {
+    display: none;
+  }
+
+  .lifecount-annotation-text-left {
+    left: 0;
+    text-align: right;
+  }
+
+  .lifecount-annotation-text-right {
+    right: 0;
+    text-align: left;
   }
 
   .lifecount-map:focus-visible {
@@ -454,6 +737,10 @@ const schema = {
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg-strong) 22%, transparent);
   }
 
+  .lifecount-cell[data-status="future"] {
+    border-style: dashed;
+  }
+
   .lifecount-cell:hover,
   .lifecount-cell:focus-visible {
     z-index: 1;
@@ -491,6 +778,40 @@ const schema = {
     background: color-mix(in srgb, var(--legend-color) 72%, var(--bg));
   }
 
+  .lifecount-legend-source {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .lifecount-source-link {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 0.9rem;
+    height: 0.9rem;
+    color: var(--fg-muted);
+    opacity: 0.72;
+    pointer-events: auto;
+    transition: color 140ms ease, opacity 140ms ease;
+  }
+
+  .lifecount-source-link:hover,
+  .lifecount-source-link:focus-visible {
+    color: var(--fg-strong);
+    opacity: 1;
+  }
+
+  .lifecount-source-link:focus-visible {
+    outline: 1px solid color-mix(in srgb, var(--fg-muted) 48%, transparent);
+    outline-offset: 3px;
+  }
+
+  .lifecount-source-link svg {
+    width: 0.78rem;
+    height: 0.78rem;
+  }
+
   .lifecount-stages-overlay {
     position: fixed;
     z-index: 40;
@@ -514,22 +835,50 @@ const schema = {
 
   .lifecount-stages-header {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title close"
+      "controls controls";
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1rem;
   }
 
   .lifecount-stages-header h2 {
+    grid-area: title;
     margin: 0;
     color: var(--fg-strong);
     font-size: 1rem;
     white-space: nowrap;
   }
 
-  .lifecount-preset-select {
+  .lifecount-preset-controls {
+    grid-area: controls;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  .lifecount-select-shell {
     position: relative;
     min-width: 0;
+  }
+
+  .lifecount-preset-select {
+    flex: 1;
+  }
+
+  .lifecount-country-select {
+    flex: 0 0 clamp(5.5rem, 28%, 7.5rem);
+  }
+
+  .lifecount-gender-select {
+    flex: 0 0 clamp(5.25rem, 28%, 7rem);
+  }
+
+  .lifecount-stages-header > .lifecount-toolbar-button {
+    grid-area: close;
   }
 
   .lifecount-stages-header select {
@@ -547,7 +896,7 @@ const schema = {
     text-overflow: ellipsis;
   }
 
-  .lifecount-preset-chevron {
+  .lifecount-select-chevron {
     position: absolute;
     top: 50%;
     right: 0.75rem;
@@ -565,8 +914,8 @@ const schema = {
     outline: 0;
   }
 
-  .lifecount-preset-select:focus-within .lifecount-preset-chevron,
-  .lifecount-preset-select:hover .lifecount-preset-chevron {
+  .lifecount-select-shell:focus-within .lifecount-select-chevron,
+  .lifecount-select-shell:hover .lifecount-select-chevron {
     color: var(--fg-strong);
   }
 
@@ -713,6 +1062,7 @@ const schema = {
 
     .lifecount-toolbar-leading {
       width: 100%;
+      flex-wrap: wrap;
     }
 
     .lifecount-map-shell {
@@ -723,5 +1073,11 @@ const schema = {
     .lifecount-map-year {
       grid-template-columns: repeat(5, minmax(0, 1fr));
     }
+
+    .lifecount-map-stage {
+      --annotation-rail-width: 140px;
+      --annotation-grid-gap: 36px;
+    }
+
   }
 </style>

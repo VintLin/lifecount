@@ -1,0 +1,287 @@
+{
+  "testedAt": "2026-11-09T13:12:46.352Z",
+  "baseUrl": "http://localhost:4322/lifecount/",
+  "environment": {
+    "desktopViewport": [
+      1482,
+      900
+    ],
+    "mobileViewport": [
+      390,
+      844
+    ],
+    "theme": "light"
+  },
+  "checks": [
+    {
+      "name": "invalid preset and gender fallback",
+      "ok": true,
+      "details": {
+        "url": "http://localhost:4322/lifecount/?unit=week&lang=zh-CN&gender=unspecified&preset=cn-undergraduate-work",
+        "datasetPreset": "cn-undergraduate-work",
+        "datasetGender": "unspecified",
+        "presetValue": "cn-undergraduate-work",
+        "genderValue": "unspecified",
+        "errorState": null
+      }
+    },
+    {
+      "name": "English interface and retirement stage",
+      "ok": true,
+      "details": {
+        "lang": "en",
+        "title": "LifeCount | Vint",
+        "pageTitle": "LifeCount",
+        "presetText": "China · General secondary → bachelor → work",
+        "genderText": "Female",
+        "rows": [
+          {
+            "label": "Early childhood",
+            "dates": "Jan 1, 2000 — Dec 31, 2002"
+          },
+          {
+            "label": "Kindergarten",
+            "dates": "Jan 1, 2003 — Dec 31, 2005"
+          },
+          {
+            "label": "Primary school",
+            "dates": "Jan 1, 2006 — Dec 31, 2011"
+          },
+          {
+            "label": "Middle school",
+            "dates": "Jan 1, 2012 — Dec 31, 2014"
+          },
+          {
+            "label": "High school",
+            "dates": "Jan 1, 2015 — Dec 31, 2017"
+          },
+          {
+            "label": "Bachelor degree",
+            "dates": "Jan 1, 2018 — Dec 31, 2021"
+          },
+          {
+            "label": "Work",
+            "dates": "Jan 1, 2022 — Dec 31, 2057"
+          },
+          {
+            "label": "Retirement",
+            "dates": "Jan 1, 2058 — Present"
+          }
+        ],
+        "futureWork": {
+          "color": "red",
+          "status": "future",
+          "background": "color(srgb 0.86662 0.717417 0.713379)",
+          "borderStyle": "dashed",
+          "label": "Dec 1, 2026 to Dec 31, 2026 · Future · Work"
+        },
+        "futureRetirement": {
+          "color": "sand",
+          "status": "future",
+          "background": "color(srgb 0.845286 0.781417 0.706712)",
+          "borderStyle": "dashed",
+          "label": "Jan 1, 2058 to Jan 31, 2058 · Future · Retirement"
+        },
+        "cellCount": 960,
+        "horizontalOverflow": false
+      }
+    },
+    {
+      "name": "future work and retirement remain visually distinct",
+      "ok": true,
+      "details": {
+        "work": {
+          "color": "red",
+          "status": "future",
+          "background": "color(srgb 0.86662 0.717417 0.713379)",
+          "borderStyle": "dashed",
+          "label": "Dec 1, 2026 to Dec 31, 2026 · Future · Work"
+        },
+        "retirement": {
+          "color": "sand",
+          "status": "future",
+          "background": "color(srgb 0.845286 0.781417 0.706712)",
+          "borderStyle": "dashed",
+          "label": "Jan 1, 2058 to Jan 31, 2058 · Future · Retirement"
+        }
+      }
+    },
+    {
+      "name": "language switch preserves preset and gender",
+      "ok": true,
+      "details": {
+        "lang": "zh-CN",
+        "presetId": "cn-academic-graduate",
+        "presetValue": "cn-academic-graduate",
+        "gender": "male",
+        "genderValue": "male",
+        "url": "http://localhost:4322/lifecount/?unit=month&lang=zh-CN&gender=male&preset=cn-academic-graduate",
+        "retirement": {
+          "label": "退休",
+          "dates": "2063年1月1日 — 进行中"
+        }
+      }
+    },
+    {
+      "name": "settings dialog is centered",
+      "ok": true,
+      "details": {
+        "open": true,
+        "centerOffsetX": 0,
+        "centerOffsetY": 0.00390625,
+        "viewport": [
+          1482,
+          900
+        ],
+        "rect": {
+          "x": 549,
+          "y": 307.3984375,
+          "width": 384,
+          "height": 285.1953125
+        }
+      }
+    },
+    {
+      "name": "settings update retirement and cell count",
+      "ok": true,
+      "details": {
+        "cellCount": 1080,
+        "summary": "已过去 436 / 1,080 月",
+        "work": {
+          "label": "工作",
+          "dates": "2012年6月15日 — 2048年6月14日"
+        },
+        "retirement": {
+          "label": "退休",
+          "dates": "2048年6月15日 — 进行中"
+        },
+        "birthdayInput": "1990-06-15",
+        "displayAgeInput": "90"
+      }
+    },
+    {
+      "name": "390px mobile drawer layout",
+      "ok": true,
+      "details": {
+        "viewport": [
+          390,
+          844
+        ],
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "drawer": {
+          "left": 0,
+          "right": 336,
+          "width": 336,
+          "height": 844,
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "opacity": "1"
+        },
+        "preset": {
+          "left": 16,
+          "right": 226.96875,
+          "top": 60,
+          "width": 210.96875
+        },
+        "gender": {
+          "left": 234.1640625,
+          "right": 319,
+          "top": 60,
+          "width": 84.8359375
+        },
+        "sameRow": true,
+        "controlsInsideDrawer": true,
+        "rows": 8,
+        "retirementLabel": "Retirement"
+      }
+    },
+    {
+      "name": "mobile drawer dismisses from backdrop",
+      "ok": true,
+      "details": {
+        "hidden": true,
+        "expanded": "false"
+      }
+    }
+  ],
+  "screenshots": {
+    "desktop": "/Users/Vint/Repos/01_Project_Personal/011_LifeCount/artifacts/lifecount-gender-retirement-en-light.png",
+    "mobile": "/Users/Vint/Repos/01_Project_Personal/011_LifeCount/artifacts/lifecount-gender-retirement-mobile-en-light.png"
+  },
+  "summary": {
+    "passed": 8,
+    "total": 8,
+    "failures": [],
+    "finalSmokePassed": true
+  },
+  "finalSmoke": {
+    "testedAt": "2026-11-09T13:15:15.114Z",
+    "viewport": [
+      1482,
+      900
+    ],
+    "views": [
+      {
+        "unit": "day",
+        "summary": "9,809 / 29,220 days elapsed",
+        "domCells": 0,
+        "canvas": {
+          "width": 960,
+          "height": 765,
+          "cssWidth": "960px",
+          "cssHeight": "764.797px"
+        },
+        "columns": 192,
+        "computedRows": 153,
+        "cellSize": 4.01,
+        "gap": 1,
+        "retirementRow": true,
+        "horizontalOverflow": false
+      },
+      {
+        "unit": "week",
+        "summary": "1,401 / 4,175 weeks elapsed",
+        "domCells": 0,
+        "canvas": {
+          "width": 960,
+          "height": 636,
+          "cssWidth": "960px",
+          "cssHeight": "635.325px"
+        },
+        "columns": 80,
+        "computedRows": 53,
+        "cellSize": 10.03,
+        "gap": 2,
+        "retirementRow": true,
+        "horizontalOverflow": false
+      },
+      {
+        "unit": "month",
+        "summary": "322 / 960 months elapsed",
+        "domCells": 960,
+        "canvas": null,
+        "columns": 41,
+        "computedRows": 24,
+        "cellSize": 20.49,
+        "gap": 3,
+        "retirementRow": true,
+        "horizontalOverflow": false
+      },
+      {
+        "unit": "year",
+        "summary": "26 / 80 years elapsed",
+        "domCells": 80,
+        "canvas": null,
+        "columns": 19,
+        "computedRows": 5,
+        "cellSize": 45.79,
+        "gap": 5,
+        "retirementRow": true,
+        "horizontalOverflow": false
+      }
+    ],
+    "passed": 4,
+    "total": 4,
+    "failures": []
+  }
+}

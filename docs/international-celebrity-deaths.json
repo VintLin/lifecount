@@ -1,0 +1,778 @@
+{
+  "schemaVersion": "1.0",
+  "updatedAt": "2026-11-10",
+  "description": "各国历史人物出生与去世时间参考；日期精度和历史实体说明必须随记录保留。",
+  "countries": [
+    {
+      "country": "China",
+      "records": [
+        {
+          "name": "屈原",
+          "type": "先秦诗人、政治人物",
+          "birth": "约前 340",
+          "death": "约前 278",
+          "deathTime": null,
+          "deathDatePrecision": "circa/year_only",
+          "summary": "《离骚》作者，端午文化的重要历史人物",
+          "sourceUrl": "https://zh.wikipedia.org/wiki/%E5%B1%88%E5%8E%9F"
+        },
+        {
+          "name": "李白",
+          "type": "唐代诗人",
+          "birth": "701",
+          "death": "762",
+          "deathTime": null,
+          "deathDatePrecision": "year_only",
+          "summary": "“诗仙”；去世日期和死因均无可靠日级记录",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Li_Bai"
+        },
+        {
+          "name": "杜甫",
+          "type": "唐代诗人",
+          "birth": "712",
+          "death": "770",
+          "deathTime": null,
+          "deathDatePrecision": "year_only",
+          "summary": "“诗圣”；唐诗重要代表",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Du_Fu"
+        },
+        {
+          "name": "苏轼",
+          "type": "宋代文学家、书画家",
+          "birth": "1037",
+          "death": "1101",
+          "deathTime": null,
+          "deathDatePrecision": "year_only",
+          "summary": "诗、词、散文和书法代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Su_Shi"
+        },
+        {
+          "name": "鲁迅",
+          "type": "现代作家、思想家",
+          "birth": "1881-09-25",
+          "death": "1936-10-19",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "中国现代文学的重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Lu_Xun"
+        },
+        {
+          "name": "钱学森",
+          "type": "科学家、航天事业奠基者",
+          "birth": "1911-12-11",
+          "death": "2009-10-31",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "中国航天与系统科学的重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Qian_Xuesen"
+        },
+        {
+          "name": "张国荣",
+          "type": "香港歌手、演员、词曲作者",
+          "birth": "1956-09-12",
+          "death": "2003-04-01",
+          "deathTime": "18:43 HKT",
+          "deathDatePrecision": "day",
+          "summary": "华语流行文化和电影的重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Leslie_Cheung"
+        },
+        {
+          "name": "张雪峰",
+          "type": "教育博主、升学规划讲师",
+          "birth": "1984-05-18",
+          "death": "2026-03-24",
+          "deathTime": "15:50，苏州当地时间",
+          "deathDatePrecision": "day",
+          "summary": "当代教育与网络公共讨论人物",
+          "sourceUrl": "https://zh.wikipedia.org/wiki/%E5%BC%A0%E9%9B%AA%E5%B3%B0",
+          "status": "conditional"
+        },
+        {
+          "name": "金庸",
+          "type": "武侠小说作家、报人和社会文化人物",
+          "birth": "1924",
+          "death": "2018-10-30",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "武侠小说作家、报人和社会文化人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Jin_Yong"
+        },
+        {
+          "name": "杨绛",
+          "type": "作家、翻译家和戏剧家；《堂吉诃德》中文全译本译者",
+          "birth": "1912",
+          "death": "2016-05-25",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "作家、翻译家和戏剧家；《堂吉诃德》中文全译本译者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Yang_Jiang"
+        },
+        {
+          "name": "老舍",
+          "type": "作家、剧作家",
+          "birth": "1899-02-03",
+          "death": "1966-08-24",
+          "summary": "作家、剧作家，《茶馆》作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Lao_She",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "钱锺书",
+          "type": "作家、文学研究者",
+          "birth": "1910-11-21",
+          "death": "1998-12-19",
+          "summary": "作家、文学研究者和《围城》作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Qian_Zhongshu",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "朱自清",
+          "type": "散文家、诗人和学者",
+          "birth": "1898-11-22",
+          "death": "1948-08-12",
+          "summary": "散文家、诗人和学者，《背影》作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Zhu_Ziqing",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "张爱玲",
+          "type": "作家",
+          "birth": "1920-09-30",
+          "death": "1995-09-08",
+          "summary": "作家，20世纪华语文学重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Eileen_Chang",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "林语堂",
+          "type": "作家、语言学家",
+          "birth": "1895-10-10",
+          "death": "1976-03-26",
+          "summary": "作家、语言学家和文化传播者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Lin_Yutang",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "李玟",
+          "type": "歌手",
+          "birth": "1975-01-17",
+          "death": "2023-07-05",
+          "summary": "华语流行歌手和舞台表演者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Coco_Lee",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "高以翔",
+          "type": "演员和模特",
+          "birth": "1984-09-22",
+          "death": "2019-11-27",
+          "summary": "演员和模特；其意外去世引发公众对节目安全的关注",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Godfrey_Gao",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        }
+      ]
+    },
+    {
+      "country": "France",
+      "records": [
+        {
+          "name": "Molière",
+          "type": "剧作家、演员",
+          "birth": "1622-01-15",
+          "death": "1673-02-17",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "法国古典喜剧和戏剧代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Moli%C3%A8re"
+        },
+        {
+          "name": "Victor Hugo",
+          "type": "作家、诗人",
+          "birth": "1802-02-26",
+          "death": "1885-05-22",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "《悲惨世界》《巴黎圣母院》作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Victor_Hugo"
+        },
+        {
+          "name": "Marie Curie",
+          "type": "物理学家、化学家",
+          "birth": "1867-11-07",
+          "death": "1934-07-04",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "诺贝尔奖获得者；放射性研究先驱",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Marie_Curie"
+        },
+        {
+          "name": "Édith Piaf",
+          "type": "歌手",
+          "birth": "1915-12-19",
+          "death": "1963-10-10",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "法国香颂代表人物；官方死亡证明曾因迁葬问题写成 10 月 11 日",
+          "sourceUrl": "https://en.wikipedia.org/wiki/%C3%89dith_Piaf"
+        },
+        {
+          "name": "Charles de Gaulle",
+          "type": "政治家、法国总统",
+          "birth": "1890-11-22",
+          "death": "1970-11-09",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "法国第五共和国的重要政治人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Charles_de_Gaulle"
+        },
+        {
+          "name": "Alain Delon",
+          "type": "演员",
+          "birth": "1935-11-08",
+          "death": "2024-08-18",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "法国和欧洲电影代表演员",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Alain_Delon"
+        },
+        {
+          "name": "Jean-Paul Sartre",
+          "type": "哲学家、作家和存在主义代表人物",
+          "birth": "1905-06-21",
+          "death": "1980-04-15",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "哲学家、作家和存在主义代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Jean-Paul_Sartre"
+        },
+        {
+          "name": "Albert Camus",
+          "type": "作家、哲学家",
+          "birth": "1913-11-07",
+          "death": "1960-01-04",
+          "summary": "作家、哲学家和诺贝尔文学奖获得者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Albert_Camus",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Marcel Proust",
+          "type": "作家",
+          "birth": "1871-07-10",
+          "death": "1922-11-18",
+          "summary": "作家，《追忆似水年华》作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Marcel_Proust",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Claude François",
+          "type": "歌手、词曲作者和舞者",
+          "birth": "1939-02-01",
+          "death": "1978-03-11",
+          "summary": "法国流行歌手、词曲作者和舞者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Claude_Fran%C3%A7ois",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        }
+      ]
+    },
+    {
+      "country": "United Kingdom",
+      "records": [
+        {
+          "name": "William Shakespeare",
+          "type": "剧作家、诗人",
+          "birth": "1564-04-23",
+          "death": "1616-04-23",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "英语文学和戏剧代表人物；日期以 Stratford 纪念记录为主",
+          "sourceUrl": "https://en.wikipedia.org/wiki/William_Shakespeare"
+        },
+        {
+          "name": "Isaac Newton",
+          "type": "物理学家、数学家",
+          "birth": "1643-01-04",
+          "death": "1727-03-31",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "经典力学、微积分和光学代表人物；旧式历法存在换算差异",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Isaac_Newton"
+        },
+        {
+          "name": "Charles Darwin",
+          "type": "生物学家、博物学家",
+          "birth": "1809-02-12",
+          "death": "1882-04-19",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "演化论和自然选择理论代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Charles_Darwin"
+        },
+        {
+          "name": "Winston Churchill",
+          "type": "政治家、作家",
+          "birth": "1874-11-30",
+          "death": "1965-01-24",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "二战时期英国首相和历史写作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Winston_Churchill"
+        },
+        {
+          "name": "Diana, Princess of Wales",
+          "type": "公共人物、慈善活动者",
+          "birth": "1961-07-01",
+          "death": "1997-08-31",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "英国王室和全球公共文化人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Diana,_Princess_of_Wales"
+        },
+        {
+          "name": "David Bowie",
+          "type": "歌手、词曲作者、演员",
+          "birth": "1947-01-08",
+          "death": "2016-01-10",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "英国流行音乐和视觉文化代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/David_Bowie"
+        },
+        {
+          "name": "Stephen Hawking",
+          "type": "理论物理学家、宇宙学家",
+          "birth": "1942-01-08",
+          "death": "2018-03-14",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "黑洞和宇宙学公众传播代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Stephen_Hawking"
+        },
+        {
+          "name": "Alan Turing",
+          "type": "数学家、计算机科学先驱和密码学家",
+          "birth": "1912-06-23",
+          "death": "1954-06-07",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "数学家、计算机科学先驱和密码学家",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Alan_Turing"
+        },
+        {
+          "name": "George Orwell",
+          "type": "作家、记者",
+          "birth": "1903-06-25",
+          "death": "1950-01-21",
+          "summary": "作家、记者和社会评论家，《1984》作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/George_Orwell",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Agatha Christie",
+          "type": "作家、剧作家",
+          "birth": "1890-09-15",
+          "death": "1976-01-12",
+          "summary": "推理小说作家和剧作家",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Agatha_Christie",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Amy Winehouse",
+          "type": "歌手、词曲作者",
+          "birth": "1983-09-14",
+          "death": "2011-07-23",
+          "summary": "灵魂乐、节奏布鲁斯和爵士歌手",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Amy_Winehouse",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "George Michael",
+          "type": "歌手、词曲作者和音乐制作人",
+          "birth": "1963-06-25",
+          "death": "2016-12-25",
+          "summary": "歌手、词曲作者和音乐制作人",
+          "sourceUrl": "https://en.wikipedia.org/wiki/George_Michael",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        }
+      ]
+    },
+    {
+      "country": "Russia",
+      "records": [
+        {
+          "name": "Alexander Pushkin",
+          "type": "诗人、作家",
+          "birth": "1799-06-08",
+          "death": "1837-02-10",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "俄语现代文学和诗歌的重要奠基者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Alexander_Pushkin"
+        },
+        {
+          "name": "Leo Tolstoy",
+          "type": "作家、思想家",
+          "birth": "1828-09-09",
+          "death": "1910-11-20",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "《战争与和平》《安娜·卡列尼娜》作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Leo_Tolstoy"
+        },
+        {
+          "name": "Fyodor Dostoevsky",
+          "type": "作家、思想家",
+          "birth": "1821-11-11",
+          "death": "1881-02-09",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "俄国文学和心理小说代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Fyodor_Dostoevsky"
+        },
+        {
+          "name": "Sergei Rachmaninoff",
+          "type": "作曲家、钢琴家、指挥家",
+          "birth": "1873-04-01",
+          "death": "1943-03-28",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "俄国和俄罗斯流亡音乐传统代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Sergei_Rachmaninoff"
+        },
+        {
+          "name": "Yuri Gagarin",
+          "type": "宇航员",
+          "birth": "1934-03-09",
+          "death": "1968-03-27",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "首位进入太空的人类；成就属于苏联时期",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Yuri_Gagarin"
+        },
+        {
+          "name": "Mikhail Gorbachev",
+          "type": "政治家、苏联领导人",
+          "birth": "1931-03-02",
+          "death": "2022-08-30",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "20 世纪末苏联政治和国际关系的重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Mikhail_Gorbachev"
+        },
+        {
+          "name": "Anna Akhmatova",
+          "type": "俄国和苏联诗人；20世纪俄语文学重要人物",
+          "birth": "1889-06-23",
+          "death": "1966-03-05",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "俄国和苏联诗人；20世纪俄语文学重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Anna_Akhmatova"
+        },
+        {
+          "name": "Mikhail Bulgakov",
+          "type": "作家",
+          "birth": "1891-05-15",
+          "death": "1940-03-10",
+          "summary": "作家，《大师与玛格丽特》作者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Mikhail_Bulgakov",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Sergei Prokofiev",
+          "type": "作曲家、钢琴家和指挥家",
+          "birth": "1891-04-23",
+          "death": "1953-03-05",
+          "summary": "作曲家、钢琴家和指挥家",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Sergei_Prokofiev",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Vladimir Vysotsky",
+          "type": "歌手、诗人和演员",
+          "birth": "1938-01-25",
+          "death": "1980-07-25",
+          "summary": "歌手、诗人和演员；苏联时期重要公共文化人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Vladimir_Vysotsky",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Dmitri Hvorostovsky",
+          "type": "歌剧歌唱家",
+          "birth": "1962-10-16",
+          "death": "2017-11-22",
+          "summary": "歌剧男中音歌唱家",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Dmitri_Hvorostovsky",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        }
+      ]
+    },
+    {
+      "country": "Japan",
+      "records": [
+        {
+          "name": "Murasaki Shikibu",
+          "type": "平安时代作家、诗人",
+          "birth": "约 973",
+          "death": "约 1014",
+          "deathTime": null,
+          "deathDatePrecision": "circa/year_only",
+          "summary": "《源氏物语》作者；生卒年份存在学术争议",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Murasaki_Shikibu"
+        },
+        {
+          "name": "Matsuo Bashō",
+          "type": "江户时代俳句诗人",
+          "birth": "1644",
+          "death": "1694-11-28",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "日本俳句传统代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Matsuo_Bash%C5%8D"
+        },
+        {
+          "name": "Natsume Sōseki",
+          "type": "作家、诗人、学者",
+          "birth": "1867-02-09",
+          "death": "1916-12-09",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "日本近代文学代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Natsume_S%C5%8Dseki"
+        },
+        {
+          "name": "Akira Kurosawa",
+          "type": "导演、编剧",
+          "birth": "1910-03-23",
+          "death": "1998-09-06",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "日本电影和世界电影史代表导演",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Akira_Kurosawa"
+        },
+        {
+          "name": "Osamu Tezuka",
+          "type": "漫画家、动画制作人",
+          "birth": "1928-11-03",
+          "death": "1989-02-09",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "日本现代漫画与动画产业的重要奠基者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Osamu_Tezuka"
+        },
+        {
+          "name": "Yukio Mishima",
+          "type": "作家、剧作家",
+          "birth": "1925-01-14",
+          "death": "1970-11-25",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "日本战后文学和公共争议人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Yukio_Mishima"
+        },
+        {
+          "name": "Hideki Yukawa",
+          "type": "理论物理学家；首位获得诺贝尔奖的日本人",
+          "birth": "1907-01-23",
+          "death": "1981-09-08",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "理论物理学家；首位获得诺贝尔奖的日本人",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Hideki_Yukawa"
+        },
+        {
+          "name": "Kenzaburō Ōe",
+          "type": "日本作家和诺贝尔文学奖获得者",
+          "birth": "1935-01-31",
+          "death": "2023-03-03",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "日本作家和诺贝尔文学奖获得者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Kenzabur%C5%8D_%C5%8Ce"
+        },
+        {
+          "name": "Yasunari Kawabata",
+          "type": "作家",
+          "birth": "1899-06-11",
+          "death": "1972-04-16",
+          "summary": "作家和首位获得诺贝尔文学奖的日本人",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Yasunari_Kawabata",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Haruma Miura",
+          "type": "演员和歌手",
+          "birth": "1990-04-05",
+          "death": "2020-07-18",
+          "summary": "演员和歌手；日本影视文化人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Haruma_Miura",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Satoshi Kon",
+          "type": "动画导演、编剧和漫画家",
+          "birth": "1963-10-12",
+          "death": "2010-08-24",
+          "summary": "动画导演、编剧和漫画家",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Satoshi_Kon",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        }
+      ]
+    },
+    {
+      "country": "India",
+      "records": [
+        {
+          "name": "Rabindranath Tagore",
+          "type": "诗人、作家、思想家",
+          "birth": "1861-05-07",
+          "death": "1941-08-07",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "首位获得诺贝尔文学奖的亚洲作家",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Rabindranath_Tagore"
+        },
+        {
+          "name": "Mahatma Gandhi",
+          "type": "政治和社会运动领袖",
+          "birth": "1869-10-02",
+          "death": "1948-01-30",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "印度独立运动的重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Mahatma_Gandhi"
+        },
+        {
+          "name": "Jawaharlal Nehru",
+          "type": "政治家、印度首任总理",
+          "birth": "1889-11-14",
+          "death": "1964-05-27",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "独立后印度国家建设的重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Jawaharlal_Nehru"
+        },
+        {
+          "name": "Indira Gandhi",
+          "type": "政治家、印度总理",
+          "birth": "1917-11-19",
+          "death": "1984-10-31",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "印度现代政治的重要人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Indira_Gandhi"
+        },
+        {
+          "name": "Satyajit Ray",
+          "type": "导演、编剧、作家",
+          "birth": "1921-05-02",
+          "death": "1992-04-23",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "印度电影和世界电影史代表导演",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Satyajit_Ray"
+        },
+        {
+          "name": "A. P. J. Abdul Kalam",
+          "type": "科学家、印度总统",
+          "birth": "1931-10-15",
+          "death": "2015-07-27",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "航天与公共教育传播人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/A._P._J._Abdul_Kalam"
+        },
+        {
+          "name": "Lata Mangeshkar",
+          "type": "歌手",
+          "birth": "1929-09-28",
+          "death": "2022-02-06",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "印度电影音乐和大众文化代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Lata_Mangeshkar"
+        },
+        {
+          "name": "Mother Teresa",
+          "type": "天主教修女和慈善工作者；诺贝尔和平奖获得者",
+          "birth": "1910-08-26",
+          "death": "1997-09-05",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "天主教修女和慈善工作者；诺贝尔和平奖获得者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Mother_Teresa"
+        },
+        {
+          "name": "Ravi Shankar",
+          "type": "印度西塔琴演奏家和世界音乐传播者",
+          "birth": "1920-04-07",
+          "death": "2012-12-11",
+          "deathTime": null,
+          "deathDatePrecision": "day",
+          "summary": "印度西塔琴演奏家和世界音乐传播者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Ravi_Shankar"
+        },
+        {
+          "name": "Vikram Sarabhai",
+          "type": "物理学家",
+          "birth": "1919-08-12",
+          "death": "1971-12-30",
+          "summary": "物理学家和印度空间研究事业奠基者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Vikram_Sarabhai",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "R. K. Narayan",
+          "type": "作家",
+          "birth": "1906-10-10",
+          "death": "2001-05-13",
+          "summary": "作家，印度英语文学代表人物",
+          "sourceUrl": "https://en.wikipedia.org/wiki/R._K._Narayan",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Irrfan Khan",
+          "type": "演员",
+          "birth": "1967-01-07",
+          "death": "2020-04-29",
+          "summary": "印度演员，活跃于印度、英国和美国电影",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Irrfan_Khan",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        },
+        {
+          "name": "Sridevi",
+          "type": "演员和舞者",
+          "birth": "1963-08-13",
+          "death": "2018-02-24",
+          "summary": "印度电影演员和舞者",
+          "sourceUrl": "https://en.wikipedia.org/wiki/Sridevi",
+          "deathTime": null,
+          "deathDatePrecision": "day"
+        }
+      ]
+    }
+  ]
+}

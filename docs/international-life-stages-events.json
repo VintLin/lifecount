@@ -1,0 +1,564 @@
+{
+  "schemaVersion": "1.0",
+  "updatedAt": "2026-11-10",
+  "description": "各国典型教育路径、法律门槛、人口事件和启发性成就事件。代表性模型不是个人必经时间线。",
+  "countries": [
+    {
+      "country": "China",
+      "educationPaths": [
+        {
+          "id": "cn-undergraduate-work",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–6 幼儿园",
+            "6–12 小学",
+            "12–15 初中",
+            "15–18 普通高中",
+            "18–22 本科",
+            "22+ 工作"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "cn-academic-graduate",
+          "stages": [
+            "15–18 普通高中",
+            "18–22 本科",
+            "22–25 研究生",
+            "25+ 工作"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "cn-secondary-vocational",
+          "stages": [
+            "12–15 初中",
+            "15–18 中等职业教育",
+            "18+ 工作"
+          ],
+          "status": "conditional"
+        }
+      ],
+      "events": [
+        {
+          "age": 18,
+          "label": "民事成年、普通汽车驾驶",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 26.8,
+          "label": "女性首次生育（2017）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 29.38,
+          "label": "男性首次结婚（2020）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 27.95,
+          "label": "女性首次结婚（2020）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 75.4,
+          "label": "男性出生时预期寿命（2020）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 80.9,
+          "label": "女性出生时预期寿命（2020）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 29.5,
+          "label": "首次购房年龄参考（2018）",
+          "type": "asset_milestone",
+          "status": "conditional"
+        },
+        {
+          "age": 35.6,
+          "label": "城镇购房者年龄参考（2025）",
+          "type": "asset_milestone",
+          "status": "conditional"
+        },
+        {
+          "age": 30.5,
+          "label": "首次拥有汽车年龄参考（2025）",
+          "type": "asset_milestone",
+          "status": "conditional"
+        },
+        {
+          "age": 22.4,
+          "label": "平均取得驾驶证年龄参考（2025）",
+          "type": "asset_milestone",
+          "status": "conditional"
+        },
+        {
+          "age": 23,
+          "label": "首次创业年龄段参考（21–25 岁）",
+          "type": "career_milestone",
+          "status": "conditional"
+        },
+        {
+          "age": 27,
+          "label": "首次跨城市迁移年龄拐点参考",
+          "type": "mobility_milestone",
+          "status": "candidate_only"
+        }
+      ],
+      "achievements": [
+        {
+          "age": 84,
+          "label": "屠呦呦获得诺贝尔生理学或医学奖（2015）",
+          "type": "achievement",
+          "status": "conditional"
+        }
+      ]
+    },
+    {
+      "country": "France",
+      "educationPaths": [
+        {
+          "id": "fr-licence-work",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–6 maternelle",
+            "6–11 小学",
+            "11–15 collège",
+            "15–18 lycée",
+            "18–21 Licence",
+            "21+ 工作"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "fr-licence-master",
+          "stages": [
+            "15–18 普通高中",
+            "18–21 Licence",
+            "21–23 Master",
+            "23+ 工作"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "fr-vocational-bts",
+          "stages": [
+            "15–18 职业高中",
+            "18–20 BTS",
+            "20+ 工作"
+          ],
+          "status": "conditional"
+        }
+      ],
+      "events": [
+        {
+          "age": 18,
+          "label": "民事成年与通常投票年龄",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 17,
+          "label": "普通汽车驾驶（2024起）",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 29.1,
+          "label": "女性首次生育（2023）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 36.6,
+          "label": "男性实际初婚平均年龄（2022）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 34.7,
+          "label": "女性实际初婚平均年龄（2022）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 80.3,
+          "label": "男性出生时预期寿命（2025）",
+          "type": "demographic",
+          "status": "conditional"
+        },
+        {
+          "age": 85.9,
+          "label": "女性出生时预期寿命（2025）",
+          "type": "demographic",
+          "status": "conditional"
+        }
+      ],
+      "achievements": [
+        {
+          "age": 36,
+          "label": "Marie Curie 获得诺贝尔物理学奖（1903）",
+          "type": "achievement",
+          "status": "conditional"
+        }
+      ]
+    },
+    {
+      "country": "United Kingdom",
+      "educationPaths": [
+        {
+          "id": "uk-england-alevel-bachelor",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–4 学前",
+            "4–5 Reception",
+            "5–11 小学",
+            "11–16 中学",
+            "16–18 A-level",
+            "18–21 本科"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "uk-england-tlevel-work",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–4 学前",
+            "4–5 Reception",
+            "5–11 小学",
+            "11–16 中学",
+            "16–18 T Level",
+            "18+ 工作"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "uk-scotland-bachelor",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–5 学前",
+            "5–12 小学",
+            "12–16 中学",
+            "16–18 高中后期",
+            "18–22 本科"
+          ],
+          "status": "conditional"
+        }
+      ],
+      "events": [
+        {
+          "age": 18,
+          "label": "成年或英国议会投票",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 17,
+          "label": "普通汽车驾驶",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 29.4,
+          "label": "女性首次生育（2024，英格兰及威尔士）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 32.7,
+          "label": "男性首次法律伴侣关系中位数（2022）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 31.2,
+          "label": "女性首次法律伴侣关系中位数（2022）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 79.1,
+          "label": "男性出生时预期寿命（2022–2024）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 83.0,
+          "label": "女性出生时预期寿命（2022–2024）",
+          "type": "demographic",
+          "status": "verified"
+        }
+      ],
+      "achievements": [
+        {
+          "age": 62,
+          "label": "石黑一雄获得诺贝尔文学奖（2017）",
+          "type": "achievement",
+          "status": "conditional"
+        }
+      ]
+    },
+    {
+      "country": "Russia",
+      "educationPaths": [
+        {
+          "id": "ru-eleven-year-bachelor",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–7 幼儿教育近似期",
+            "7–11 小学",
+            "11–16 基础普通教育",
+            "16–18 高中",
+            "18–22 本科"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "ru-eleven-year-specialist",
+          "stages": [
+            "7–18 普通学校",
+            "18–23 专家学位课程",
+            "23+ 工作"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "ru-after-grade9-vocational",
+          "stages": [
+            "7–11 小学",
+            "11–16 基础普通教育",
+            "16–20 中等职业教育",
+            "20+ 工作"
+          ],
+          "status": "conditional"
+        }
+      ],
+      "events": [
+        {
+          "age": 18,
+          "label": "民事成年与投票",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 64,
+          "label": "男性法定养老金年龄（2026）",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 25.2,
+          "label": "女性第一孩次假设队列平均年龄（2013）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 68.0,
+          "label": "男性出生时预期寿命（2023）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 78.7,
+          "label": "女性出生时预期寿命（2023）",
+          "type": "demographic",
+          "status": "verified"
+        }
+      ],
+      "achievements": [
+        {
+          "age": 27,
+          "label": "Yuri Gagarin 完成人类首次载人太空飞行（1961，苏联）",
+          "type": "achievement",
+          "status": "conditional"
+        }
+      ]
+    },
+    {
+      "country": "Japan",
+      "educationPaths": [
+        {
+          "id": "jp-university-work",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–6 幼儿园",
+            "6–12 小学",
+            "12–15 初中",
+            "15–18 高中",
+            "18–22 大学",
+            "22+ 工作"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "jp-senmon-work",
+          "stages": [
+            "15–18 高中",
+            "18–20 专门学校",
+            "20+ 工作"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "jp-kosen-work",
+          "stages": [
+            "12–15 初中",
+            "15–20 五年制高等专门学校",
+            "20+ 工作"
+          ],
+          "status": "conditional"
+        }
+      ],
+      "events": [
+        {
+          "age": 18,
+          "label": "成年（2022起）",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 20,
+          "label": "饮酒与烟草",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 31,
+          "label": "第一子出生时母亲平均年龄（2024）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 31.1,
+          "label": "男性平均初婚年龄（2024）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 29.8,
+          "label": "女性平均初婚年龄（2024）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 81.35,
+          "label": "男性出生时预期寿命（2025）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 87.33,
+          "label": "女性出生时预期寿命（2025）",
+          "type": "demographic",
+          "status": "verified"
+        }
+      ],
+      "achievements": [
+        {
+          "age": 50,
+          "label": "山中伸弥获得诺贝尔生理学或医学奖（2012）",
+          "type": "achievement",
+          "status": "conditional"
+        }
+      ]
+    },
+    {
+      "country": "India",
+      "educationPaths": [
+        {
+          "id": "in-traditional-10plus2-bachelor3",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–6 学前",
+            "6–11 小学",
+            "11–14 初中",
+            "14–16 中学",
+            "16–18 高中",
+            "18–21 三年本科"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "in-nep-four-year-bachelor",
+          "stages": [
+            "0–3 婴幼儿",
+            "3–8 Foundation",
+            "8–11 Preparatory",
+            "11–14 Middle",
+            "14–18 Secondary",
+            "18–22 本科"
+          ],
+          "status": "conditional"
+        },
+        {
+          "id": "in-class10-iti",
+          "stages": [
+            "14–16 中学",
+            "16+ ITI职业技能培训与工作"
+          ],
+          "status": "conditional"
+        }
+      ],
+      "events": [
+        {
+          "age": 18,
+          "label": "民事成年与投票、女性法定最低结婚年龄",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 21,
+          "label": "男性法定最低结婚年龄",
+          "type": "legal_threshold",
+          "status": "conditional"
+        },
+        {
+          "age": 21.2,
+          "label": "女性首次生育年龄中位数（2019–2021）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 24.9,
+          "label": "男性首次结婚年龄中位数（2019–2021）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 18.8,
+          "label": "女性首次结婚年龄中位数（2019–2021）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 68.5,
+          "label": "男性出生时预期寿命（2019–2023）",
+          "type": "demographic",
+          "status": "verified"
+        },
+        {
+          "age": 72.5,
+          "label": "女性出生时预期寿命（2019–2023）",
+          "type": "demographic",
+          "status": "verified"
+        }
+      ],
+      "achievements": [
+        {
+          "age": 52,
+          "label": "Rabindranath Tagore 获得诺贝尔文学奖（1913）",
+          "type": "achievement",
+          "status": "conditional"
+        }
+      ]
+    }
+  ]
+}

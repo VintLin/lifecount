@@ -1,6 +1,6 @@
 import type {
+  LifeGender,
   LifePresetCountryId,
-  LifePresetPathId,
   LifeStageId,
   LifeUnit
 } from "@/data/lifecount";
@@ -22,7 +22,10 @@ export interface LifeCountMessages {
   stages: string;
   stagesOpen: string;
   close: string;
-  selectPreset: string;
+  selectCountry: string;
+  selectCase: string;
+  gender: string;
+  selectGender: string;
   birthday: string;
   displayAge: string;
   cancel: string;
@@ -39,12 +42,19 @@ export interface LifeCountMessages {
   cellStatus: Record<"elapsed" | "current" | "future", string>;
   languageButton: string;
   languageButtonLabel: string;
+  stageAnnotations: string;
+  stageAnnotationsToggle: string;
+  celebrityDeaths: string;
+  celebrityDeathsToggle: string;
+  biography: string;
+  biographyToggle: string;
+  selectBiography: string;
   themeLight: string;
   themeDark: string;
   githubRepository: string;
+  genders: Record<LifeGender, string>;
   stageLabels: Record<LifeStageId, string>;
   countryLabels: Record<LifePresetCountryId, string>;
-  pathLabels: Record<LifePresetPathId, string>;
 }
 
 const zhCN: LifeCountMessages = {
@@ -56,7 +66,10 @@ const zhCN: LifeCountMessages = {
   stages: "人生阶段",
   stagesOpen: "查看人生阶段",
   close: "关闭",
-  selectPreset: "选择人生阶段预设",
+  selectCountry: "选择国家",
+  selectCase: "选择典型人生案例",
+  gender: "性别",
+  selectGender: "选择性别，用于计算退休年龄",
   birthday: "出生日期",
   displayAge: "最高年龄",
   cancel: "取消",
@@ -90,18 +103,43 @@ const zhCN: LifeCountMessages = {
   },
   languageButton: "EN",
   languageButtonLabel: "View this page in English",
+  stageAnnotations: "典型人生阶段和事件",
+  stageAnnotationsToggle: "显示或隐藏典型人生阶段和事件",
+  celebrityDeaths: "名人去世时间",
+  celebrityDeathsToggle: "显示或隐藏名人去世时间",
+  biography: "名人履历",
+  biographyToggle: "显示或隐藏名人履历",
+  selectBiography: "选择名人",
   themeLight: "切换到浅色模式",
   themeDark: "切换到深色模式",
   githubRepository: "在 GitHub 查看 LifeCount",
+  genders: {
+    unspecified: "未指定",
+    female: "女",
+    male: "男"
+  },
   stageLabels: {
-    preschool: "学前",
+    "early-childhood": "婴幼儿期",
+    preschool: "学前期",
     kindergarten: "幼儿园",
+    reception: "学前衔接班",
     primary: "小学",
     middle: "初中",
+    secondary: "中学",
     high: "高中",
+    "sixth-form": "高中后两年",
+    "upper-secondary-vocational": "中等职业教育",
     undergraduate: "本科",
     graduate: "研究生",
-    work: "工作"
+    associate: "副学士",
+    "tertiary-vocational": "高等职业教育",
+    foundation: "基础阶段",
+    preparatory: "预备阶段",
+    vocational: "职业技能培训",
+    specialist: "专家学位",
+    "integrated-technical": "五年制高等专门教育",
+    work: "工作",
+    retirement: "退休"
   },
   countryLabels: {
     cn: "中国",
@@ -111,14 +149,6 @@ const zhCN: LifeCountMessages = {
     ru: "俄罗斯",
     jp: "日本",
     in: "印度"
-  },
-  pathLabels: {
-    "undergraduate-work": "普通本科后就业",
-    "vocational-work": "专科或高职后就业",
-    "undergraduate-graduate": "本科后研究生",
-    "k12-undergraduate": "K-12 后四年制本科",
-    "community-college-transfer": "社区大学转学",
-    "high-school-vocational": "高中后职业路径"
   }
 };
 
@@ -131,7 +161,10 @@ const en: LifeCountMessages = {
   stages: "Life stages",
   stagesOpen: "View life stages",
   close: "Close",
-  selectPreset: "Choose a life-stage preset",
+  selectCountry: "Choose a country",
+  selectCase: "Choose a typical life case",
+  gender: "Gender",
+  selectGender: "Choose gender for retirement age",
   birthday: "Birthday",
   displayAge: "Maximum age",
   cancel: "Cancel",
@@ -165,18 +198,43 @@ const en: LifeCountMessages = {
   },
   languageButton: "中",
   languageButtonLabel: "以中文查看此页面",
+  stageAnnotations: "Typical life stages and events",
+  stageAnnotationsToggle: "Show or hide typical life stages and events",
+  celebrityDeaths: "Celebrity death dates",
+  celebrityDeathsToggle: "Show or hide celebrity death dates",
+  biography: "Celebrity biographies",
+  biographyToggle: "Show or hide celebrity biography",
+  selectBiography: "Choose a celebrity",
   themeLight: "Switch to light mode",
   themeDark: "Switch to dark mode",
   githubRepository: "View LifeCount on GitHub",
+  genders: {
+    unspecified: "Not specified",
+    female: "Female",
+    male: "Male"
+  },
   stageLabels: {
+    "early-childhood": "Early childhood",
     preschool: "Preschool",
     kindergarten: "Kindergarten",
+    reception: "Reception",
     primary: "Primary school",
     middle: "Middle school",
+    secondary: "Secondary school",
     high: "High school",
-    undergraduate: "Undergraduate",
+    "sixth-form": "Sixth form",
+    "upper-secondary-vocational": "Upper-secondary vocational",
+    undergraduate: "Bachelor degree",
     graduate: "Graduate school",
-    work: "Work"
+    associate: "Associate degree",
+    "tertiary-vocational": "Tertiary vocational",
+    foundation: "Foundation stage",
+    preparatory: "Preparatory stage",
+    vocational: "Vocational training",
+    specialist: "Specialist degree",
+    "integrated-technical": "Integrated technical education",
+    work: "Work",
+    retirement: "Retirement"
   },
   countryLabels: {
     cn: "China",
@@ -186,14 +244,6 @@ const en: LifeCountMessages = {
     ru: "Russia",
     jp: "Japan",
     in: "India"
-  },
-  pathLabels: {
-    "undergraduate-work": "Undergraduate then work",
-    "vocational-work": "Vocational education then work",
-    "undergraduate-graduate": "Undergraduate then graduate school",
-    "k12-undergraduate": "K-12 then four-year university",
-    "community-college-transfer": "Community college transfer",
-    "high-school-vocational": "Career path after high school"
   }
 };
 

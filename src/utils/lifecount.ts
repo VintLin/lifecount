@@ -1,5 +1,6 @@
 import type {
   LifeColor,
+  LifeGender,
   LifePreset,
   LifeStage,
   LifeUnit
@@ -84,25 +85,79 @@ export function lifeCells(
   });
 }
 
+export function lifeCellsUntil(
+  birthday: string,
+  endExclusive: string,
+  unit: LifeUnit
+): LifeCell[] {
+  const cells: LifeCell[] = [];
+  let start = birthday;
+  let index = 0;
+
+  while (start < endExclusive) {
+    const next =
+      unit === "day"
+        ? addDays(start, 1)
+        : unit === "week"
+          ? addDays(start, 7)
+          : anniversary(birthday, (index + 1) * (unit === "month" ? 1 : 12));
+    const end = next < endExclusive ? next : endExclusive;
+    cells.push({ start, end: addDays(end, -1) });
+    if (end >= endExclusive) break;
+    start = end;
+    index += 1;
+  }
+
+  return cells;
+}
+
 export function isDateInRange(date: string, start: string, end: string) {
   return date >= start && date <= end;
 }
 
-export function stageOverlapsRange(stage: LifeStage, start: string, end: string, today: string) {
-  const effectiveEnd = stage.endDate === OPEN_ENDED_STAGE_END_DATE ? today : stage.endDate;
-  return stage.startDate <= end && effectiveEnd >= start;
+export function stageOverlapsRange(stage: LifeStage, start: string, end: string) {
+  return stage.startDate <= end && stage.endDate >= start;
 }
 
-export function stageDatesForPreset(birthday: string, preset: LifePreset): LifeStage[] {
-  return preset.stages.map((stage) => ({
-    id: stage.id,
-    startDate: anniversary(birthday, stage.startAge * 12),
-    endDate:
-      stage.endAge === null
-        ? OPEN_ENDED_STAGE_END_DATE
-        : addDays(anniversary(birthday, stage.endAge * 12), -1),
-    color: stage.color
-  }));
+export function stageDatesForPreset(
+  birthday: string,
+  preset: LifePreset,
+  gender: LifeGender
+): LifeStage[] {
+  const retirementAge = preset.retirementAges[gender];
+  const retirementStart = anniversary(birthday, retirementAge * 12);
+
+  return preset.stages.flatMap((stage) => {
+    const startDate = anniversary(birthday, stage.startAge * 12);
+    if (stage.id === "work" && stage.endAge === null) {
+      return [
+        {
+          id: "work",
+          startDate,
+          endDate: addDays(retirementStart, -1),
+          color: stage.color
+        },
+        {
+          id: "retirement",
+          startDate: retirementStart,
+          endDate: OPEN_ENDED_STAGE_END_DATE,
+          color: "sand"
+        }
+      ] satisfies LifeStage[];
+    }
+
+    return [
+      {
+        id: stage.id,
+        startDate,
+        endDate:
+          stage.endAge === null
+            ? OPEN_ENDED_STAGE_END_DATE
+            : addDays(anniversary(birthday, stage.endAge * 12), -1),
+        color: stage.color
+      }
+    ] satisfies LifeStage[];
+  });
 }
 
 export function cellStatus(cell: LifeCell, today: string): LifeCellStatus {
@@ -113,14 +168,13 @@ export function cellStatus(cell: LifeCell, today: string): LifeCellStatus {
 
 export function dominantStage(
   cell: LifeCell,
-  stages: LifeStage[],
-  today: string
+  stages: LifeStage[]
 ): LifeStage | undefined {
   const counts = new Map<string, { stage: LifeStage | undefined; days: number; order: number }>();
   let date = cell.start;
 
   while (date <= cell.end) {
-    const stage = stages.find((candidate) => stageOverlapsRange(candidate, date, date, today));
+    const stage = stages.find((candidate) => stageOverlapsRange(candidate, date, date));
     const key = stage?.id ?? "__unassigned__";
     const current = counts.get(key) ?? {
       stage,
@@ -142,7 +196,7 @@ export function cellColorKey(
   stages: LifeStage[],
   today: string
 ): LifeColor | "elapsed" | "future" | "current" {
-  const stage = dominantStage(cell, stages, today);
+  const stage = dominantStage(cell, stages);
   if (stage) return stage.color;
 
   return cellStatus(cell, today);
@@ -165,7 +219,7 @@ export function formatCellLabel(
   locale: string
 ) {
   const status = cellStatus(cell, today);
-  const stage = dominantStage(cell, stages, today);
+  const stage = dominantStage(cell, stages);
   const details = [
     messages.cellStatus[status],
     stage ? messages.stageLabels[stage.id] : undefined
