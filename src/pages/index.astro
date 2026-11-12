@@ -178,6 +178,7 @@ const schema = {
           <div class="lifecount-map-axis-x" data-lifecount-axis-x aria-hidden="true"></div>
           <div class="lifecount-map-axis-y" data-lifecount-axis-y aria-hidden="true"></div>
           <div class="lifecount-annotations" data-lifecount-annotations aria-label="关键人生节点"></div>
+          <div class="lifecount-cell-popover" data-lifecount-cell-popover role="dialog" aria-live="polite" hidden></div>
         </div>
       </div>
       <div class="lifecount-legend" data-lifecount-legend role="list" aria-label="图例"></div>
@@ -557,6 +558,9 @@ const schema = {
   .lifecount-panel {
     position: relative;
     padding: 0;
+    --annotation-rail-width: 168px;
+    --annotation-grid-gap: 48px;
+    --lifecount-grid-gutter: calc(var(--annotation-rail-width) + var(--annotation-grid-gap));
   }
 
   .lifecount-map-shell {
@@ -618,6 +622,87 @@ const schema = {
     pointer-events: none;
     overflow: visible;
     z-index: 3;
+  }
+
+  .lifecount-cell-popover {
+    position: absolute;
+    z-index: 7;
+    width: min(15rem, calc(100% - 1rem));
+    box-sizing: border-box;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid color-mix(in srgb, var(--fg-strong) 18%, transparent);
+    border-radius: 0.55rem;
+    background: color-mix(in srgb, var(--bg) 96%, var(--fg-strong));
+    color: var(--fg-strong);
+    box-shadow: 0 0.7rem 2rem color-mix(in srgb, var(--fg-strong) 18%, transparent);
+    font-size: 0.72rem;
+    line-height: 1.45;
+    pointer-events: auto;
+  }
+
+  .lifecount-cell-popover[hidden] {
+    display: none;
+  }
+
+  .lifecount-cell-popover h3,
+  .lifecount-cell-popover p {
+    margin: 0;
+  }
+
+  .lifecount-cell-popover h3 {
+    font-size: 0.78rem;
+    font-weight: 650;
+  }
+
+  .lifecount-cell-popover-kicker {
+    margin-bottom: 0.12rem;
+    color: var(--fg-muted);
+    font-size: 0.62rem;
+  }
+
+  .lifecount-cell-popover dl {
+    display: grid;
+    gap: 0.22rem;
+    margin: 0.55rem 0 0;
+  }
+
+  .lifecount-cell-popover dl div {
+    display: grid;
+    grid-template-columns: 3.2rem minmax(0, 1fr);
+    gap: 0.4rem;
+  }
+
+  .lifecount-cell-popover dt {
+    color: var(--fg-muted);
+  }
+
+  .lifecount-cell-popover dd {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .lifecount-cell-popover-events {
+    display: grid;
+    gap: 0.3rem;
+    margin-top: 0.55rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--fg-muted) 18%, transparent);
+  }
+
+  .lifecount-cell-popover-event {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.3rem;
+  }
+
+  .lifecount-cell-popover-event strong {
+    font-weight: 600;
+  }
+
+  .lifecount-cell-popover-event-detail {
+    color: var(--fg-muted);
+    font-size: 0.65rem;
   }
 
   .lifecount-annotation-group {
@@ -752,9 +837,12 @@ const schema = {
 
   .lifecount-legend {
     display: flex;
+    width: calc(100% - (var(--lifecount-grid-gutter) * 2));
+    box-sizing: border-box;
     flex-wrap: wrap;
     gap: 0.6rem 1rem;
     margin-top: 1rem;
+    margin-inline: var(--lifecount-grid-gutter);
     color: var(--fg-muted);
     font-size: 0.76rem;
   }
@@ -1075,6 +1163,11 @@ const schema = {
     }
 
     .lifecount-map-stage {
+      --annotation-rail-width: 140px;
+      --annotation-grid-gap: 36px;
+    }
+
+    .lifecount-panel {
       --annotation-rail-width: 140px;
       --annotation-grid-gap: 36px;
     }

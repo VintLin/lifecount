@@ -1,5 +1,6 @@
 import type { LifeStageTemplate } from "./lifecount";
 import type { LifeAnnotationEvent, LifeSpecialPeriod } from "./lifecount-annotations";
+import { additionalLifeBiographyProfiles } from "./lifecount-biographies-additional";
 
 export interface LifeBiographyStage extends LifeStageTemplate {
   labelZh: string;
@@ -27,18 +28,24 @@ export const lifeBiographyProfiles: LifeBiographyProfile[] = [
     birthDate: "1971-06-28",
     basePresetId: "cn-undergraduate-work",
     stages: [
-      { id: "early-childhood", startAge: 0, endAge: 3, color: "cyan", labelZh: "婴幼儿期", labelEn: "Early childhood" },
-      { id: "kindergarten", startAge: 3, endAge: 6, color: "green", labelZh: "学前阶段", labelEn: "Preschool years" },
-      { id: "primary", startAge: 6, endAge: 12, color: "blue", labelZh: "小学阶段", labelEn: "Primary school" },
-      { id: "middle", startAge: 12, endAge: 15, color: "purple", labelZh: "中学前段", labelEn: "Lower secondary" },
-      { id: "high", startAge: 15, endAge: 17.5, color: "pink", labelZh: "高中阶段", labelEn: "Upper secondary" },
+      { id: "early-childhood", startAge: 0, endAge: 3, color: "cyan", labelZh: "南非婴幼儿期", labelEn: "Early childhood in South Africa" },
+      { id: "kindergarten", startAge: 3, endAge: 6, color: "green", labelZh: "比勒陀利亚学前阶段", labelEn: "Preschool years in Pretoria" },
+      { id: "primary", startAge: 6, endAge: 12, color: "blue", labelZh: "南非小学阶段", labelEn: "Primary school in South Africa" },
+      { id: "middle", startAge: 12, endAge: 15, color: "purple", labelZh: "比勒陀利亚中学前段", labelEn: "Lower secondary in Pretoria" },
+      { id: "high", startAge: 15, endAge: 17.5, color: "pink", labelZh: "Pretoria Boys High School", labelEn: "Pretoria Boys High School" },
       { id: "undergraduate", startAge: 17.5, endAge: 18, color: "sand", labelZh: "比勒陀利亚大学", labelEn: "University of Pretoria" },
       { id: "undergraduate", startAge: 18, endAge: 21, color: "orange", labelZh: "皇后大学", labelEn: "Queen's University" },
       { id: "undergraduate", startAge: 21, endAge: 24, color: "purple", labelZh: "宾夕法尼亚大学", labelEn: "University of Pennsylvania" },
-      { id: "work", startAge: 24, endAge: 31.3, color: "red", labelZh: "Zip2 / X.com / PayPal", labelEn: "Zip2 / X.com / PayPal" },
-      { id: "work", startAge: 31.3, endAge: 44.9, color: "sand", labelZh: "SpaceX / Tesla / SolarCity", labelEn: "SpaceX / Tesla / SolarCity" },
-      { id: "work", startAge: 44.9, endAge: 51.3, color: "green", labelZh: "Neuralink / The Boring Company", labelEn: "Neuralink / The Boring Company" },
-      { id: "work", startAge: 51.3, endAge: null, color: "orange", labelZh: "X / xAI", labelEn: "X / xAI" }
+      { id: "work", startAge: 24, endAge: 28, color: "red", labelZh: "Zip2 创业期", labelEn: "Zip2 startup period" },
+      { id: "work", startAge: 28, endAge: 29.5, color: "pink", labelZh: "X.com 创业阶段", labelEn: "X.com entrepreneurship" },
+      { id: "work", startAge: 29.5, endAge: 31.3, color: "purple", labelZh: "PayPal 业务阶段", labelEn: "PayPal business period" },
+      { id: "work", startAge: 31.3, endAge: 32.8, color: "sand", labelZh: "SpaceX 早期发展", labelEn: "Early SpaceX development" },
+      { id: "work", startAge: 32.8, endAge: 37.3, color: "orange", labelZh: "Tesla 董事长阶段", labelEn: "Tesla chairman period" },
+      { id: "work", startAge: 37.3, endAge: 44.9, color: "red", labelZh: "Tesla CEO 阶段", labelEn: "Tesla CEO period" },
+      { id: "work", startAge: 44.9, endAge: 48, color: "green", labelZh: "Neuralink 创业阶段", labelEn: "Neuralink startup period" },
+      { id: "work", startAge: 48, endAge: 51.3, color: "purple", labelZh: "The Boring Company 建设阶段", labelEn: "The Boring Company development" },
+      { id: "work", startAge: 51.3, endAge: 51.9, color: "red", labelZh: "X 所有者兼 CEO", labelEn: "X owner and CEO" },
+      { id: "work", startAge: 51.9, endAge: null, color: "orange", labelZh: "X 产品技术领导", labelEn: "X product and technology leadership" }
     ],
     sourceUrl: "https://en.wikipedia.org/wiki/Elon_Musk",
     specialPeriods: [],
@@ -161,17 +168,20 @@ export const lifeBiographyProfiles: LifeBiographyProfile[] = [
     deathDate: "2011-10-05",
     basePresetId: "us-bachelor-work",
     stages: [
-      { id: "early-childhood", startAge: 0, endAge: 6, color: "cyan", labelZh: "婴幼儿期", labelEn: "Early childhood" },
+      { id: "early-childhood", startAge: 0, endAge: 6, color: "cyan", labelZh: "加州收养家庭早期生活", labelEn: "Early life in California adoptive family" },
       { id: "primary", startAge: 6, endAge: 10, color: "blue", labelZh: "Monta Loma Elementary（约）", labelEn: "Monta Loma Elementary (approx.)" },
       { id: "middle", startAge: 10, endAge: 13, color: "purple", labelZh: "Crittenden Middle School（约）", labelEn: "Crittenden Middle School (approx.)" },
       { id: "high", startAge: 13, endAge: 17, color: "pink", labelZh: "Homestead High School", labelEn: "Homestead High School" },
       { id: "undergraduate", startAge: 17, endAge: 19, color: "orange", labelZh: "Reed College", labelEn: "Reed College" },
       { id: "work", startAge: 19, endAge: 19.5, color: "sand", labelZh: "Atari 早期工作", labelEn: "Early Atari work" },
-      { id: "work", startAge: 19.5, endAge: 20, color: "purple", labelZh: "印度求学与精神探索", labelEn: "India and spiritual exploration" },
-      { id: "work", startAge: 20, endAge: 21, color: "sand", labelZh: "Atari / 个人计算机探索", labelEn: "Atari / personal-computer exploration" },
+      { id: "work", startAge: 19.5, endAge: 20, color: "purple", labelZh: "印度精神探索阶段", labelEn: "India spiritual exploration" },
+      { id: "work", startAge: 20, endAge: 21, color: "sand", labelZh: "Atari 游戏开发阶段", labelEn: "Atari game development" },
       { id: "work", startAge: 21, endAge: 30, color: "red", labelZh: "Apple 早期", labelEn: "Early Apple" },
-      { id: "work", startAge: 30, endAge: 42, color: "purple", labelZh: "NeXT / Pixar", labelEn: "NeXT / Pixar" },
-      { id: "work", startAge: 42, endAge: null, color: "orange", labelZh: "Apple / Pixar 回归", labelEn: "Apple / Pixar return" }
+      { id: "work", startAge: 30, endAge: 32, color: "purple", labelZh: "NeXT 创业阶段", labelEn: "NeXT startup period" },
+      { id: "work", startAge: 32, endAge: 42, color: "pink", labelZh: "Pixar 管理阶段", labelEn: "Pixar leadership period" },
+      { id: "work", startAge: 42, endAge: 44.9, color: "orange", labelZh: "Apple 临时 CEO 重建期", labelEn: "Apple interim CEO rebuilding period" },
+      { id: "work", startAge: 44.9, endAge: 56.5, color: "red", labelZh: "Apple 正式 CEO 阶段", labelEn: "Apple CEO period" },
+      { id: "work", startAge: 56.5, endAge: null, color: "purple", labelZh: "Apple 董事长过渡阶段", labelEn: "Apple chairman transition" }
     ],
     sourceUrl: "https://en.wikipedia.org/wiki/Steve_Jobs",
     specialPeriods: [],
@@ -294,7 +304,8 @@ export const lifeBiographyProfiles: LifeBiographyProfile[] = [
         sourceUrl: "https://www.apple.com/in/newsroom/2011/10/05Statement-by-Apples-Board-of-Directors/"
       }
     ]
-  }
+  },
+  ...additionalLifeBiographyProfiles
 ];
 
 export function biographyById(id: string | null) {

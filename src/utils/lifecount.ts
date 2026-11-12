@@ -3,6 +3,7 @@ import type {
   LifeGender,
   LifePreset,
   LifeStage,
+  LifeStageTemplate,
   LifeUnit
 } from "@/data/lifecount";
 import type { LifeCountMessages } from "@/i18n/lifecount";
@@ -127,9 +128,53 @@ export function stageDatesForPreset(
   const retirementAge = preset.retirementAges[gender];
   const retirementStart = anniversary(birthday, retirementAge * 12);
 
-  return preset.stages.flatMap((stage) => {
-    const startDate = anniversary(birthday, stage.startAge * 12);
+  const calendar = academicCalendarForPreset(preset);
+  const isAcademic = (stage: LifeStageTemplate) => [
+    "preschool",
+    "kindergarten",
+    "primary",
+    "middle",
+    "secondary",
+    "high",
+    "sixth-form",
+    "upper-secondary-vocational",
+    "undergraduate",
+    "graduate",
+    "associate",
+    "tertiary-vocational",
+    "foundation",
+    "preparatory",
+    "vocational",
+    "specialist",
+    "integrated-technical"
+  ].includes(stage.id);
+  const starts = preset.stages.map((stage) => {
+    const stageCalendar = calendar && isAcademic(stage)
+      ? stage.id === "undergraduate" || stage.id === "graduate" || stage.id === "associate"
+        ? calendar.higher
+        : calendar.school
+      : null;
+    return stageCalendar
+      ? calendarStartDate(birthday, stage.startAge, stageCalendar)
+      : anniversary(birthday, stage.startAge * 12);
+  });
+
+  let previousEnd: string | null = null;
+  return preset.stages.flatMap((stage, index) => {
+    const stageIsAcademic = Boolean(calendar && isAcademic(stage));
+    const nextStage = preset.stages[index + 1];
+    const nextStart = starts[index + 1];
+    const stageCalendar = calendar && stageIsAcademic
+      ? stage.id === "undergraduate" || stage.id === "graduate" || stage.id === "associate"
+        ? calendar.higher
+        : calendar.school
+      : null;
+    let startDate = starts[index];
+    if (previousEnd) {
+      startDate = addDays(previousEnd, 1);
+    }
     if (stage.id === "work" && stage.endAge === null) {
+      previousEnd = addDays(retirementStart, -1);
       return [
         {
           id: "work",
@@ -146,18 +191,108 @@ export function stageDatesForPreset(
       ] satisfies LifeStage[];
     }
 
+    let endDate = stage.endAge === null
+      ? OPEN_ENDED_STAGE_END_DATE
+      : stageCalendar
+        ? calendarEndDate(birthday, stage.endAge, stageCalendar)
+        : addDays(anniversary(birthday, stage.endAge * 12), -1);
+    if (
+      stage.endAge !== null &&
+      nextStage &&
+      nextStart &&
+      stage.endAge === nextStage.startAge &&
+      !stageIsAcademic &&
+      isAcademic(nextStage)
+    ) {
+      endDate = addDays(nextStart, -1);
+    }
+    previousEnd = endDate;
+
     return [
       {
         id: stage.id,
         startDate,
-        endDate:
-          stage.endAge === null
-            ? OPEN_ENDED_STAGE_END_DATE
-            : addDays(anniversary(birthday, stage.endAge * 12), -1),
+        endDate,
         color: stage.color
       }
     ] satisfies LifeStage[];
   });
+}
+
+interface AcademicCalendarBoundary {
+  startMonth: number;
+  startDay: number;
+  endMonth: number;
+  endDay: number;
+}
+
+interface AcademicCalendars {
+  school: AcademicCalendarBoundary;
+  higher: AcademicCalendarBoundary;
+}
+
+function academicCalendarForPreset(preset: LifePreset): AcademicCalendars {
+  if (preset.countryId === "cn") {
+    return {
+      school: { startMonth: 9, startDay: 1, endMonth: 7, endDay: 15 },
+      higher: { startMonth: 9, startDay: 1, endMonth: 6, endDay: 30 }
+    };
+  }
+  if (preset.countryId === "fr") {
+    return {
+      school: { startMonth: 9, startDay: 1, endMonth: 7, endDay: 7 },
+      higher: { startMonth: 9, startDay: 15, endMonth: 6, endDay: 30 }
+    };
+  }
+  if (preset.countryId === "uk") {
+    const scotland = preset.pathId === "scotland-bachelor";
+    return {
+      school: scotland
+        ? { startMonth: 8, startDay: 15, endMonth: 6, endDay: 30 }
+        : { startMonth: 9, startDay: 1, endMonth: 7, endDay: 20 },
+      higher: { startMonth: 9, startDay: 15, endMonth: 6, endDay: 30 }
+    };
+  }
+  if (preset.countryId === "ru") {
+    return {
+      school: { startMonth: 9, startDay: 1, endMonth: 6, endDay: 30 },
+      higher: { startMonth: 9, startDay: 1, endMonth: 6, endDay: 30 }
+    };
+  }
+  if (preset.countryId === "jp") {
+    return {
+      school: { startMonth: 4, startDay: 1, endMonth: 3, endDay: 31 },
+      higher: { startMonth: 4, startDay: 1, endMonth: 3, endDay: 31 }
+    };
+  }
+  if (preset.countryId === "in") {
+    return {
+      school: { startMonth: 4, startDay: 1, endMonth: 3, endDay: 31 },
+      higher: { startMonth: 7, startDay: 1, endMonth: 4, endDay: 30 }
+    };
+  }
+  return {
+    school: { startMonth: 9, startDay: 1, endMonth: 6, endDay: 30 },
+    higher: { startMonth: 9, startDay: 1, endMonth: 5, endDay: 31 }
+  };
+}
+
+function calendarStartDate(
+  birthday: string,
+  age: number,
+  calendar: AcademicCalendarBoundary
+) {
+  const birthYear = parseDay(birthday).getUTCFullYear();
+  return isoDay(utcDate(birthYear + Math.floor(age), calendar.startMonth - 1, calendar.startDay));
+}
+
+function calendarEndDate(
+  birthday: string,
+  age: number,
+  calendar: AcademicCalendarBoundary
+) {
+  const birthYear = parseDay(birthday).getUTCFullYear();
+  return isoDay(utcDate(birthYear + Math.floor(age), calendar.endMonth - 1, calendar.endDay));
 }
 
 export function cellStatus(cell: LifeCell, today: string): LifeCellStatus {
@@ -170,12 +305,15 @@ export function dominantStage(
   cell: LifeCell,
   stages: LifeStage[]
 ): LifeStage | undefined {
-  const counts = new Map<string, { stage: LifeStage | undefined; days: number; order: number }>();
+  // A biography can contain several distinct stages with the semantic id
+  // `work`. Use the stage instance as the bucket key so those colors remain
+  // independent while the id still powers the generic label fallback.
+  const counts = new Map<LifeStage | "__unassigned__", { stage: LifeStage | undefined; days: number; order: number }>();
   let date = cell.start;
 
   while (date <= cell.end) {
     const stage = stages.find((candidate) => stageOverlapsRange(candidate, date, date));
-    const key = stage?.id ?? "__unassigned__";
+    const key = stage ?? "__unassigned__";
     const current = counts.get(key) ?? {
       stage,
       days: 0,
@@ -222,7 +360,11 @@ export function formatCellLabel(
   const stage = dominantStage(cell, stages);
   const details = [
     messages.cellStatus[status],
-    stage ? messages.stageLabels[stage.id] : undefined
+    stage
+      ? locale === "en"
+        ? stage.labelEn ?? messages.stageLabels[stage.id]
+        : stage.labelZh ?? messages.stageLabels[stage.id]
+      : undefined
   ].filter(Boolean);
 
   return `${formatLifeDate(cell.start, locale)}${messages.dateRangeSeparator}${formatLifeDate(cell.end, locale)} · ${details.join(" · ")}`;

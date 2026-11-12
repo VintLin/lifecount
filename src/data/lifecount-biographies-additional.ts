@@ -1,0 +1,300 @@
+import type { LifeBiographyProfile } from "./lifecount-biographies";
+
+/**
+ * First researched extension set for biography mode.
+ *
+ * Dates that are only known to a year, season, or approximate age stay in the
+ * event detail instead of being promoted to a false day-level date.
+ */
+export const additionalLifeBiographyProfiles = [
+  {
+    id: "bill-gates",
+    nameZh: "比尔·盖茨",
+    nameEn: "Bill Gates",
+    birthDate: "1955-10-28",
+    basePresetId: "us-bachelor-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 6, color: "cyan", labelZh: "西雅图家庭成长", labelEn: "Family life in Seattle" },
+      { id: "primary", startAge: 6, endAge: 10, color: "blue", labelZh: "View Ridge Elementary", labelEn: "View Ridge Elementary" },
+      { id: "middle", startAge: 10, endAge: 12, color: "purple", labelZh: "西雅图公立学校后段", labelEn: "Later public-school years in Seattle" },
+      { id: "high", startAge: 12, endAge: 15, color: "pink", labelZh: "Lakeside School 早期阶段", labelEn: "Early years at Lakeside School" },
+      { id: "high", startAge: 15, endAge: 17.5, color: "red", labelZh: "Lakeside School 高年级阶段", labelEn: "Upper years at Lakeside School" },
+      { id: "undergraduate", startAge: 17.5, endAge: 20.5, color: "orange", labelZh: "Harvard College", labelEn: "Harvard College" },
+      { id: "work", startAge: 20.5, endAge: 25, color: "red", labelZh: "Microsoft 创业期", labelEn: "Microsoft startup period" },
+      { id: "work", startAge: 25, endAge: 44.2, color: "pink", labelZh: "Microsoft CEO 阶段", labelEn: "Microsoft CEO period" },
+      { id: "work", startAge: 44.2, endAge: 52.7, color: "purple", labelZh: "Microsoft 董事长阶段", labelEn: "Microsoft chairman period" },
+      { id: "work", startAge: 52.7, endAge: 68.6, color: "green", labelZh: "基金会全职共同主席", labelEn: "Full-time foundation co-chair" },
+      { id: "work", startAge: 68.6, endAge: null, color: "orange", labelZh: "基金会唯一主席", labelEn: "Sole foundation chair" }
+    ],
+    sourceUrl: "https://www.si.edu/object/bill-gates%3Anpg_NPG.97.TC8.1",
+    specialPeriods: [],
+    events: [
+      { age: 13, label: "接触 Lakeside 计算机实验室", type: "achievement", year: 1968, detail: "年份数据；首次持续接触计算机，日期精度为年份，证据为 conditional。", status: "conditional", sourceUrl: "https://www.historylink.org/file/10421" },
+      { age: 17, label: "创办 Traf-O-Data", type: "career_milestone", year: 1972, detail: "年份数据；与 Paul Allen 合作。", status: "verified", sourceUrl: "https://americanhistory.si.edu/explore/exhibitions/american-enterprise/online/global-era/biographies-1980s%E2%80%932010s" },
+      { age: 18, label: "进入 Harvard", type: "demographic", year: 1973, detail: "年份数据；之后离校投入 Microsoft。", status: "verified", sourceUrl: "https://news.harvard.edu/gazette/story/2007/03/bill-gates-to-speak-at-commencement/" },
+      { age: 19, label: "创办 Microsoft 并开发 Altair BASIC", type: "career_milestone", year: 1975, detail: "年份数据；不把 1975 年伪装成某个具体成立日。", status: "verified", sourceUrl: "https://learn.microsoft.com/en-us/shows/history/history-of-microsoft-1975" },
+      { age: 25.8, label: "MS-DOS 随 IBM PC 进入市场", type: "achievement", year: "1981-08-12", detail: "精确日期；Microsoft 历史节点。", status: "verified", sourceUrl: "https://learn.microsoft.com/en-us/shows/history/history-of-microsoft-1981" },
+      { age: 30.4, label: "Microsoft 上市", type: "career_milestone", year: "1986-03-13", detail: "精确日期；完成 IPO。", status: "verified", sourceUrl: "https://news.microsoft.com/en-sg/inside_ms/" },
+      { age: 39.8, label: "Windows 95 发布", type: "achievement", year: "1995-08-24", detail: "精确日期；代表性产品发布。", status: "verified", sourceUrl: "https://news.microsoft.com/en-sg/inside_ms/" },
+      { age: 44.2, label: "转为 Microsoft 主席并进入基金会阶段", type: "career_milestone", year: 2000, detail: "年份数据；包含既有基金会合并与重组，不简化成单一新机构成立。", status: "verified", sourceUrl: "https://news.microsoft.com/source/2006/06/15/microsoft-announces-plans-for-july-2008-transition-for-bill-gates/" },
+      { age: 52.7, label: "离开 Microsoft 日常管理", type: "career_milestone", year: "2008-07", detail: "月份数据；转向全职基金会工作。", status: "verified", sourceUrl: "https://news.microsoft.com/source/2006/06/15/microsoft-announces-plans-for-july-2008-transition-for-bill-gates/" },
+      { age: 54.6, label: "发起 Giving Pledge", type: "achievement", year: 2010, detail: "年份数据；与 Melinda Gates、Warren Buffett 共同发起。", status: "verified", sourceUrl: "https://www.gatesfoundation.org/about/leadership/bill-gates" }
+    ]
+  },
+  {
+    id: "jeff-bezos",
+    nameZh: "杰夫·贝索斯",
+    nameEn: "Jeff Bezos",
+    birthDate: "1964-01-12",
+    basePresetId: "us-bachelor-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 4, color: "cyan", labelZh: "Albuquerque 早期童年", labelEn: "Early childhood in Albuquerque" },
+      { id: "primary", startAge: 4, endAge: 9, color: "blue", labelZh: "休斯敦学校阶段", labelEn: "School years in Houston" },
+      { id: "primary", startAge: 9, endAge: 12, color: "green", labelZh: "River Oaks Elementary", labelEn: "River Oaks Elementary" },
+      { id: "middle", startAge: 12, endAge: 14, color: "purple", labelZh: "迈阿密中学阶段（约）", labelEn: "Secondary school in Miami (approx.)" },
+      { id: "high", startAge: 14, endAge: 18, color: "pink", labelZh: "Miami Palmetto 高中", labelEn: "Miami Palmetto Senior High" },
+      { id: "undergraduate", startAge: 18, endAge: 22, color: "orange", labelZh: "Princeton", labelEn: "Princeton University" },
+      { id: "work", startAge: 22, endAge: 26, color: "sand", labelZh: "Bankers Trust 工作阶段", labelEn: "Bankers Trust career" },
+      { id: "work", startAge: 26, endAge: 30, color: "green", labelZh: "D. E. Shaw 工作阶段", labelEn: "D. E. Shaw career" },
+      { id: "work", startAge: 30, endAge: 32.3, color: "red", labelZh: "Amazon 创业初期", labelEn: "Amazon founding and early startup" },
+      { id: "work", startAge: 32.3, endAge: 57.5, color: "purple", labelZh: "Amazon CEO 兼董事会主席", labelEn: "Amazon CEO and board chair" },
+      { id: "work", startAge: 57.5, endAge: null, color: "orange", labelZh: "Amazon Executive Chair", labelEn: "Amazon Executive Chair" }
+    ],
+    sourceUrl: "https://npg.si.edu/object/npg_S_NPG.2002.6",
+    specialPeriods: [],
+    events: [
+      { age: 22, label: "Princeton 最高荣誉毕业", type: "achievement", year: 1986, detail: "年份数据；获电气工程与计算机科学学位。", status: "verified", sourceUrl: "https://alumni.princeton.edu/stories/jeff-and-mackenzie-bezos-donate-15-million-create-center-princeton-neuroscience-institute" },
+      { age: 26, label: "加入 D. E. Shaw", type: "career_milestone", year: 1990, detail: "年份数据；进入创办 Amazon 前的金融与技术职业阶段。", status: "verified", sourceUrl: "https://ir.aboutamazon.com/files/doc_financials/proxy/proxy_00.pdf" },
+      { age: 30, label: "创办 Amazon", type: "career_milestone", year: 1994, detail: "年份数据；公司创办与网站上线分开记录。", status: "verified", sourceUrl: "https://ir.aboutamazon.com/faqs/default.aspx" },
+      { age: 31.5, label: "Amazon 网上书店开业", type: "achievement", year: "1995-07", detail: "月份数据；早期业务正式上线。", status: "verified", sourceUrl: "https://ir.aboutamazon.com/faqs/default.aspx" },
+      { age: 33.3, label: "Amazon IPO", type: "career_milestone", year: "1997-05-15", detail: "精确日期；完成首次公开募股。", status: "verified", sourceUrl: "https://ir.aboutamazon.com/faqs/default.aspx" },
+      { age: 36, label: "创办 Blue Origin", type: "career_milestone", year: 2000, detail: "年份数据；不补写未经官方确认的月份。", status: "verified", sourceUrl: "https://www.nasa.gov/wp-content/uploads/2019/08/CCDev1_BlueOrigin_508.pdf" },
+      { age: 43.9, label: "Kindle 发布", type: "achievement", year: "2007-11-19", detail: "精确日期；代表性产品发布。", status: "verified", sourceUrl: "https://press.aboutamazon.com/2007/11/introducing-amazon-kindle" },
+      { age: 49.6, label: "收购 The Washington Post", type: "career_milestone", year: "2013-08-05", detail: "精确日期；进入媒体事业。", status: "verified", sourceUrl: "https://www.washingtonpost.com/national/jeff-bezos-on-post-purchase/2013/08/05/e5b293de-fe0d-11e2-9711-3708310f6f4d_story.html?hpid=z1" },
+      { age: 57.0575, label: "宣布转为 Amazon Executive Chair", type: "career_milestone", year: "2021-02-02", detail: "精确日期；实际交接在 2021 年 7 月，不与首次载人飞行合并。", status: "verified", sourceUrl: "https://www.aboutamazon.com/news/company-news/email-from-jeff-bezos-to-employees" },
+      { age: 57.5, label: "New Shepard 首次载人飞行", type: "achievement", year: "2021-07-20", detail: "精确日期；Blue Origin 载人飞行。", status: "verified", sourceUrl: "https://www.blueorigin.com/pt-BR/news/first-human-flight-updates" }
+    ]
+  },
+  {
+    id: "walt-disney",
+    nameZh: "沃尔特·迪士尼",
+    nameEn: "Walt Disney",
+    birthDate: "1901-12-05",
+    deathDate: "1966-12-15",
+    basePresetId: "us-high-school-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 4, color: "cyan", labelZh: "芝加哥早期童年", labelEn: "Early childhood in Chicago" },
+      { id: "primary", startAge: 4, endAge: 10, color: "blue", labelZh: "Marceline 童年阶段", labelEn: "Childhood in Marceline" },
+      { id: "middle", startAge: 10, endAge: 16, color: "purple", labelZh: "Kansas City 艺术学习", labelEn: "Art training in Kansas City" },
+      { id: "work", startAge: 16, endAge: 17, color: "purple", labelZh: "红十字会法国经历", labelEn: "Red Cross service in France" },
+      { id: "work", startAge: 17, endAge: 19, color: "sand", labelZh: "Kansas City 商业美术", labelEn: "Commercial art in Kansas City" },
+      { id: "work", startAge: 19, endAge: 22, color: "orange", labelZh: "Laugh-O-Gram Films", labelEn: "Laugh-O-Gram Films" },
+      { id: "work", startAge: 22, endAge: 27, color: "red", labelZh: "Disney Brothers Studio", labelEn: "Disney Brothers Studio" },
+      { id: "work", startAge: 27, endAge: 36, color: "pink", labelZh: "Mickey 短片制作", labelEn: "Mickey short animation" },
+      { id: "work", startAge: 36, endAge: 42, color: "purple", labelZh: "长篇动画制作", labelEn: "Feature animation production" },
+      { id: "work", startAge: 42, endAge: 53, color: "sand", labelZh: "战时影片制作", labelEn: "Wartime film production" },
+      { id: "work", startAge: 53, endAge: 54, color: "green", labelZh: "Disneyland 筹建阶段", labelEn: "Disneyland development" },
+      { id: "work", startAge: 54, endAge: 59, color: "purple", labelZh: "Disneyland 开园后运营", labelEn: "Disneyland operations" },
+      { id: "work", startAge: 59, endAge: 63.9, color: "orange", labelZh: "彩色电视制作", labelEn: "Color television production" },
+      { id: "work", startAge: 63.9, endAge: null, color: "red", labelZh: "Florida Project 城市规划", labelEn: "Florida Project urban planning" }
+    ],
+    sourceUrl: "https://d23.com/about-walt-disney/",
+    specialPeriods: [],
+    events: [
+      { age: 16.8, label: "加入红十字会并前往法国", type: "mobility_milestone", year: "1918 秋", detail: "季节数据；具体出发日未确定。", status: "conditional", sourceUrl: "https://d23.com/about-walt-disney/" },
+      { age: 18.5, label: "创作并销售原创动画片", type: "achievement", year: 1920, detail: "年份数据；早期动画事业起点。", status: "verified", sourceUrl: "https://d23.com/about-walt-disney/" },
+      { age: 21.9, label: "Disney Brothers Cartoon Studio 开始运营", type: "career_milestone", year: "1923-10-16", detail: "精确日期；以 Alice Comedies 合同作为公司运营起点，不等同于唯一法律注册日。", status: "verified", sourceUrl: "https://d23.com/disney-history/" },
+      { age: 27, label: "《Steamboat Willie》首映", type: "achievement", year: "1928-11-18", detail: "精确日期；Mickey 正式银幕亮相。", status: "verified", sourceUrl: "https://d23.com/about-walt-disney/" },
+      { age: 30.9, label: "《Flowers and Trees》获 Academy Award", type: "achievement", year: 1932, detail: "年份数据；个人重要荣誉节点。", status: "verified", sourceUrl: "https://d23.com/about-walt-disney/" },
+      { age: 36, label: "《白雪公主与七个小矮人》首映", type: "achievement", year: "1937-12-21", detail: "精确日期；第一部长篇动画电影阶段。", status: "verified", sourceUrl: "https://d23.com/about-walt-disney/" },
+      { age: 53.1, label: "Disneyland 开放", type: "career_milestone", year: 1955, detail: "年份数据；主题乐园事业阶段。", status: "verified", sourceUrl: "https://d23.com/about-walt-disney/" },
+      { age: 59.1, label: "进入全彩电视阶段", type: "achievement", year: 1961, detail: "年份数据；《Wonderful World of Color》播出。", status: "verified", sourceUrl: "https://d23.com/about-walt-disney/" },
+      { age: 64, label: "转向 EPCOT 城市规划项目", type: "career_milestone", year: 1965, detail: "年份数据；晚年规划项目。", status: "verified", sourceUrl: "https://d23.com/about-walt-disney/" },
+      { age: 65.0274, label: "去世", type: "demographic", year: "1966-12-15", detail: "精确日期；享年 65 岁。", status: "verified", sourceUrl: "https://d23.com/a-to-z/disney-walter-elias/" }
+    ]
+  },
+  {
+    id: "albert-einstein",
+    nameZh: "阿尔伯特·爱因斯坦",
+    nameEn: "Albert Einstein",
+    birthDate: "1879-03-14",
+    deathDate: "1955-04-18",
+    basePresetId: "us-bachelor-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 9, color: "cyan", labelZh: "慕尼黑童年阶段", labelEn: "Childhood in Munich" },
+      { id: "primary", startAge: 9, endAge: 16, color: "blue", labelZh: "慕尼黑中学阶段", labelEn: "Secondary school in Munich" },
+      { id: "secondary", startAge: 16, endAge: 17, color: "purple", labelZh: "阿劳州立学校", labelEn: "Aarau Cantonal School" },
+      { id: "undergraduate", startAge: 17, endAge: 21, color: "orange", labelZh: "ETH 教师训练课程", labelEn: "ETH teacher-training course" },
+      { id: "work", startAge: 21, endAge: 23, color: "sand", labelZh: "苏黎世求职阶段", labelEn: "Job search in Zurich" },
+      { id: "work", startAge: 23, endAge: 30, color: "red", labelZh: "伯尔尼专利局", labelEn: "Swiss Patent Office" },
+      { id: "work", startAge: 30, endAge: 32, color: "green", labelZh: "苏黎世大学教授", labelEn: "University of Zurich professor" },
+      { id: "work", startAge: 32, endAge: 33, color: "pink", labelZh: "布拉格理论物理教授", labelEn: "Prague theoretical physics professor" },
+      { id: "work", startAge: 33, endAge: 35, color: "purple", labelZh: "ETH 理论物理教授", labelEn: "ETH theoretical physics professor" },
+      { id: "work", startAge: 35, endAge: 54, color: "red", labelZh: "柏林大学教授兼研究所负责人", labelEn: "Berlin professor and institute director" },
+      { id: "work", startAge: 54, endAge: 67, color: "orange", labelZh: "普林斯顿高等研究院教员", labelEn: "Institute for Advanced Study faculty" },
+      { id: "work", startAge: 67, endAge: null, color: "sand", labelZh: "普林斯顿高等研究院荣休阶段", labelEn: "Institute for Advanced Study emeritus period" }
+    ],
+    sourceUrl: "https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/",
+    specialPeriods: [],
+    events: [
+      { age: 16, label: "进入阿劳并准备进入 ETH", type: "achievement", year: "1895–1896", detail: "年份区间数据；不转换为具体月份。", status: "verified", sourceUrl: "https://library.ethz.ch/en/collections-and-archives/short-portraits/einstein-albert-1879-1955.html" },
+      { age: 21, label: "获得数学与物理教师文凭", type: "achievement", year: 1900, detail: "年份数据。", status: "verified", sourceUrl: "https://library.ethz.ch/en/collections-and-archives/short-portraits/einstein-albert-1879-1955.html" },
+      { age: 23, label: "进入伯尔尼专利局", type: "career_milestone", year: "1902-06", detail: "月份数据；任技术专家。", status: "verified", sourceUrl: "https://www.einstein.caltech.edu/what-we-do/published-volumes/volume-5" },
+      { age: 26, label: "奇迹年论文发表并取得博士学位", type: "achievement", year: 1905, detail: "年份数据；多篇论文集中发表，不能视为单日事件。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/" },
+      { age: 30, label: "成为苏黎世大学教授", type: "career_milestone", year: 1909, detail: "年份数据。", status: "verified", sourceUrl: "https://library.ethz.ch/sammlungen-und-archive/online-zugaenge/einstein-online.html" },
+      { age: 33, label: "回到 ETH 任理论物理教授", type: "career_milestone", year: 1912, detail: "年份数据。", status: "verified", sourceUrl: "https://ethz.ch/content/dam/ethz/associates/services/News/life/ausgaben/deutsch/eth_life_15_1_de_low.pdf" },
+      { age: 35, label: "转赴柏林任教授与研究所负责人", type: "career_milestone", year: 1914, detail: "年份数据。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/" },
+      { age: 40, label: "日食观测验证光线偏折预测", type: "achievement", year: 1919, detail: "年份数据；短期观测事件，不画阶段色块。", status: "verified", sourceUrl: "https://history.aip.org/exhibits/einstein/inbrief.htm" },
+      { age: 42, label: "获得诺贝尔物理学奖", type: "achievement", year: "1921/1922", detail: "1921 年奖项，1922 年正式颁发。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/physics/1921/einstein/facts/" },
+      { age: 54, label: "加入普林斯顿高等研究院", type: "career_milestone", year: 1933, detail: "年份数据；离开德国并进入美国长期研究阶段。", status: "verified", sourceUrl: "https://www.ias.edu/scholars/einstein" },
+      { age: 76.0958, label: "去世", type: "demographic", year: "1955-04-18", detail: "精确日期；享年 76 岁。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/" }
+    ]
+  },
+  {
+    id: "marie-curie",
+    nameZh: "玛丽·居里",
+    nameEn: "Marie Curie",
+    birthDate: "1867-11-07",
+    deathDate: "1934-07-04",
+    basePresetId: "fr-licence-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 6, color: "cyan", labelZh: "华沙家庭早期生活", labelEn: "Early family life in Warsaw" },
+      { id: "primary", startAge: 6, endAge: 15, color: "blue", labelZh: "华沙学校教育", labelEn: "Schooling in Warsaw" },
+      { id: "secondary", startAge: 15, endAge: 16, color: "purple", labelZh: "华沙科学自学阶段", labelEn: "Scientific self-study in Warsaw" },
+      { id: "work", startAge: 16, endAge: 24, color: "sand", labelZh: "波兰家庭教师阶段", labelEn: "Governess work in Poland" },
+      { id: "undergraduate", startAge: 24, endAge: 26, color: "orange", labelZh: "索邦大学物理学", labelEn: "Sorbonne physics" },
+      { id: "undergraduate", startAge: 26, endAge: 27, color: "purple", labelZh: "索邦大学数学", labelEn: "Sorbonne mathematics" },
+      { id: "work", startAge: 27, endAge: 28, color: "red", labelZh: "早期实验室研究", labelEn: "Early laboratory research" },
+      { id: "work", startAge: 28, endAge: 31, color: "pink", labelZh: "放射性测量博士研究", labelEn: "Doctoral radioactivity measurements" },
+      { id: "work", startAge: 31, endAge: 39, color: "purple", labelZh: "钋镭研究阶段", labelEn: "Polonium-radium research" },
+      { id: "work", startAge: 39, endAge: 42, color: "green", labelZh: "索邦大学教授", labelEn: "Sorbonne professor" },
+      { id: "work", startAge: 42, endAge: 47, color: "purple", labelZh: "镭研究所领导阶段", labelEn: "Radium Institute leadership" },
+      { id: "work", startAge: 47, endAge: 51, color: "orange", labelZh: "战争时期研究阶段", labelEn: "Wartime research period" },
+      { id: "work", startAge: 51, endAge: null, color: "green", labelZh: "战后镭研究", labelEn: "Postwar radium research" }
+    ],
+    sourceUrl: "https://www.nobelprize.org/prizes/physics/1903/marie-curie/biographical/",
+    specialPeriods: [],
+    events: [
+      { age: 24, label: "前往巴黎并进入索邦大学", type: "mobility_milestone", year: 1891, detail: "年份数据。", status: "verified", sourceUrl: "https://www.nps.gov/people/manhattan-project-pioneers-marie-curie.htm" },
+      { age: 26, label: "取得物理学与数学学位", type: "achievement", year: "1893–1894", detail: "年份区间数据。", status: "verified", sourceUrl: "https://institut-curie.org/legacy-marie-curie-perpetuating-spirit-pioneer" },
+      { age: 30, label: "发现钋与镭", type: "achievement", year: 1898, detail: "年份数据；研究事件，不画连续阶段色块。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/physics/1903/marie-curie/facts/" },
+      { age: 35, label: "获得诺贝尔物理学奖", type: "achievement", year: 1903, detail: "年份数据。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/physics/1903/marie-curie/biographical/" },
+      { age: 39, label: "接替 Pierre Curie，成为索邦大学教授", type: "career_milestone", year: 1906, detail: "年份数据；Pierre Curie 于同年去世。", status: "verified", sourceUrl: "https://institut-curie.org/legacy-marie-curie-perpetuating-spirit-pioneer" },
+      { age: 42, label: "镭研究所成立", type: "career_milestone", year: 1909, detail: "年份数据；负责物理与化学实验室。", status: "verified", sourceUrl: "https://institut-curie.org/legacy-marie-curie-perpetuating-spirit-pioneer" },
+      { age: 44, label: "获得诺贝尔化学奖", type: "achievement", year: 1911, detail: "年份数据。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/chemistry/1911/marie-curie/facts/" },
+      { age: 47, label: "组织移动 X 光服务", type: "career_milestone", year: "1914–1918", detail: "多年间歇性服务，不画连续阶段色块。", status: "verified", sourceUrl: "https://www.nps.gov/people/manhattan-project-pioneers-marie-curie.htm" },
+      { age: 53, label: "赴美国筹集镭研究资金", type: "mobility_milestone", year: 1921, detail: "年份数据；短期访问，不画阶段色块。", status: "verified", sourceUrl: "https://institut-curie.org/legacy-marie-curie-perpetuating-spirit-pioneer" },
+      { age: 64, label: "华沙镭研究所启用", type: "achievement", year: 1932, detail: "年份数据；研究机构启用事件。", status: "verified", sourceUrl: "https://www.nps.gov/people/manhattan-project-pioneers-marie-curie.htm" },
+      { age: 66.6544, label: "去世", type: "demographic", year: "1934-07-04", detail: "精确日期；享年 66 岁。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/physics/1903/marie-curie/biographical/" }
+    ]
+  },
+  {
+    id: "katherine-johnson",
+    nameZh: "凯瑟琳·约翰逊",
+    nameEn: "Katherine Johnson",
+    birthDate: "1918-08-26",
+    deathDate: "2020-02-24",
+    basePresetId: "us-bachelor-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 6, color: "cyan", labelZh: "White Sulphur Springs 家庭阶段", labelEn: "Family years in White Sulphur Springs" },
+      { id: "primary", startAge: 6, endAge: 10, color: "blue", labelZh: "White Sulphur Springs 小学阶段", labelEn: "Elementary years in White Sulphur Springs" },
+      { id: "secondary", startAge: 10, endAge: 14, color: "purple", labelZh: "Institute 高中", labelEn: "High school in Institute" },
+      { id: "undergraduate", startAge: 14, endAge: 18, color: "orange", labelZh: "West Virginia State College", labelEn: "West Virginia State College" },
+      { id: "work", startAge: 18, endAge: 20, color: "sand", labelZh: "学校数学教师阶段", labelEn: "School mathematics teaching" },
+      { id: "work", startAge: 20, endAge: 35, color: "green", labelZh: "家庭照护阶段", labelEn: "Family care period" },
+      { id: "work", startAge: 35, endAge: 40, color: "red", labelZh: "NACA Langley 飞行研究部", labelEn: "NACA Langley Flight Research Division" },
+      { id: "work", startAge: 40, endAge: 44, color: "pink", labelZh: "NASA Space Task Group", labelEn: "NASA Space Task Group" },
+      { id: "work", startAge: 44, endAge: 52, color: "purple", labelZh: "Flight Mechanics Branch", labelEn: "Flight Mechanics Branch" },
+      { id: "work", startAge: 52, endAge: 63, color: "orange", labelZh: "Flight Dynamics and Control Division", labelEn: "Flight Dynamics and Control Division" },
+      { id: "work", startAge: 63, endAge: 68, color: "red", labelZh: "Spacecraft Controls Branch", labelEn: "Spacecraft Controls Branch" },
+      { id: "work", startAge: 68, endAge: null, color: "sand", labelZh: "退休后生活阶段", labelEn: "Retirement years" }
+    ],
+    sourceUrl: "https://www.nasa.gov/centers-and-facilities/langley/katherine-johnson-biography/",
+    specialPeriods: [],
+    events: [
+      { age: 14, label: "高中毕业", type: "achievement", year: 1932, detail: "年份数据；14 岁完成高中阶段。", status: "verified", sourceUrl: "https://science.nasa.gov/people/katherine-johnson/" },
+      { age: 18, label: "取得数学与法语学士学位", type: "achievement", year: 1937, detail: "年份数据；最高荣誉毕业。", status: "verified", sourceUrl: "https://science.nasa.gov/people/katherine-johnson/" },
+      { age: 20, label: "进入 West Virginia University 研究生项目", type: "achievement", year: 1939, detail: "年份数据；完成第一学期后离开。", status: "verified", sourceUrl: "https://www.nasa.gov/centers-and-facilities/langley/katherine-johnson-biography/" },
+      { age: 35, label: "加入 NACA Langley West Area Computers", type: "career_milestone", year: "1953 夏", detail: "季节数据；成为人工计算员。", status: "verified", sourceUrl: "https://www.nasa.gov/centers-and-facilities/langley/katherine-johnson-biography/" },
+      { age: 40, label: "加入 Space Task Group", type: "career_milestone", year: 1958, detail: "年份数据；进入早期载人航天计算阶段。", status: "verified", sourceUrl: "https://www.nasa.gov/history/langleys-computers-1935-1970/" },
+      { age: 42.69, label: "为 Freedom 7 任务计算轨道", type: "achievement", year: "1961-05-05", detail: "精确日期；短期航天任务，不画阶段色块。", status: "verified", sourceUrl: "https://www.nasa.gov/mission/mercury-redstone-3-freedom-7/" },
+      { age: 43.49, label: "复核 Friendship 7 轨道计算", type: "achievement", year: "1962-02-20", detail: "精确日期；短期航天任务，不画阶段色块。", status: "verified", sourceUrl: "https://www.nasa.gov/image-article/liftoff-of-john-glenns-friendship-7-feb-20-1962/" },
+      { age: 50, label: "参与 Apollo 11 月球任务计算", type: "achievement", year: "1969-07", detail: "月份数据；登月日为 1969-07-20，短期任务，不画阶段色块。", status: "verified", sourceUrl: "https://science.nasa.gov/people/katherine-johnson/" },
+      { age: 68, label: "从 NASA 退休", type: "career_milestone", year: 1986, detail: "年份数据；NASA 任职约 33 年。", status: "verified", sourceUrl: "https://www.nasa.gov/news-release/nasa-dedicates-facility-to-mathematician-presidential-medal-winner/" },
+      { age: 97, label: "获得总统自由勋章与国会金质奖章", type: "achievement", year: "2015/2019", detail: "2015-11-24 为精确日期，2019 为年份数据。", status: "verified", sourceUrl: "https://science.nasa.gov/people/katherine-johnson/" },
+      { age: 101.5, label: "去世", type: "demographic", year: "2020-02-24", detail: "精确日期；享年 101 岁。", status: "verified", sourceUrl: "https://www.nasa.gov/centers-and-facilities/langley/katherine-johnson-biography/" }
+    ]
+  },
+  {
+    id: "yuan-longping",
+    nameZh: "袁隆平",
+    nameEn: "Yuan Longping",
+    birthDate: "1930-09-07",
+    deathDate: "2021-05-22",
+    basePresetId: "cn-undergraduate-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 6, color: "cyan", labelZh: "家庭成长阶段", labelEn: "Family years" },
+      { id: "primary", startAge: 6, endAge: 12, color: "blue", labelZh: "基础学校教育", labelEn: "Primary education" },
+      { id: "middle", startAge: 12, endAge: 15, color: "purple", labelZh: "初中阶段", labelEn: "Lower secondary education" },
+      { id: "high", startAge: 15, endAge: 19, color: "pink", labelZh: "高中阶段", labelEn: "Upper secondary education" },
+      { id: "undergraduate", startAge: 19, endAge: 22, color: "orange", labelZh: "西南农学院", labelEn: "Southwest Agricultural College" },
+      { id: "work", startAge: 22, endAge: 34, color: "sand", labelZh: "安江农业学校任教", labelEn: "Teaching at Anjiang Agricultural School" },
+      { id: "work", startAge: 34, endAge: 41, color: "red", labelZh: "杂交水稻早期研究", labelEn: "Early hybrid rice research" },
+      { id: "work", startAge: 41, endAge: 54, color: "pink", labelZh: "湖南省农业科学院研究阶段", labelEn: "Hunan Academy of Agricultural Sciences" },
+      { id: "work", startAge: 54, endAge: 65, color: "purple", labelZh: "湖南杂交水稻研究中心", labelEn: "Hunan Hybrid Rice Research Center" },
+      { id: "work", startAge: 65, endAge: 70, color: "orange", labelZh: "两系法杂交水稻", labelEn: "Two-line hybrid rice" },
+      { id: "work", startAge: 70, endAge: 80, color: "green", labelZh: "超级杂交稻早期攻关", labelEn: "Early super hybrid rice program" },
+      { id: "work", startAge: 80, endAge: null, color: "sand", labelZh: "第三代杂交水稻研究", labelEn: "Third-generation hybrid rice research" }
+    ],
+    sourceUrl: "https://www.most.gov.cn/ztzl/kjrw/200709/t20070904_54260.html",
+    specialPeriods: [],
+    events: [
+      { age: 22, label: "毕业并赴安江任教", type: "career_milestone", year: 1953, detail: "年份数据；进入农业教学与研究阶段。", status: "verified", sourceUrl: "https://sdaj.hunan.gov.cn/wszt/xxsl/xxrw/200609/t20060928_1977925.html" },
+      { age: 34, label: "开始杂交水稻研究", type: "career_milestone", year: 1964, detail: "年份数据。", status: "verified", sourceUrl: "https://www.most.gov.cn/kjbgz/202105/t20210523_174786.html" },
+      { age: 43, label: "三系配套成功", type: "achievement", year: 1973, detail: "年份数据；研究突破。", status: "verified", sourceUrl: "https://www.hunau.edu.cn/zjnd/xnyx/xnrw/" },
+      { age: 44, label: "南优 2 号与全国推广", type: "achievement", year: "1974–1976", detail: "年份区间数据。", status: "verified", sourceUrl: "https://www.most.gov.cn/ztzl/kjrw/200709/t20070904_54260.html" },
+      { age: 50, label: "获国家发明奖特等奖", type: "achievement", year: 1981, detail: "年份数据。", status: "verified", sourceUrl: "https://xcb.hunau.edu.cn/wmxy/202105/t20210524_9686.html" },
+      { age: 65, label: "两系法杂交水稻突破", type: "achievement", year: 1995, detail: "年份数据。", status: "verified", sourceUrl: "https://www.hunau.edu.cn/zjnd/xnyx/xnrw/" },
+      { age: 80, label: "获国家最高科学技术奖", type: "achievement", year: 2014, detail: "年份数据。", status: "verified", sourceUrl: "https://www.most.gov.cn/ztzl/kjrw/200709/t20070904_54260.html" },
+      { age: 90.7, label: "去世", type: "demographic", year: "2021-05-22", detail: "精确日期；享年 91 岁。", status: "verified", sourceUrl: "https://www.ccdi.gov.cn/toutiao/202105/t20210522_242423.html" }
+    ]
+  },
+  {
+    id: "tu-youyou",
+    nameZh: "屠呦呦",
+    nameEn: "Tu Youyou",
+    birthDate: "1930-12-30",
+    basePresetId: "cn-undergraduate-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 5, color: "cyan", labelZh: "宁波家庭成长", labelEn: "Early family life in Ningbo" },
+      { id: "primary", startAge: 5, endAge: 10, color: "blue", labelZh: "宁波崇德小学", labelEn: "Ningbo Chongde Primary School" },
+      { id: "primary", startAge: 10, endAge: 12, color: "green", labelZh: "宁波茂西小学", labelEn: "Ningbo Maoxi Primary School" },
+      { id: "middle", startAge: 12, endAge: 14, color: "purple", labelZh: "宁波启正中学", labelEn: "Ningbo Qizheng Middle School" },
+      { id: "secondary", startAge: 14, endAge: 15, color: "pink", labelZh: "宁波永江女子学校", labelEn: "Ningbo Yongjiang Girls' School" },
+      { id: "work", startAge: 15, endAge: 17, color: "sand", labelZh: "结核病治疗休学阶段", labelEn: "Tuberculosis treatment break" },
+      { id: "high", startAge: 17, endAge: 19, color: "orange", labelZh: "宁波效实中学", labelEn: "Ningbo Xiaoshi High School" },
+      { id: "high", startAge: 19, endAge: 20, color: "red", labelZh: "宁波高中阶段", labelEn: "Ningbo High School" },
+      { id: "undergraduate", startAge: 20, endAge: 24.5, color: "orange", labelZh: "北京医学院药学系", labelEn: "Pharmacy at Beijing Medical College" },
+      { id: "work", startAge: 24.5, endAge: 28, color: "sand", labelZh: "中药研究所初期工作", labelEn: "Early Institute of Chinese Materia Medica work" },
+      { id: "work", startAge: 28, endAge: 32, color: "green", labelZh: "中医药理论培训", labelEn: "Chinese medicine theory training" },
+      { id: "work", startAge: 32, endAge: 39, color: "pink", labelZh: "中药研究阶段", labelEn: "Materia medica research and malaria preparation" },
+      { id: "work", startAge: 39, endAge: 42, color: "red", labelZh: "523 抗疟项目", labelEn: "Project 523" },
+      { id: "work", startAge: 42, endAge: 49, color: "purple", labelZh: "青蒿素临床验证阶段", labelEn: "Artemisinin isolation and clinical validation" },
+      { id: "work", startAge: 49, endAge: 56, color: "orange", labelZh: "青蒿素药物开发", labelEn: "Artemisinin drug development" },
+      { id: "work", startAge: 56, endAge: 61, color: "red", labelZh: "双氢青蒿素研发", labelEn: "Dihydroartemisinin research" },
+      { id: "work", startAge: 61, endAge: null, color: "green", labelZh: "青蒿素衍生物临床转化", labelEn: "Clinical translation of artemisinin derivatives" }
+    ],
+    sourceUrl: "https://www.nobelprize.org/prizes/medicine/2015/tu/biographical/",
+    specialPeriods: [],
+    events: [
+      { age: 20, label: "考入北京医学院", type: "achievement", year: 1951, detail: "年份数据。", status: "verified", sourceUrl: "https://www.most.gov.cn/ztzl/tyy/rwjs/201510/t20151006_121867.html" },
+      { age: 24.5, label: "毕业并进入中医研究院", type: "career_milestone", year: 1955, detail: "年份数据。", status: "verified", sourceUrl: "https://www.icmm.ac.cn/zjjj/zsyjy1/" },
+      { age: 28.5, label: "接受中医药培训", type: "achievement", year: "1959–1962", detail: "年份区间数据。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/medicine/2015/tu/biographical/" },
+      { age: 39, label: "负责 523 抗疟研究组", type: "career_milestone", year: 1969, detail: "年份数据。", status: "verified", sourceUrl: "https://laskerfoundation.org/winners/artemisinin-therapy-for-malaria/" },
+      { age: 40.8, label: "样品 191 取得突破", type: "achievement", year: "1971-10-04", detail: "精确日期；实验突破。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/medicine/2015/tu/biographical/" },
+      { age: 41.7, label: "首次临床试验并分离青蒿素", type: "achievement", year: 1972, detail: "年份数据；包含多个研究节点，不视为单日事件。", status: "verified", sourceUrl: "https://www.nobelprize.org/uploads/2018/06/tu-lecture.pdf" },
+      { age: 80.8, label: "获 Lasker 临床医学研究奖", type: "achievement", year: 2011, detail: "年份数据。", status: "verified", sourceUrl: "https://laskerfoundation.org/winners/artemisinin-therapy-for-malaria/" },
+      { age: 84.8, label: "获诺贝尔生理学或医学奖", type: "achievement", year: 2015, detail: "年份数据。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/medicine/2015/tu/facts/" }
+    ]
+  }
+] satisfies LifeBiographyProfile[];

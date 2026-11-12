@@ -245,12 +245,12 @@ export const lifeCountryAnnotations: Partial<Record<LifePresetCountryId, LifeCou
     "celebrities": [
       {
         "name": "屈原",
-        "age": null,
+        "age": 62,
         "death": "约前 278",
         "summary": "《离骚》作者，端午文化的重要历史人物",
         "type": "celebrity",
         "sourceUrl": "https://zh.wikipedia.org/wiki/%E5%B1%88%E5%8E%9F",
-        "status": "verified"
+        "status": "conditional"
       },
       {
         "name": "李白",

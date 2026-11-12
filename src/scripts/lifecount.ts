@@ -19,6 +19,7 @@ import {
   anniversary,
   cellColorKey,
   cellStatus,
+  dominantStage,
   formatCellLabel,
   lifeCells,
   lifeCellsUntil,
@@ -937,6 +938,7 @@ function renderDomGrid(
   });
 
   renderLifeAnnotations(root, cells, state, countryId, biography);
+  setupCellPopover(root, cells, unit, stages, today, messages, locale, countryId, biography);
 
   if (map.dataset.keyboardReady !== "true") {
     map.dataset.keyboardReady = "true";
@@ -1061,6 +1063,7 @@ function renderCanvas(
   const updateActive = () => {
     const cellData = cells[activeIndex];
     if (!cellData) return;
+    map.dataset.activeCell = String(activeIndex);
     map.setAttribute(
       "aria-label",
       formatCellLabel(cellData, stages, today, messages, locale)
@@ -1085,6 +1088,262 @@ function renderCanvas(
   });
 
   renderLifeAnnotations(root, cells, state, countryId, biography);
+  setupCellPopover(root, cells, unit, stages, today, messages, locale, countryId, biography);
+}
+
+function setupCellPopover(
+  root: HTMLElement,
+  cells: LifeCell[],
+  unit: LifeUnit,
+  stages: LifeStage[],
+  today: string,
+  messages: LifeCountMessages,
+  locale: LifeCountLocale,
+  countryId: LifePresetCountryId,
+  biography: LifeBiographyProfile | null
+) {
+  const map = root.querySelector<HTMLElement>("[data-lifecount-map]");
+  const popover = root.querySelector<HTMLElement>("[data-lifecount-cell-popover]");
+  const container = root.querySelector<HTMLElement>(".lifecount-map-stage");
+  if (!map || !popover || !container || !cells.length) return;
+
+  let hideTimer: number | undefined;
+  const clearHideTimer = () => {
+    if (hideTimer !== undefined) window.clearTimeout(hideTimer);
+  };
+  const scheduleHide = () => {
+    clearHideTimer();
+    hideTimer = window.setTimeout(() => {
+      popover.hidden = true;
+    }, 160);
+  };
+  popover.onmouseenter = clearHideTimer;
+  popover.onmouseleave = scheduleHide;
+
+  const birthday = cells[0].start;
+  const country = lifeCountryAnnotations[countryId];
+  const events = [...(biography?.events ?? country?.events ?? [])];
+  if (
+    biography?.deathDate &&
+    !events.some((event) => event.type === "demographic" && event.label.includes("去世"))
+  ) {
+    events.push({
+      age: ageAt(birthday, biography.deathDate),
+      label: "去世",
+      type: "demographic",
+      year: biography.deathDate,
+      detail: `${biography.deathDate}；享年 ${ageAt(birthday, biography.deathDate)} 岁。`,
+      status: "verified",
+      sourceUrl: biography.sourceUrl
+    });
+  }
+
+  const dateAtAge = (age: number) => {
+    const start = new Date(`${birthday}T00:00:00Z`);
+    const year = Math.floor(age);
+    start.setUTCFullYear(start.getUTCFullYear() + year);
+    const next = new Date(start);
+    next.setUTCFullYear(next.getUTCFullYear() + 1);
+    return new Date(start.getTime() + (next.getTime() - start.getTime()) * (age - year))
+      .toISOString().slice(0, 10);
+  };
+  const eventDate = (event: LifeAnnotationEvent) =>
+    biography?.deathDate && event.label.includes("去世")
+      ? biography.deathDate
+      : dateAtAge(event.age);
+  const stageLabel = (stage: LifeStage | undefined) => {
+    if (!stage) return locale === "en" ? "Unassigned stage" : "未分配阶段";
+    return locale === "en"
+      ? stage.labelEn ?? messages.stageLabels[stage.id]
+      : stage.labelZh ?? messages.stageLabels[stage.id];
+  };
+  const text = (value: string) => document.createTextNode(value);
+  const appendRow = (dl: HTMLElement, label: string, value: string) => {
+    const row = document.createElement("div");
+    const term = document.createElement("dt");
+    term.textContent = label;
+    const description = document.createElement("dd");
+    description.textContent = value;
+    row.append(term, description);
+    dl.append(row);
+  };
+  const formatPopoverDate = (cell: LifeCell) => {
+    const start = new Date(`${cell.start}T00:00:00Z`);
+    const end = new Date(`${cell.end}T00:00:00Z`);
+    const year = start.getUTCFullYear();
+    const month = start.getUTCMonth() + 1;
+    const day = start.getUTCDate();
+    if (locale !== "zh-CN") {
+      if (unit === "year") return String(year);
+      if (unit === "month") {
+        return new Intl.DateTimeFormat(locale, { year: "numeric", month: "short", timeZone: "UTC" }).format(start);
+      }
+      const startText = new Intl.DateTimeFormat(locale, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        timeZone: "UTC"
+      }).format(start);
+      const endText = new Intl.DateTimeFormat(locale, {
+        year: end.getUTCFullYear() === year ? undefined : "numeric",
+        month: "short",
+        day: "numeric",
+        timeZone: "UTC"
+      }).format(end);
+      return startText === endText ? startText : `${startText}–${endText}`;
+    }
+    if (unit === "year") return `${year}年`;
+    if (unit === "month") return `${year}年${month}月`;
+    const startText = `${year}年${month}月${day}日`;
+    const endYear = end.getUTCFullYear();
+    const endMonth = end.getUTCMonth() + 1;
+    const endDay = end.getUTCDate();
+    if (unit === "day" || cell.start === cell.end) return startText;
+    const endText = endYear === year
+      ? `${endMonth}月${endDay}日`
+      : `${endYear}年${endMonth}月${endDay}日`;
+    return `${startText}-${endText}`;
+  };
+
+  const show = (index: number, targetRect: DOMRect) => {
+    const cell = cells[index];
+    if (!cell) return;
+    clearHideTimer();
+    const status = cellStatus(cell, today);
+    const stage = dominantStage(cell, stages);
+    const startAge = ageAt(birthday, cell.start);
+    const endAge = ageAt(birthday, cell.end);
+    const ageLabel = startAge === endAge
+      ? `${startAge}${locale === "en" ? " years" : " 岁"}`
+      : `${startAge}–${endAge}${locale === "en" ? " years" : " 岁"}`;
+    const cellEvents = events.filter((event) => {
+      const date = eventDate(event);
+      return cell.start <= date && date <= cell.end;
+    });
+
+    popover.replaceChildren();
+    const kicker = document.createElement("div");
+    kicker.className = "lifecount-cell-popover-kicker";
+    kicker.textContent = locale === "en" ? "Life stage" : "人生阶段";
+    const heading = document.createElement("h3");
+    heading.textContent = stageLabel(stage);
+    const details = document.createElement("dl");
+    appendRow(details, locale === "en" ? "Age" : "年龄", ageLabel);
+    appendRow(
+      details,
+      locale === "en" ? "Date" : "日期",
+      formatPopoverDate(cell)
+    );
+    appendRow(details, locale === "en" ? "Status" : "状态", messages.cellStatus[status]);
+    popover.append(kicker, heading, details);
+
+    if (cellEvents.length) {
+      const eventSection = document.createElement("div");
+      eventSection.className = "lifecount-cell-popover-events";
+      for (const event of cellEvents) {
+        const eventRow = document.createElement("div");
+        eventRow.className = "lifecount-cell-popover-event";
+        const eventCopy = document.createElement("div");
+        const eventTitle = document.createElement("strong");
+        eventTitle.append(text(event.label));
+        if (event.sourceUrl) {
+          eventTitle.append(createSourceLink(event.sourceUrl, sourceLinkLabel(event.sourceUrl, locale)));
+        }
+        eventCopy.append(eventTitle);
+        if (event.detail) {
+          const eventDetail = document.createElement("div");
+          eventDetail.className = "lifecount-cell-popover-event-detail";
+          eventDetail.textContent = event.detail;
+          eventCopy.append(eventDetail);
+        }
+        eventRow.append(eventCopy);
+        eventSection.append(eventRow);
+      }
+      popover.append(eventSection);
+    }
+
+    popover.hidden = false;
+    const stageRect = container.getBoundingClientRect();
+    const gap = 12;
+    const maxLeft = Math.max(8, container.clientWidth - popover.offsetWidth - 8);
+    let left = targetRect.right - stageRect.left + gap;
+    if (left + popover.offsetWidth > container.clientWidth - 8) {
+      left = targetRect.left - stageRect.left - popover.offsetWidth - gap;
+    }
+    left = Math.max(8, Math.min(maxLeft, left));
+    const maxTop = Math.max(8, container.clientHeight - popover.offsetHeight - 8);
+    const top = Math.max(8, Math.min(maxTop, targetRect.top - stageRect.top));
+    popover.style.left = `${left}px`;
+    popover.style.top = `${top}px`;
+  };
+
+  if (unit === "month" || unit === "year") {
+    map.querySelectorAll<HTMLButtonElement>(".lifecount-cell").forEach((button) => {
+      const index = Number(button.dataset.index);
+      button.onmouseenter = () => show(index, button.getBoundingClientRect());
+      button.onmouseleave = scheduleHide;
+      button.onfocus = () => show(index, button.getBoundingClientRect());
+      button.onblur = scheduleHide;
+      button.onclick = () => show(index, button.getBoundingClientRect());
+    });
+    return;
+  }
+
+  const canvas = map.querySelector<HTMLCanvasElement>(".lifecount-canvas");
+  if (!canvas) return;
+  const columns = Number(map.dataset.columns);
+  const cellSize = Number(map.dataset.cellSize);
+  const gap = Number(map.dataset.gap);
+  const indexAtPointer = (event: MouseEvent) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const column = Math.floor(x / (cellSize + gap));
+    const row = Math.floor(y / (cellSize + gap));
+    if (column < 0 || row < 0 || column >= columns) return null;
+    const index = row * columns + column;
+    return index >= 0 && index < cells.length ? index : null;
+  };
+  map.onmousemove = (event) => {
+    const index = indexAtPointer(event);
+    if (index === null) return;
+    const rect = canvas.getBoundingClientRect();
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    const targetRect = new DOMRect(
+      rect.left + column * (cellSize + gap),
+      rect.top + row * (cellSize + gap),
+      cellSize,
+      cellSize
+    );
+    show(index, targetRect);
+  };
+  map.onmouseleave = scheduleHide;
+  map.onclick = (event) => {
+    const index = indexAtPointer(event);
+    if (index === null) return;
+    const rect = canvas.getBoundingClientRect();
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    show(index, new DOMRect(
+      rect.left + column * (cellSize + gap),
+      rect.top + row * (cellSize + gap),
+      cellSize,
+      cellSize
+    ));
+  };
+  map.onfocus = () => {
+    const index = Number(map.dataset.activeCell ?? 0);
+    const rect = canvas.getBoundingClientRect();
+    const column = index % columns;
+    const row = Math.floor(index / columns);
+    show(index, new DOMRect(
+      rect.left + column * (cellSize + gap),
+      rect.top + row * (cellSize + gap),
+      cellSize,
+      cellSize
+    ));
+  };
 }
 
 interface AnnotationPoint {
@@ -1127,7 +1386,21 @@ function renderLifeAnnotations(
   const birthday = cells[0].start;
   const country = lifeCountryAnnotations[countryId];
   const specialPeriods = biography?.specialPeriods ?? country?.specialPeriods ?? [];
-  const events = biography?.events ?? country?.events ?? [];
+  const events = [...(biography?.events ?? country?.events ?? [])];
+  if (
+    biography?.deathDate &&
+    !events.some((event) => event.type === "demographic" && event.label.includes("去世"))
+  ) {
+    events.push({
+      age: ageAt(birthday, biography.deathDate),
+      label: "去世",
+      type: "demographic",
+      year: biography.deathDate,
+      detail: `${biography.deathDate}；享年 ${ageAt(birthday, biography.deathDate)} 岁。`,
+      status: "verified",
+      sourceUrl: biography.sourceUrl
+    });
+  }
 
   const positionForDate = (date: string): AnnotationPoint | null => {
     const index = cells.findIndex((cell) => cell.start <= date && date <= cell.end);
@@ -1234,7 +1507,16 @@ function renderLifeAnnotations(
     className: string,
     sourceUrl: string | null
   ) => {
-    const point = positionForDate(dateAtAge(age));
+    appendPointAtDate(dateAtAge(age), title, detail, className, sourceUrl);
+  };
+  const appendPointAtDate = (
+    date: string,
+    title: string,
+    detail: string,
+    className: string,
+    sourceUrl: string | null
+  ) => {
+    const point = positionForDate(date);
     if (!point) return;
     const group = document.createElement("span");
     group.className = `lifecount-annotation-group ${className}`;
@@ -1265,7 +1547,9 @@ function renderLifeAnnotations(
     }
     const eventsByDate = new Map<string, LifeAnnotationEvent[]>();
     for (const event of events) {
-      const date = dateAtAge(event.age);
+      const date = biography?.deathDate && event.label.includes("去世")
+        ? biography.deathDate
+        : dateAtAge(event.age);
       eventsByDate.set(date, [...(eventsByDate.get(date) ?? []), event]);
     }
     for (const eventGroup of eventsByDate.values()) {
@@ -1285,8 +1569,11 @@ function renderLifeAnnotations(
           })
           .filter(Boolean)
       )].join("、");
-      appendPoint(
-        firstEvent.age,
+      const eventDate = biography?.deathDate && parsedLabels.some((item) => item.title.includes("去世"))
+        ? biography.deathDate
+        : dateAtAge(firstEvent.age);
+      appendPointAtDate(
+        eventDate,
         title,
         detail,
         "lifecount-event-annotation",
