@@ -514,6 +514,7 @@ function renderStaticCopy(
   setText(root, "[data-lifecount-language-label]", messages.languageButton);
   root.querySelectorAll<HTMLElement>("[data-lifecount-language-icon]").forEach((icon) => {
     icon.hidden = icon.dataset.lifecountLanguageIcon !== (messages.languageButton === "EN" ? "en" : "zh");
+    icon.style.display = icon.hidden ? "none" : "";
   });
   setLabel(root, "[data-lifecount-stage-annotations-toggle]", messages.stageAnnotationsToggle);
   setLabel(root, "[data-lifecount-celebrity-annotations-toggle]", messages.celebrityDeathsToggle);

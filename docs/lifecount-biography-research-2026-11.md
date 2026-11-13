@@ -199,3 +199,59 @@
 - [日本文部科学省教育体系](https://www.mext.go.jp/en/policy/education/overview/)
 - [印度 NEP 2020](https://www.education.gov.in/sites/upload_files/mhrd/files/NEP_Final_English.pdf)
 - [CBSE academic session](https://www.cbse.gov.in/cbsenew/exam_change_sub.html)
+
+## 第四轮履历调研：黄仁勋
+
+### 资料边界
+
+黄仁勋的出生日期采用 `1963-02-17`。出生地存在来源差异：Stanford、Caltech 和 Computer History Museum 的口述史资料指向台北，Computer History Museum 人物页写作台南。本项目将出生地写成“台湾，出生地待核”，避免把来源冲突处理成确定事实。
+
+### 连续人生阶段
+
+| 年龄范围 | 阶段名称 | 依据与处理 |
+|---|---|---|
+| 0–5 岁 | 台湾童年阶段 | 出生地仅保留台湾范围，具体城市待核。 |
+| 5–9 岁 | 曼谷 Ruamrudee 国际学校 | 学校校友资料记录 1968–1972 年就读。 |
+| 9–10 岁 | Tacoma 赴美过渡阶段 | Caltech 资料称约 9 岁赴 Tacoma，Stanford 资料称约 10 岁迁往美国，使用约数。 |
+| 10–13 岁 | Oneida Baptist Institute | 资料确认就读 Kentucky 的 Oneida Baptist Institute，起止月份未找到可靠来源。 |
+| 13–16 岁 | Oregon / Aloha High School | Caltech 和 Oregon State 资料均支持高中阶段，16 岁左右毕业。 |
+| 16–21 岁 | Oregon State University 电气工程 | 1984 年获得 B.S.E.E.。 |
+| 21–22 岁 | AMD 微处理器设计 | NVIDIA SEC 履历记录 1983–1985 年在 AMD 从事微处理器设计；由于它和大学后段存在并行，图中按主线顺序展开，事件保留 1983 年原始节点。 |
+| 22–30 岁 | LSI Logic / Stanford MSEE | 1985 年加入 LSI Logic，期间承担芯片设计和管理工作；1992 年获得 Stanford 电气工程硕士。 |
+| 30–36.5 岁 | NVIDIA 创办初期 | 1993 年创办 NVIDIA，早期主线集中在 PC 图形芯片。 |
+| 36.5–43.7 岁 | GeForce 图形计算阶段 | 1999 年 GeForce 256 成为代表性产品节点。 |
+| 43.7–49.6 岁 | CUDA / Tesla GPU 计算 | 2006 年 CUDA、2007 年 Tesla 平台构成通用 GPU 计算转折。 |
+| 49.6–53.1 岁 | AlexNet 深度学习转折 | 2012 年 GPU 加速深度学习成为产业转折点。 |
+| 53.1 岁至今 | NVIDIA AI 加速计算阶段 | 2016 年 DGX-1 代表 AI 计算基础设施产品化；阶段继续延伸到当前时间。 |
+
+### 事件节点
+
+| 时间 | 事件 | 精度 |
+|---|---|---|
+| 1983 年 | 加入 AMD 微处理器设计团队 | 年份 |
+| 1984 年 | 获俄勒冈州立大学电气工程学士学位 | 年份 |
+| 1985 年 | 加入 LSI Logic | 年份 |
+| 1992 年 | 获 Stanford 电气工程硕士学位 | 年份 |
+| 1993-04-05 | 创办 NVIDIA | 日级 |
+| 1999 年 1 月 | NVIDIA 开始公开交易 | 月份 |
+| 1999 年 8 月 | 发布 GeForce 256 | 月份 |
+| 2006 年 11 月 | 发布 CUDA | 月份 |
+| 2007 年 | 推出 Tesla GPU 计算平台 | 年份 |
+| 2012 年 | AlexNet 推动 GPU 深度学习转折 | 年份 |
+| 2016-04-05 | 发布 DGX-1 深度学习超级计算机 | 日级 |
+| 2026-11-12 | NVIDIA 管理层变化公告 | 日级，作为近期事件 |
+
+### 来源
+
+- [NVIDIA 官方公司时间线](https://www.nvidia.com/en-us/about-nvidia/corporate-timeline/)
+- [Stanford Engineering 黄仁勋资料](https://engineering.stanford.edu/news/jen-hsun-huang-nvidia-co-founder-invests-next-generation-stanford-engineers)
+- [Caltech 黄仁勋资料](https://www.caltech.edu/about/news/nvidia-founder-and-ceo-jensen-huang-to-give-caltechs-130th-commencement-address)
+- [Computer History Museum 人物资料](https://computerhistory.org/profile/jensen-huang/)
+- [Ruamrudee International School 校友资料](https://www.rism.ac.th/alumni-news-roundup-december-2024/)
+- [Oregon State University 黄仁勋资料](https://engineering.oregonstate.edu/alumni-partners/oregon-stater-awards/searchable-awards-database/jen-hsun-huang-engineering-hall)
+- [NVIDIA SEC 10-K](https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm)
+- [NVIDIA 1999 时间线](https://www.nvidia.com/content/timeline/time_99.html)
+- [CUDA 编程指南](https://docs.nvidia.com/cuda/archive/10.2/cuda-c-programming-guide/index.html)
+- [Tesla GPU 平台资料](https://www.nvidia.com/content/company-info/nvidia-intro2015.pdf)
+- [DGX-1 发布公告](https://nvidianews.nvidia.com/news/nvidia-launches-world-s-first-deep-learning-supercomputer-6622436)
+- [NVIDIA 管理层变化公告](https://nvidianews.nvidia.com/news/nvidia-announces-ceo-transition)

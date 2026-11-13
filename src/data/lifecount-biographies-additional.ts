@@ -296,5 +296,43 @@ export const additionalLifeBiographyProfiles = [
       { age: 80.8, label: "获 Lasker 临床医学研究奖", type: "achievement", year: 2011, detail: "年份数据。", status: "verified", sourceUrl: "https://laskerfoundation.org/winners/artemisinin-therapy-for-malaria/" },
       { age: 84.8, label: "获诺贝尔生理学或医学奖", type: "achievement", year: 2015, detail: "年份数据。", status: "verified", sourceUrl: "https://www.nobelprize.org/prizes/medicine/2015/tu/facts/" }
     ]
+  },
+  {
+    id: "jensen-huang",
+    nameZh: "黄仁勋",
+    nameEn: "Jensen Huang",
+    birthDate: "1963-02-17",
+    basePresetId: "us-bachelor-work",
+    stages: [
+      { id: "early-childhood", startAge: 0, endAge: 5, color: "cyan", labelZh: "台湾童年阶段（出生地待核）", labelEn: "Early childhood in Taiwan (birthplace under review)" },
+      { id: "primary", startAge: 5, endAge: 9, color: "green", labelZh: "曼谷 Ruamrudee 国际学校", labelEn: "Ruamrudee International School in Bangkok" },
+      { id: "middle", startAge: 9, endAge: 10, color: "blue", labelZh: "Tacoma 赴美过渡阶段（约）", labelEn: "Tacoma transition to the United States (approx.)" },
+      { id: "middle", startAge: 10, endAge: 13, color: "purple", labelZh: "Oneida Baptist Institute（约）", labelEn: "Oneida Baptist Institute (approx.)" },
+      { id: "high", startAge: 13, endAge: 16, color: "pink", labelZh: "Oregon / Aloha High School（约）", labelEn: "Oregon / Aloha High School (approx.)" },
+      { id: "undergraduate", startAge: 16, endAge: 21, color: "orange", labelZh: "Oregon State University 电气工程", labelEn: "Electrical engineering at Oregon State University" },
+      { id: "work", startAge: 21, endAge: 22, color: "sand", labelZh: "AMD 微处理器设计", labelEn: "AMD microprocessor design" },
+      { id: "work", startAge: 22, endAge: 30, color: "red", labelZh: "LSI Logic / Stanford MSEE", labelEn: "LSI Logic / Stanford MSEE" },
+      { id: "work", startAge: 30, endAge: 36.5, color: "purple", labelZh: "NVIDIA 创办初期", labelEn: "NVIDIA founding and early graphics" },
+      { id: "work", startAge: 36.5, endAge: 43.7, color: "pink", labelZh: "GeForce 图形计算阶段", labelEn: "GeForce graphics computing" },
+      { id: "work", startAge: 43.7, endAge: 49.6, color: "sand", labelZh: "CUDA / Tesla GPU 计算", labelEn: "CUDA / Tesla GPU computing" },
+      { id: "work", startAge: 49.6, endAge: 53.1, color: "green", labelZh: "AlexNet 深度学习转折", labelEn: "AlexNet deep-learning transition" },
+      { id: "work", startAge: 53.1, endAge: null, color: "red", labelZh: "NVIDIA AI 加速计算阶段", labelEn: "NVIDIA accelerated computing" }
+    ],
+    sourceUrl: "https://www.nvidia.com/en-us/about-nvidia/corporate-timeline/",
+    specialPeriods: [],
+    events: [
+      { age: 20.9, label: "加入 AMD 微处理器设计团队", type: "career_milestone", year: 1983, detail: "年份数据；与俄勒冈州立大学完成学业的阶段存在并行。", status: "verified", sourceUrl: "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm" },
+      { age: 21.0, label: "获俄勒冈州立大学电气工程学士学位", type: "achievement", year: 1984, detail: "年份数据；获得 B.S.E.E.。", status: "verified", sourceUrl: "https://engineering.oregonstate.edu/alumni-partners/oregon-stater-awards/searchable-awards-database/jen-hsun-huang-engineering-hall" },
+      { age: 22.0, label: "加入 LSI Logic", type: "career_milestone", year: 1985, detail: "年份数据；后续承担芯片设计与管理工作。", status: "verified", sourceUrl: "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm" },
+      { age: 29.3, label: "获 Stanford 电气工程硕士学位", type: "achievement", year: 1992, detail: "年份数据；在 LSI Logic 工作期间完成硕士学习。", status: "verified", sourceUrl: "https://engineering.stanford.edu/news/jen-hsun-huang-nvidia-co-founder-invests-next-generation-stanford-engineers" },
+      { age: 30.1, label: "创办 NVIDIA", type: "career_milestone", year: "1993-04-05", detail: "精确日期；NVIDIA 官方时间线列出的创办日期。", status: "verified", sourceUrl: "https://www.nvidia.com/en-us/about-nvidia/corporate-timeline/" },
+      { age: 35.9, label: "NVIDIA 上市", type: "career_milestone", year: "1999-01", detail: "月份数据；SEC 资料记录 1999 年 1 月开始公开交易。", status: "verified", sourceUrl: "https://www.sec.gov/Archives/edgar/data/1045810/000104581018000010/nvda-2018x10k.htm" },
+      { age: 36.5, label: "发布 GeForce 256", type: "achievement", year: "1999-08", detail: "月份数据；NVIDIA 官方时间线中的代表性图形产品节点。", status: "verified", sourceUrl: "https://www.nvidia.com/content/timeline/time_99.html" },
+      { age: 43.7, label: "发布 CUDA", type: "achievement", year: "2006-11", detail: "月份数据；开启通用 GPU 计算开发生态。", status: "verified", sourceUrl: "https://docs.nvidia.com/cuda/archive/10.2/cuda-c-programming-guide/index.html" },
+      { age: 44.3, label: "推出 Tesla GPU 计算平台", type: "achievement", year: 2007, detail: "年份数据；面向科学计算和通用 GPU 计算。", status: "verified", sourceUrl: "https://www.nvidia.com/content/company-info/nvidia-intro2015.pdf" },
+      { age: 49.6, label: "AlexNet 推动 GPU 深度学习转折", type: "achievement", year: 2012, detail: "年份数据；以 GPU 加速深度学习成为行业转折点。", status: "verified", sourceUrl: "https://www.nvidia.com/en-us/about-nvidia/corporate-timeline/" },
+      { age: 53.1, label: "发布 DGX-1 深度学习超级计算机", type: "achievement", year: "2016-04-05", detail: "精确日期；NVIDIA 官方新闻稿。", status: "verified", sourceUrl: "https://nvidianews.nvidia.com/news/nvidia-launches-world-s-first-deep-learning-supercomputer-6622436" },
+      { age: 63.73, label: "NVIDIA 管理层变化公告", type: "career_milestone", year: "2026-11-12", detail: "精确日期；现阶段作为近期事件展示，不单独新增未知的后续职业阶段。", status: "verified", sourceUrl: "https://nvidianews.nvidia.com/news/nvidia-announces-ceo-transition" }
+    ]
   }
 ] satisfies LifeBiographyProfile[];
