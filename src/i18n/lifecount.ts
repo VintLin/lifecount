@@ -28,8 +28,6 @@ export interface LifeCountMessages {
   selectGender: string;
   birthday: string;
   displayAge: string;
-  cancel: string;
-  save: string;
   selectUnit: string;
   units: Record<LifeUnit, LifeCountUnitLabel>;
   views: Record<LifeUnit, string>;
@@ -72,8 +70,6 @@ const zhCN: LifeCountMessages = {
   selectGender: "选择性别，用于计算退休年龄",
   birthday: "出生日期",
   displayAge: "最高年龄",
-  cancel: "取消",
-  save: "保存",
   selectUnit: "选择时间单位",
   units: {
     day: { short: "日", one: "日", other: "日" },
@@ -167,8 +163,6 @@ const en: LifeCountMessages = {
   selectGender: "Choose gender for retirement age",
   birthday: "Birthday",
   displayAge: "Maximum age",
-  cancel: "Cancel",
-  save: "Save",
   selectUnit: "Choose a time unit",
   units: {
     day: { short: "D", one: "day", other: "days" },

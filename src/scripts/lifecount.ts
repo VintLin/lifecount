@@ -38,7 +38,6 @@ import {
 import { biographyById, lifeBiographyProfiles, type LifeBiographyProfile } from "@/data/lifecount-biographies";
 
 const UNITS: LifeUnit[] = ["day", "week", "month", "year"];
-const GENDERS: LifeGender[] = ["unspecified", "female", "male"];
 const COLOR_VARIABLES: Record<LifeColor, string> = {
   blue: "var(--life-blue)",
   cyan: "var(--life-cyan)",
@@ -59,21 +58,20 @@ const DOM_GRID_GAP_BY_UNIT: Record<"month" | "year", number> = {
   month: 3,
   year: 5
 };
-const THEME_STORAGE_KEY = "vint-color-scheme";
-const themeTransitionState: {
-  generation: number;
-  running: boolean;
-  transition: ViewTransition | null;
-  animation: Animation | null;
-} = {
-  generation: 0,
-  running: false,
-  transition: null,
-  animation: null
-};
-
+const MAP_GRID_MAX_WIDTH = 672;
+const FULL_ANNOTATION_RAIL_WIDTH = 168;
+const FULL_ANNOTATION_GAP = 48;
+const COMPACT_ANNOTATION_RAIL_WIDTH = 18;
+const COMPACT_ANNOTATION_GAP = 12;
+const COMPACT_GRID_GUTTER = 30;
+const MIN_TEXT_ANNOTATION_RAIL_WIDTH = 120;
+const MIN_TEXT_ANNOTATION_GAP = 16;
+const MAP_STAGE_MAX_WIDTH = MAP_GRID_MAX_WIDTH +
+  (FULL_ANNOTATION_RAIL_WIDTH + FULL_ANNOTATION_GAP) * 2;
+const MAP_STAGE_VIEWPORT_PADDING = 32;
 interface LifeCountState {
   locale: LifeCountLocale;
+  settingsTab: "me" | "biography";
   presetId: string;
   countryId: LifePresetCountryId;
   birthday: string;
@@ -115,22 +113,6 @@ function validPreset(config: LifeCountConfig, value: string | null): LifePreset 
     config.presets.find((preset) => preset.id === config.defaultPresetId) ??
     config.presets[0]
   );
-}
-
-function validGender(value: string | null): LifeGender {
-  return value && GENDERS.includes(value as LifeGender)
-    ? (value as LifeGender)
-    : "unspecified";
-}
-
-function validCountry(
-  config: LifeCountConfig,
-  value: string | null,
-  fallback: LifePresetCountryId
-) {
-  return config.presets.some((preset) => preset.countryId === value)
-    ? (value as LifePresetCountryId)
-    : fallback;
 }
 
 function ageAt(birthday: string, today: string) {
@@ -279,27 +261,6 @@ function renderPresetOptions(
   select.setAttribute("aria-label", messages.selectCase);
 }
 
-function renderGenderOptions(
-  root: HTMLElement,
-  state: LifeCountState,
-  messages: LifeCountMessages
-) {
-  const select = root.querySelector<HTMLSelectElement>("[data-lifecount-gender]");
-  if (!select) return;
-
-  select.replaceChildren(
-    ...GENDERS.map((gender) => {
-      const option = document.createElement("option");
-      option.value = gender;
-      option.textContent = messages.genders[gender];
-      return option;
-    })
-  );
-  select.value = state.gender;
-  select.disabled = Boolean(state.biographyId);
-  select.setAttribute("aria-label", messages.selectGender);
-}
-
 function renderBiographyOptions(
   root: HTMLElement,
   state: LifeCountState,
@@ -319,7 +280,7 @@ function renderBiographyOptions(
   );
   select.value = state.biographyId ?? lifeBiographyProfiles[0]?.id ?? "";
   select.setAttribute("aria-label", messages.selectBiography);
-  picker.hidden = !state.biographyId;
+  picker.hidden = false;
 }
 
 function createSourceLink(url: string, label: string, className = "lifecount-source-link") {
@@ -423,9 +384,10 @@ function renderStages(
   root: HTMLElement,
   stages: LifeStage[],
   messages: LifeCountMessages,
-  locale: LifeCountLocale
+  locale: LifeCountLocale,
+  selector = "[data-lifecount-stage-list]"
 ) {
-  const list = root.querySelector<HTMLElement>("[data-lifecount-stage-list]");
+  const list = root.querySelector<HTMLElement>(selector);
   if (!list) return;
   list.replaceChildren();
 
@@ -502,8 +464,16 @@ function renderStaticCopy(
   setText(root, "[data-lifecount-settings-title]", messages.settingsTitle);
   setText(root, "[data-lifecount-birthday-label]", messages.birthday);
   setText(root, "[data-lifecount-display-age-label]", messages.displayAge);
-  setText(root, "[data-lifecount-settings-cancel]", messages.cancel);
-  setText(root, "[data-lifecount-settings-save]", messages.save);
+  setText(
+    root,
+    "[data-lifecount-country-field-label]",
+    messages.selectCountry === "选择国家" ? "预设国家" : "Preset country"
+  );
+  setText(
+    root,
+    "[data-lifecount-preset-field-label]",
+    messages.selectCase === "选择典型人生案例" ? "预设人生" : "Preset life path"
+  );
   setLabel(root, "[data-lifecount-settings]", messages.settings);
   setLabel(root, "[data-lifecount-stages]", messages.stagesOpen);
   setLabel(root, "[data-lifecount-stages-close]", messages.close);
@@ -522,189 +492,16 @@ function renderStaticCopy(
   setLabel(root, "[data-lifecount-github]", messages.githubRepository);
   setLabel(root, "[data-lifecount-legend]", messages.legend);
 
-  const isDark = document.documentElement.classList.contains("dark");
-  setLabel(
-    root,
-    "[data-lifecount-theme]",
-    isDark ? messages.themeLight : messages.themeDark
-  );
+  const language = root.querySelector<HTMLSelectElement>("[data-lifecount-language]");
+  if (language) {
+    const isEnglish = messages.languageButton !== "EN";
+    language.value = isEnglish ? "en" : "zh-CN";
+    language.closest(".lifecount-language-select")?.classList.toggle("is-english", isEnglish);
+  }
 
   const drawer = root.querySelector<HTMLDialogElement>("[data-lifecount-stages-drawer]");
   drawer?.setAttribute("aria-label", messages.stages);
-  const unitGroup = root.querySelector<HTMLElement>(".lifecount-unit-switch");
-  unitGroup?.setAttribute("aria-label", messages.selectUnit);
-}
-
-function persistTheme(theme: "light" | "dark") {
-  try {
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
-  } catch {
-    // Theme switching still works when storage is unavailable.
-  }
-}
-
-function applyTheme(
-  theme: "light" | "dark",
-  renderPage: () => void
-) {
-  const isDark = theme === "dark";
-  document.documentElement.classList.toggle("dark", isDark);
-  document
-    .querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-    ?.setAttribute("content", isDark ? "#050505" : "#fafaf9");
-  renderPage();
-}
-
-function resolveThemeTransitionOrigin(button: HTMLButtonElement) {
-  const rect = button.getBoundingClientRect();
-  const x = rect.left + rect.width / 2;
-  const y = rect.top + rect.height / 2;
-  return rect.width > 0 && rect.height > 0 && Number.isFinite(x) && Number.isFinite(y)
-    ? { x, y }
-    : null;
-}
-
-function resolveThemeTransitionRadius({ x, y }: { x: number; y: number }) {
-  return Math.hypot(
-    Math.max(x, window.innerWidth - x),
-    Math.max(y, window.innerHeight - y)
-  );
-}
-
-function setThemeButtonBusy(busy: boolean) {
-  document
-    .querySelectorAll<HTMLButtonElement>("[data-lifecount-theme]")
-    .forEach((button) => {
-      button.toggleAttribute("aria-disabled", busy);
-      button.toggleAttribute("aria-busy", busy);
-    });
-}
-
-function setBackgroundTransitionPaused(paused: boolean) {
-  (
-    window as Window & {
-      __noiseDriftBackground?: {
-        setTransitionPaused?: (value: boolean) => void;
-      };
-    }
-  ).__noiseDriftBackground?.setTransitionPaused?.(paused);
-}
-
-function stopThemeTransition() {
-  themeTransitionState.generation += 1;
-  themeTransitionState.running = false;
-
-  try {
-    themeTransitionState.animation?.cancel();
-  } catch {
-    // The animation may already be finished.
-  }
-
-  try {
-    themeTransitionState.transition?.skipTransition();
-  } catch {
-    // The transition may already be finished.
-  }
-
-  setBackgroundTransitionPaused(false);
-  setThemeButtonBusy(false);
-  themeTransitionState.animation = null;
-  themeTransitionState.transition = null;
-}
-
-function finishThemeTransition(generation: number) {
-  if (themeTransitionState.generation !== generation) return;
-  themeTransitionState.running = false;
-  themeTransitionState.animation = null;
-  themeTransitionState.transition = null;
-  setBackgroundTransitionPaused(false);
-  setThemeButtonBusy(false);
-}
-
-function animateThemeTransition(
-  button: HTMLButtonElement,
-  nextTheme: "light" | "dark",
-  renderPage: () => void
-) {
-  const origin = resolveThemeTransitionOrigin(button);
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (!origin || reducedMotion || typeof document.startViewTransition !== "function") {
-    applyTheme(nextTheme, renderPage);
-    return;
-  }
-
-  const generation = themeTransitionState.generation + 1;
-  themeTransitionState.generation = generation;
-  themeTransitionState.running = true;
-  setThemeButtonBusy(true);
-  setBackgroundTransitionPaused(true);
-
-  const radius = resolveThemeTransitionRadius(origin);
-  const originX = `${(origin.x / window.innerWidth) * 100}%`;
-  const originY = `${(origin.y / window.innerHeight) * 100}%`;
-  const from = `circle(0px at ${originX} ${originY})`;
-  const to = `circle(${radius}px at ${originX} ${originY})`;
-  const isExpanding = nextTheme === "light";
-
-  let transition: ViewTransition;
-  try {
-    transition = document.startViewTransition(() => {
-      applyTheme(nextTheme, renderPage);
-    });
-    themeTransitionState.transition = transition;
-  } catch {
-    applyTheme(nextTheme, renderPage);
-    finishThemeTransition(generation);
-    return;
-  }
-
-  transition.ready
-    .then(() => {
-      if (themeTransitionState.generation !== generation) return;
-      const animation = document.documentElement.animate(
-        { clipPath: isExpanding ? [from, to] : [to, from] },
-        {
-          duration: isExpanding ? 400 : 370,
-          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-          composite: "replace",
-          fill: "both",
-          pseudoElement: isExpanding
-            ? "::view-transition-new(root)"
-            : "::view-transition-old(root)"
-        }
-      );
-      themeTransitionState.animation = animation;
-      return Promise.all([animation.finished, transition.finished]);
-    })
-    .catch(() => {
-      try {
-        transition.skipTransition();
-      } catch {
-        // The browser may have already completed the transition.
-      }
-    })
-    .finally(() => finishThemeTransition(generation));
-}
-
-function setupThemeToggle(root: HTMLElement, renderPage: () => void) {
-  const button = root.querySelector<HTMLButtonElement>("[data-lifecount-theme]");
-  if (!button) return;
-
-  button.addEventListener("click", () => {
-    if (themeTransitionState.running) return;
-    const nextTheme = document.documentElement.classList.contains("dark")
-      ? "light"
-      : "dark";
-    persistTheme(nextTheme);
-    animateThemeTransition(button, nextTheme, renderPage);
-  });
-
-  window.addEventListener("storage", (event) => {
-    if (event.key !== THEME_STORAGE_KEY) return;
-    stopThemeTransition();
-    applyTheme(event.newValue === "light" ? "light" : "dark", renderPage);
-  });
+  root.querySelector<HTMLSelectElement>("[data-lifecount-unit-select]")?.setAttribute("aria-label", messages.selectUnit);
 }
 
 function setupSettings(
@@ -715,73 +512,73 @@ function setupSettings(
 ) {
   const dialog = root.querySelector<HTMLDialogElement>("[data-lifecount-settings-dialog]");
   const button = root.querySelector<HTMLButtonElement>("[data-lifecount-settings]");
-  const form = root.querySelector<HTMLFormElement>("[data-lifecount-settings-form]");
   const birthday = root.querySelector<HTMLInputElement>("[data-lifecount-birthday]");
   const displayAge = root.querySelector<HTMLInputElement>("[data-lifecount-display-age]");
-  const cancel = root.querySelector<HTMLButtonElement>("[data-lifecount-settings-cancel]");
-  if (!dialog || !button || !form || !birthday || !displayAge || !cancel) return;
+  const country = root.querySelector<HTMLSelectElement>("[data-lifecount-country]");
+  const preset = root.querySelector<HTMLSelectElement>("[data-lifecount-preset]");
+  if (!dialog || !button || !birthday || !displayAge || !country || !preset) return;
+
+  const positionDialog = () => {
+    if (!dialog.open) return;
+    const buttonRect = button.getBoundingClientRect();
+    const dialogHeight = dialog.getBoundingClientRect().height;
+    const top = Math.min(
+      buttonRect.bottom + 8,
+      Math.max(8, window.innerHeight - dialogHeight - 8)
+    );
+    const right = Math.max(8, window.innerWidth - buttonRect.right);
+    dialog.style.setProperty("--lifecount-settings-top", `${top}px`);
+    dialog.style.setProperty("--lifecount-settings-right", `${right}px`);
+  };
 
   button.addEventListener("click", () => {
     birthday.value = state.birthday;
     displayAge.value = String(config.displayAge);
+    requestAnimationFrame(positionDialog);
   });
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!form.reportValidity()) return;
+  window.addEventListener("resize", positionDialog);
+
+  const commitMeSettings = () => {
+    if (!birthday.value || !displayAge.validity.valid) return;
     config.birthday = birthday.value;
     state.birthday = birthday.value;
     state.biographyId = null;
+    state.settingsTab = "me";
     config.displayAge = Number(displayAge.value);
-    cancel.click();
     renderPage();
-  });
-}
+  };
 
-function setupStageDrawer(
-  root: HTMLElement,
-  config: LifeCountConfig,
-  state: LifeCountState,
-  renderPage: () => void
-) {
-  const button = root.querySelector<HTMLButtonElement>("[data-lifecount-stages]");
-  const overlay = root.querySelector<HTMLElement>("[data-lifecount-stages-overlay]");
-  const drawer = root.querySelector<HTMLDialogElement>("[data-lifecount-stages-drawer]");
-  const close = root.querySelector<HTMLButtonElement>("[data-lifecount-stages-close]");
-  const country = root.querySelector<HTMLSelectElement>("[data-lifecount-country]");
-  const preset = root.querySelector<HTMLSelectElement>("[data-lifecount-preset]");
-  const gender = root.querySelector<HTMLSelectElement>("[data-lifecount-gender]");
-  if (!button || !overlay || !drawer || !close || !country || !preset || !gender) return;
+  birthday.addEventListener("input", commitMeSettings);
+  displayAge.addEventListener("input", commitMeSettings);
 
-  button.addEventListener("click", () => {
-    requestAnimationFrame(() => country.focus());
-  });
   country.addEventListener("change", () => {
-    state.countryId = validCountry(config, country.value, state.countryId);
-    const nextPreset = config.presets.find((item) => item.countryId === state.countryId);
-    if (nextPreset) state.presetId = nextPreset.id;
-    updateUrl({ preset: state.presetId });
+    const countryId = country.value as LifePresetCountryId;
+    const nextPreset = config.presets.find((item) => item.countryId === countryId);
+    if (!nextPreset) return;
+    state.countryId = countryId;
+    state.presetId = nextPreset.id;
+    state.biographyId = null;
+    state.settingsTab = "me";
+    updateUrl({ biography: "", preset: nextPreset.id });
     renderPage();
   });
+
   preset.addEventListener("change", () => {
-    const nextPreset = config.presets.find((item) => item.id === preset.value);
-    if (!nextPreset) return;
+    const nextPreset = validPreset(config, preset.value);
     state.presetId = nextPreset.id;
     state.countryId = nextPreset.countryId;
-    updateUrl({ preset: state.presetId });
-    renderPage();
-  });
-  gender.addEventListener("change", () => {
-    state.gender = validGender(gender.value);
-    updateUrl({ gender: state.gender });
+    state.biographyId = null;
+    state.settingsTab = "me";
+    updateUrl({ biography: "", preset: nextPreset.id });
     renderPage();
   });
 }
 
 function setupLanguageSwitcher(root: HTMLElement, state: LifeCountState, renderPage: () => void) {
-  const button = root.querySelector<HTMLButtonElement>("[data-lifecount-language]");
-  if (!button) return;
-  button.addEventListener("click", () => {
-    state.locale = state.locale === "zh-CN" ? "en" : "zh-CN";
+  const select = root.querySelector<HTMLSelectElement>("[data-lifecount-language]");
+  if (!select) return;
+  select.addEventListener("change", () => {
+    state.locale = resolveLifeCountLocale(select.value);
     updateUrl({ lang: state.locale });
     renderPage();
   });
@@ -793,9 +590,9 @@ function setupBiographyControls(
   state: LifeCountState,
   renderPage: () => void
 ) {
-  const toggle = root.querySelector<HTMLButtonElement>("[data-lifecount-biography-toggle]");
   const select = root.querySelector<HTMLSelectElement>("[data-lifecount-biography]");
-  if (!toggle || !select) return;
+  const tabs = [...root.querySelectorAll<HTMLButtonElement>("[data-lifecount-settings-tab]")];
+  if (!select || !tabs.length) return;
 
   const activate = (profile: LifeBiographyProfile) => {
     if (!state.biographyId) {
@@ -804,6 +601,7 @@ function setupBiographyControls(
       state.biographyRestoreShowStageAnnotations = state.showStageAnnotations;
       state.biographyRestoreShowCelebrityAnnotations = state.showCelebrityAnnotations;
     }
+    state.settingsTab = "biography";
     state.biographyId = profile.id;
     state.birthday = profile.birthDate;
     state.presetId = profile.basePresetId;
@@ -816,6 +614,7 @@ function setupBiographyControls(
   };
 
   const deactivate = () => {
+    state.settingsTab = "me";
     state.biographyId = null;
     state.birthday = state.biographyRestoreBirthday;
     state.presetId = state.biographyRestorePresetId;
@@ -826,13 +625,21 @@ function setupBiographyControls(
     renderPage();
   };
 
-  toggle.addEventListener("click", () => {
-    if (state.biographyId) {
-      deactivate();
-      return;
-    }
-    const profile = lifeBiographyProfiles[0];
-    if (profile) activate(profile);
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const nextTab = tab.dataset.lifecountSettingsTab;
+      if (nextTab === "biography") {
+        const profile = biographyById(state.biographyId) ?? lifeBiographyProfiles[0];
+        if (profile) activate(profile);
+        return;
+      }
+      if (state.biographyId) {
+        deactivate();
+        return;
+      }
+      state.settingsTab = "me";
+      renderPage();
+    });
   });
 
   select.addEventListener("change", () => {
@@ -1332,6 +1139,55 @@ interface AnnotationPoint {
   y: number;
 }
 
+function prepareMapStageLayout(root: HTMLElement) {
+  const container = root.querySelector<HTMLElement>(".lifecount-map-stage");
+  if (!container) return;
+
+  const pageWidth = Math.min(root.clientWidth, MAP_GRID_MAX_WIDTH);
+  const availableStageWidth = Math.max(
+    pageWidth,
+    0,
+    Math.min(window.innerWidth - MAP_STAGE_VIEWPORT_PADDING, MAP_STAGE_MAX_WIDTH)
+  );
+  const externalSpace = Math.max(0, (availableStageWidth - pageWidth) / 2);
+  const showText = externalSpace >=
+    MIN_TEXT_ANNOTATION_RAIL_WIDTH + MIN_TEXT_ANNOTATION_GAP;
+  const compact = !showText;
+  const railWidth = showText
+    ? Math.min(
+      FULL_ANNOTATION_RAIL_WIDTH,
+      Math.max(MIN_TEXT_ANNOTATION_RAIL_WIDTH, externalSpace - MIN_TEXT_ANNOTATION_GAP)
+    )
+    : COMPACT_ANNOTATION_RAIL_WIDTH;
+  const annotationGap = showText
+    ? railWidth >= FULL_ANNOTATION_RAIL_WIDTH
+      ? FULL_ANNOTATION_GAP
+      : MIN_TEXT_ANNOTATION_GAP
+    : COMPACT_ANNOTATION_GAP;
+  const gridGutter = compact
+    ? COMPACT_GRID_GUTTER
+    : railWidth + annotationGap;
+  const gridWidth = Math.max(
+    0,
+    Math.min(pageWidth, availableStageWidth - gridGutter * 2)
+  );
+  // Set the stage before the grid or canvas measures its width. Otherwise a
+  // resize can leave the canvas one render behind the visible grid.
+  container.style.width = `${availableStageWidth}px`;
+  container.style.left = "50%";
+  container.style.marginInline = "0";
+  container.style.transform = "translateX(-50%)";
+  container.style.setProperty("--lifecount-grid-width", `${gridWidth}px`);
+  container.dataset.annotationMode = compact ? "compact" : "full";
+  container.style.setProperty("--annotation-rail-width", `${railWidth}px`);
+  container.style.setProperty("--annotation-grid-gap", `${annotationGap}px`);
+  container.style.setProperty("--lifecount-grid-gutter", `${gridGutter}px`);
+  root.querySelector<HTMLElement>(".lifecount-panel")?.style.setProperty(
+    "--lifecount-grid-width",
+    `${gridWidth}px`
+  );
+}
+
 function renderLifeAnnotations(
   root: HTMLElement,
   cells: LifeCell[],
@@ -1341,9 +1197,14 @@ function renderLifeAnnotations(
 ) {
   const map = root.querySelector<HTMLElement>("[data-lifecount-map]");
   const annotations = root.querySelector<HTMLElement>("[data-lifecount-annotations]");
+  const annotationPopover = root.querySelector<HTMLElement>("[data-lifecount-annotation-popover]");
   const container = root.querySelector<HTMLElement>(".lifecount-map-stage");
   if (!map || !annotations || !container || !cells.length) return;
   annotations.replaceChildren();
+  if (annotationPopover) {
+    annotationPopover.replaceChildren();
+    annotationPopover.hidden = true;
+  }
   container.style.minHeight = "";
 
   const columns = Number(map.dataset.columns);
@@ -1358,9 +1219,9 @@ function renderLifeAnnotations(
   annotations.style.setProperty("--lifecount-annotation-pin-size", `${diameter}px`);
   annotations.style.setProperty("--lifecount-annotation-stroke", `${stroke}px`);
   container.style.paddingTop = `${radius + stroke + axisHeight}px`;
+  const compact = container.dataset.annotationMode === "compact";
   const layout = getComputedStyle(container);
   const railWidth = Number.parseFloat(layout.getPropertyValue("--annotation-rail-width"));
-  const width = container.clientWidth;
   const gridHeight = map.offsetTop + map.getBoundingClientRect().height + radius + stroke;
   const labelGap = 20;
   const padding = 16;
@@ -1435,15 +1296,71 @@ function renderLifeAnnotations(
     pin.setAttribute("aria-hidden", "true");
     parent.append(pin);
   };
-  const labels: Array<{
+  type AnnotationLabel = {
     group: HTMLElement;
     element: HTMLElement;
+    dot: HTMLButtonElement;
     anchor: AnnotationPoint;
     side: "left" | "right";
     inset: number;
     height: number;
     top: number;
-  }> = [];
+  };
+  const labels: AnnotationLabel[] = [];
+  let annotationPopoverHideTimer: number | undefined;
+  const clearAnnotationPopoverHide = () => {
+    if (annotationPopoverHideTimer !== undefined) {
+      window.clearTimeout(annotationPopoverHideTimer);
+      annotationPopoverHideTimer = undefined;
+    }
+  };
+  const scheduleAnnotationPopoverHide = () => {
+    clearAnnotationPopoverHide();
+    annotationPopoverHideTimer = window.setTimeout(() => {
+      if (annotationPopover) annotationPopover.hidden = true;
+    }, 180);
+  };
+  const showAnnotationPopover = (label: AnnotationLabel) => {
+    if (!annotationPopover || !compact) return;
+    clearAnnotationPopoverHide();
+    annotationPopover.replaceChildren();
+    const heading = document.createElement("strong");
+    heading.textContent = label.element.querySelector("strong")?.textContent ?? label.dot.title;
+    annotationPopover.append(heading);
+    const detail = label.element.querySelector<HTMLElement>(":scope > span");
+    if (detail?.textContent) {
+      const detailElement = document.createElement("span");
+      detailElement.textContent = detail.textContent;
+      annotationPopover.append(detailElement);
+    }
+    const sourceLink = label.element.querySelector<HTMLAnchorElement>(".lifecount-source-link");
+    if (sourceLink) {
+      const link = sourceLink.cloneNode(true) as HTMLAnchorElement;
+      link.classList.add("lifecount-source-link");
+      annotationPopover.append(link);
+    }
+    annotationPopover.hidden = false;
+    const stageRect = container.getBoundingClientRect();
+    const dotRect = label.dot.getBoundingClientRect();
+    const popoverWidth = annotationPopover.getBoundingClientRect().width;
+    const popoverHeight = annotationPopover.getBoundingClientRect().height;
+    const desiredLeft = label.side === "left"
+      ? dotRect.left - popoverWidth - 12
+      : dotRect.right + 12;
+    const left = Math.max(8, Math.min(
+      desiredLeft,
+      window.innerWidth - popoverWidth - 8
+    ));
+    const desiredTop = dotRect.top - 12;
+    const top = Math.max(8, Math.min(
+      desiredTop,
+      window.innerHeight - popoverHeight - 8
+    ));
+    annotationPopover.style.left = `${left - stageRect.left}px`;
+    annotationPopover.style.top = `${top - stageRect.top}px`;
+    annotationPopover.onmouseenter = clearAnnotationPopoverHide;
+    annotationPopover.onmouseleave = scheduleAnnotationPopoverHide;
+  };
   const appendLabel = (
     group: HTMLElement,
     anchor: AnnotationPoint,
@@ -1457,6 +1374,12 @@ function renderLifeAnnotations(
     element.className = `lifecount-annotation-text lifecount-annotation-text-${side}`;
     element.style.width = `${railWidth}px`;
     element.dataset.side = side;
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.className = "lifecount-annotation-dot";
+    dot.setAttribute("aria-label", title);
+    dot.title = title;
+    group.append(dot);
     const heading = document.createElement("div");
     heading.className = "lifecount-annotation-heading";
     const titleElement = document.createElement("strong");
@@ -1475,11 +1398,17 @@ function renderLifeAnnotations(
     element.append(heading, description);
     group.append(element);
     annotations.append(group);
-    labels.push({
-      group, element, anchor, side, inset,
+    const label: AnnotationLabel = {
+      group, element, dot, anchor, side, inset,
       height: element.getBoundingClientRect().height,
       top: 0
-    });
+    };
+    labels.push(label);
+    dot.addEventListener("mouseenter", () => showAnnotationPopover(label));
+    dot.addEventListener("focus", () => showAnnotationPopover(label));
+    dot.addEventListener("click", () => showAnnotationPopover(label));
+    dot.addEventListener("mouseleave", scheduleAnnotationPopoverHide);
+    dot.addEventListener("blur", scheduleAnnotationPopoverHide);
   };
   const appendPoint = (
     age: number,
@@ -1601,10 +1530,17 @@ function renderLifeAnnotations(
     }
     for (const item of items) {
       item.element.style.top = `${item.top}px`;
+      const endpointGap = compact
+        ? 24
+        : Math.max(8, Number.parseFloat(layout.getPropertyValue("--annotation-grid-gap")) - 8);
       const endpoint = {
-        x: side === "left" ? railWidth + 8 : width - railWidth - 8,
+        x: side === "left"
+          ? map.offsetLeft - endpointGap
+          : map.offsetLeft + map.clientWidth + endpointGap,
         y: item.top + item.height / 2
       };
+      item.dot.style.left = `${endpoint.x}px`;
+      item.dot.style.top = `${endpoint.y}px`;
       drawLine(item.group, item.anchor, endpoint, "lifecount-label-connector", item.inset);
     }
   }
@@ -1707,48 +1643,64 @@ function render(root: HTMLElement, config: LifeCountConfig, state: LifeCountStat
     )
   );
   renderStaticCopy(root, messages);
-  setText(
-    root,
-    "[data-lifecount-stages-title]",
-    biography
-      ? `${state.locale === "en" ? biography.nameEn : biography.nameZh} · ${messages.stages}`
-      : messages.stages
-  );
   const settingsButton = root.querySelector<HTMLButtonElement>("[data-lifecount-settings]");
   const stageAnnotationToggle = root.querySelector<HTMLButtonElement>("[data-lifecount-stage-annotations-toggle]");
   const celebrityAnnotationToggle = root.querySelector<HTMLButtonElement>("[data-lifecount-celebrity-annotations-toggle]");
-  const biographyToggle = root.querySelector<HTMLButtonElement>("[data-lifecount-biography-toggle]");
-  if (settingsButton) settingsButton.disabled = Boolean(biography);
+  if (settingsButton) settingsButton.disabled = false;
   if (stageAnnotationToggle) {
     setText(root, "[data-lifecount-stage-label]", messages.stageAnnotations);
     stageAnnotationToggle.setAttribute("aria-pressed", String(state.showStageAnnotations));
-    stageAnnotationToggle.disabled = Boolean(biography);
+    stageAnnotationToggle.disabled = false;
   }
   if (celebrityAnnotationToggle) {
     setText(root, "[data-lifecount-celebrity-label]", messages.celebrityDeaths);
     celebrityAnnotationToggle.setAttribute("aria-pressed", String(state.showCelebrityAnnotations));
-    celebrityAnnotationToggle.disabled = Boolean(biography);
+    celebrityAnnotationToggle.disabled = false;
   }
-  if (biographyToggle) {
-    setText(root, "[data-lifecount-biography-label]", messages.biography);
-    biographyToggle.setAttribute("aria-pressed", String(Boolean(state.biographyId)));
-  }
+  setText(
+    root,
+    "[data-lifecount-settings-tab-label=\"me\"]",
+    state.locale === "en" ? "Me" : "我"
+  );
+  setText(
+    root,
+    "[data-lifecount-settings-tab-label=\"biography\"]",
+    state.locale === "en" ? "Biography" : "名人履历"
+  );
+  root.querySelectorAll<HTMLButtonElement>("[data-lifecount-settings-tab]").forEach((tab) => {
+    const selected = tab.dataset.lifecountSettingsTab === state.settingsTab;
+    tab.setAttribute("aria-selected", String(selected));
+  });
+  root.querySelector<HTMLElement>("[data-lifecount-settings-panel=\"me\"]")?.toggleAttribute("hidden", state.settingsTab !== "me");
+  root.querySelector<HTMLElement>("[data-lifecount-settings-panel=\"biography\"]")?.toggleAttribute("hidden", state.settingsTab !== "biography");
   renderCountryOptions(root, config, state, messages);
   renderPresetOptions(root, config, state, messages, state.locale);
-  renderGenderOptions(root, state, messages);
   renderBiographyOptions(root, state, messages);
-  renderStages(root, stages, messages, state.locale);
+  renderStages(root, stages, messages, state.locale, "[data-lifecount-stage-list]");
+  renderStages(root, stages, messages, state.locale, "[data-lifecount-biography-stage-list]");
   renderLegend(root, stages, messages, preset.countryId, state.locale, biography);
 
-  root.querySelectorAll<HTMLButtonElement>("[data-lifecount-unit]").forEach((button) => {
-    const buttonUnit = validUnit(button.dataset.lifecountUnit ?? null, config.defaultUnit);
-    const isActive = buttonUnit === unit;
-    button.textContent = messages.units[buttonUnit].short;
-    button.setAttribute("aria-label", messages.views[buttonUnit]);
-    button.setAttribute("aria-pressed", String(isActive));
-    button.classList.toggle("is-active", isActive);
-  });
+  const unitSelect = root.querySelector<HTMLSelectElement>("[data-lifecount-unit-select]");
+  if (unitSelect) {
+    const isEnglish = state.locale === "en";
+    unitSelect.value = unit;
+    unitSelect.closest(".lifecount-unit-select")?.classList.toggle("is-english", isEnglish);
+    setText(
+      root,
+      "[data-lifecount-unit-label]",
+      isEnglish
+        ? messages.units[unit].one.charAt(0).toUpperCase() + messages.units[unit].one.slice(1)
+        : messages.units[unit].short
+    );
+    unitSelect.querySelectorAll<HTMLOptionElement>("option").forEach((option) => {
+      const optionUnit = validUnit(option.value, config.defaultUnit);
+      option.textContent = isEnglish
+        ? messages.units[optionUnit].one.charAt(0).toUpperCase() + messages.units[optionUnit].one.slice(1)
+        : messages.units[optionUnit].short;
+    });
+  }
 
+  prepareMapStageLayout(root);
   if (unit === "day" || unit === "week") {
     renderCanvas(root, cells, unit, stages, today, messages, state.locale, state, preset.countryId, biography);
   } else {
@@ -1770,13 +1722,12 @@ export function initLifeCount() {
   if (requestedPresetId && requestedPresetId !== preset.id) {
     updateUrl({ preset: preset.id });
   }
-  const requestedGender = url.searchParams.get("gender");
-  const gender = validGender(requestedGender);
-  if (requestedGender && requestedGender !== gender) {
-    updateUrl({ gender });
+  if (url.searchParams.has("gender")) {
+    updateUrl({ gender: "" });
   }
   const state: LifeCountState = {
     locale: resolveLifeCountLocale(url.searchParams.get("lang")),
+    settingsTab: requestedBiography ? "biography" : "me",
     presetId: preset.id,
     countryId: preset.countryId,
     birthday: requestedBiography?.birthDate ?? config.birthday,
@@ -1785,26 +1736,21 @@ export function initLifeCount() {
     biographyRestorePresetId: validPreset(config, requestedPresetId).id,
     biographyRestoreShowStageAnnotations: false,
     biographyRestoreShowCelebrityAnnotations: false,
-    gender,
+    gender: "unspecified",
     showStageAnnotations: false,
     showCelebrityAnnotations: false
   };
   const renderPage = () => render(root, config, state);
 
   setupSettings(root, config, state, renderPage);
-  setupStageDrawer(root, config, state, renderPage);
   setupLanguageSwitcher(root, state, renderPage);
   setupBiographyControls(root, config, state, renderPage);
   setupAnnotationToggles(root, state, renderPage);
-  setupThemeToggle(root, renderPage);
 
-  root.querySelectorAll<HTMLButtonElement>("[data-lifecount-unit]").forEach((button) => {
-    button.addEventListener("click", () => {
-      updateUrl({
-        unit: validUnit(button.dataset.lifecountUnit ?? null, config.defaultUnit)
-      });
-      renderPage();
-    });
+  root.querySelector<HTMLSelectElement>("[data-lifecount-unit-select]")?.addEventListener("change", (event) => {
+    const select = event.currentTarget as HTMLSelectElement;
+    updateUrl({ unit: validUnit(select.value, config.defaultUnit) });
+    renderPage();
   });
 
   let resizeFrame = 0;
