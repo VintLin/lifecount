@@ -504,6 +504,93 @@ function renderStaticCopy(
   root.querySelector<HTMLSelectElement>("[data-lifecount-unit-select]")?.setAttribute("aria-label", messages.selectUnit);
 }
 
+function closeCustomSelectMenus(root: HTMLElement) {
+  root.querySelectorAll<HTMLElement>("[data-lifecount-select-menu]").forEach((menu) => {
+    menu.hidden = true;
+    menu.closest<HTMLElement>("[data-lifecount-custom-select]")
+      ?.querySelector<HTMLButtonElement>("[data-lifecount-select-trigger]")
+      ?.setAttribute("aria-expanded", "false");
+  });
+}
+
+function syncCustomSelectMenus(root: HTMLElement) {
+  root.querySelectorAll<HTMLElement>("[data-lifecount-custom-select]").forEach((wrapper) => {
+    const select = wrapper.querySelector<HTMLSelectElement>(".lifecount-native-select");
+    const trigger = wrapper.querySelector<HTMLButtonElement>("[data-lifecount-select-trigger]");
+    const menu = wrapper.querySelector<HTMLElement>("[data-lifecount-select-menu]");
+    if (!select || !trigger || !menu) return;
+
+    const selectedOption = select.selectedOptions[0];
+    const value = wrapper.querySelector<HTMLElement>(
+      "[data-lifecount-language-label], [data-lifecount-unit-label], [data-lifecount-country-value], [data-lifecount-preset-value], [data-lifecount-biography-value]"
+    );
+    if (value) value.textContent = selectedOption?.textContent ?? "";
+    trigger.disabled = select.disabled;
+    trigger.setAttribute("aria-label", select.getAttribute("aria-label") ?? "");
+    trigger.setAttribute("aria-expanded", "false");
+
+    menu.replaceChildren(
+      ...[...select.options].map((option) => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "lifecount-select-option";
+        item.setAttribute("role", "option");
+        item.setAttribute("aria-selected", String(option.value === select.value));
+        item.dataset.value = option.value;
+        const check = document.createElement("span");
+        check.className = "lifecount-select-option-check";
+        check.textContent = "✓";
+        check.setAttribute("aria-hidden", "true");
+        const label = document.createElement("span");
+        label.textContent = option.textContent ?? option.value;
+        item.append(label, check);
+        item.addEventListener("click", () => {
+          select.value = option.value;
+          select.dispatchEvent(new Event("change", { bubbles: true }));
+          closeCustomSelectMenus(root);
+          trigger.focus();
+        });
+        return item;
+      })
+    );
+    menu.hidden = true;
+  });
+}
+
+function setupCustomSelectMenus(root: HTMLElement) {
+  const wrappers = [...root.querySelectorAll<HTMLElement>("[data-lifecount-custom-select]")];
+  if (!wrappers.length) return;
+
+  const closeMenus = () => closeCustomSelectMenus(root);
+  wrappers.forEach((wrapper) => {
+    const trigger = wrapper.querySelector<HTMLButtonElement>("[data-lifecount-select-trigger]");
+    const menu = wrapper.querySelector<HTMLElement>("[data-lifecount-select-menu]");
+    if (!trigger || !menu) return;
+
+    trigger.addEventListener("click", () => {
+      if (trigger.disabled) return;
+      const willOpen = menu.hidden;
+      closeMenus();
+      menu.hidden = !willOpen;
+      trigger.setAttribute("aria-expanded", String(willOpen));
+    });
+    trigger.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " " && event.key !== "ArrowDown") return;
+      event.preventDefault();
+      trigger.click();
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target as Node;
+    if (!wrappers.some((wrapper) => wrapper.contains(target))) closeMenus();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenus();
+  });
+  syncCustomSelectMenus(root);
+}
+
 function setupSettings(
   root: HTMLElement,
   config: LifeCountConfig,
@@ -1700,6 +1787,7 @@ function render(root: HTMLElement, config: LifeCountConfig, state: LifeCountStat
     });
   }
 
+  syncCustomSelectMenus(root);
   prepareMapStageLayout(root);
   if (unit === "day" || unit === "week") {
     renderCanvas(root, cells, unit, stages, today, messages, state.locale, state, preset.countryId, biography);
@@ -1742,6 +1830,7 @@ export function initLifeCount() {
   };
   const renderPage = () => render(root, config, state);
 
+  setupCustomSelectMenus(root);
   setupSettings(root, config, state, renderPage);
   setupLanguageSwitcher(root, state, renderPage);
   setupBiographyControls(root, config, state, renderPage);
