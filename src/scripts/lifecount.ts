@@ -511,11 +511,11 @@ function renderStaticCopy(
   setLabel(root, "[data-lifecount-preset]", messages.selectCase);
   setLabel(root, "[data-lifecount-gender]", messages.selectGender);
   setLabel(root, "[data-lifecount-language]", messages.languageButtonLabel);
-  setText(root, "[data-lifecount-language-label]", messages.languageButton);
-  root.querySelectorAll<HTMLElement>("[data-lifecount-language-icon]").forEach((icon) => {
-    icon.hidden = icon.dataset.lifecountLanguageIcon !== (messages.languageButton === "EN" ? "en" : "zh");
-    icon.style.display = icon.hidden ? "none" : "";
-  });
+  setText(
+    root,
+    "[data-lifecount-language-label]",
+    messages.languageButton === "EN" ? "中文" : "English"
+  );
   setLabel(root, "[data-lifecount-stage-annotations-toggle]", messages.stageAnnotationsToggle);
   setLabel(root, "[data-lifecount-celebrity-annotations-toggle]", messages.celebrityDeathsToggle);
   setLabel(root, "[data-lifecount-biography-toggle]", messages.biographyToggle);
@@ -529,7 +529,7 @@ function renderStaticCopy(
     isDark ? messages.themeLight : messages.themeDark
   );
 
-  const drawer = root.querySelector<HTMLElement>("[data-lifecount-stages-drawer]");
+  const drawer = root.querySelector<HTMLDialogElement>("[data-lifecount-stages-drawer]");
   drawer?.setAttribute("aria-label", messages.stages);
   const unitGroup = root.querySelector<HTMLElement>(".lifecount-unit-switch");
   unitGroup?.setAttribute("aria-label", messages.selectUnit);
@@ -724,9 +724,7 @@ function setupSettings(
   button.addEventListener("click", () => {
     birthday.value = state.birthday;
     displayAge.value = String(config.displayAge);
-    dialog.showModal();
   });
-  cancel.addEventListener("click", () => dialog.close());
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     if (!form.reportValidity()) return;
@@ -734,11 +732,8 @@ function setupSettings(
     state.birthday = birthday.value;
     state.biographyId = null;
     config.displayAge = Number(displayAge.value);
-    dialog.close();
+    cancel.click();
     renderPage();
-  });
-  dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) dialog.close();
   });
 }
 
@@ -750,30 +745,15 @@ function setupStageDrawer(
 ) {
   const button = root.querySelector<HTMLButtonElement>("[data-lifecount-stages]");
   const overlay = root.querySelector<HTMLElement>("[data-lifecount-stages-overlay]");
-  const drawer = root.querySelector<HTMLElement>("[data-lifecount-stages-drawer]");
+  const drawer = root.querySelector<HTMLDialogElement>("[data-lifecount-stages-drawer]");
   const close = root.querySelector<HTMLButtonElement>("[data-lifecount-stages-close]");
   const country = root.querySelector<HTMLSelectElement>("[data-lifecount-country]");
   const preset = root.querySelector<HTMLSelectElement>("[data-lifecount-preset]");
   const gender = root.querySelector<HTMLSelectElement>("[data-lifecount-gender]");
   if (!button || !overlay || !drawer || !close || !country || !preset || !gender) return;
 
-  const setOpen = (open: boolean) => {
-    overlay.hidden = !open;
-    overlay.dataset.open = String(open);
-    button.setAttribute("aria-expanded", String(open));
-    if (open) {
-      requestAnimationFrame(() => country.focus());
-    } else {
-      button.focus();
-    }
-  };
-  button.addEventListener("click", () => setOpen(overlay.hasAttribute("hidden")));
-  close.addEventListener("click", () => setOpen(false));
-  overlay.addEventListener("click", (event) => {
-    if (event.target === overlay) setOpen(false);
-  });
-  drawer.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setOpen(false);
+  button.addEventListener("click", () => {
+    requestAnimationFrame(() => country.focus());
   });
   country.addEventListener("change", () => {
     state.countryId = validCountry(config, country.value, state.countryId);

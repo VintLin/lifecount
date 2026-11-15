@@ -2,7 +2,6 @@
 import "@fontsource-variable/inter";
 import "@fontsource/dm-mono";
 import "@/styles/global.css";
-import NoiseDriftBackground from "@/components/NoiseDriftBackground.astro";
 
 interface Props {
   title?: string;
@@ -36,7 +35,7 @@ const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-default.svg`, siteRoot
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#050505" />
+    <meta name="theme-color" content="#000000" />
     <script is:inline>
       (() => {
         const storageKey = "vint-color-scheme";
@@ -45,7 +44,7 @@ const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-default.svg`, siteRoot
           document.documentElement.classList.toggle("dark", saved !== "light");
           document
             .querySelector('meta[name="theme-color"]')
-            ?.setAttribute("content", saved === "light" ? "#fafaf9" : "#050505");
+            ?.setAttribute("content", saved === "light" ? "#ffffff" : "#000000");
         } catch {
           document.documentElement.classList.add("dark");
         }
@@ -80,7 +79,6 @@ const ogImageUrl = new URL(`${import.meta.env.BASE_URL}og-default.svg`, siteRoot
     )}
   </head>
   <body data-background-visible="true">
-    <NoiseDriftBackground />
     <main class="lifecount-standalone-main">
       <slot />
     </main>
