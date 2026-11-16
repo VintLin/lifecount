@@ -38,6 +38,52 @@ import {
 import { biographyById, lifeBiographyProfiles, type LifeBiographyProfile } from "@/data/lifecount-biographies";
 
 const UNITS: LifeUnit[] = ["day", "week", "month", "year"];
+const PERSISTED_SETTINGS_KEY = "lifecount-settings-v1";
+
+interface PersistedLifeCountSettings {
+  birthday?: string;
+  displayAge?: number;
+  countryId?: LifePresetCountryId;
+  presetId?: string;
+  showStageAnnotations?: boolean;
+  showCelebrityAnnotations?: boolean;
+  locale?: LifeCountLocale;
+  unit?: LifeUnit;
+}
+
+function readPersistedSettings(): PersistedLifeCountSettings {
+  try {
+    const value = window.localStorage.getItem(PERSISTED_SETTINGS_KEY);
+    if (!value) return {};
+    const parsed = JSON.parse(value) as PersistedLifeCountSettings;
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writePersistedSettings(
+  config: LifeCountConfig,
+  state: LifeCountState
+) {
+  try {
+    window.localStorage.setItem(
+      PERSISTED_SETTINGS_KEY,
+      JSON.stringify({
+        birthday: state.birthday,
+        displayAge: config.displayAge,
+        countryId: state.countryId,
+        presetId: state.presetId,
+        showStageAnnotations: state.showStageAnnotations,
+        showCelebrityAnnotations: state.showCelebrityAnnotations,
+        locale: state.locale,
+        unit: state.unit
+      } satisfies PersistedLifeCountSettings)
+    );
+  } catch {
+    // Private browsing or storage restrictions should not block the page.
+  }
+}
 const COLOR_VARIABLES: Record<LifeColor, string> = {
   blue: "var(--life-blue)",
   cyan: "var(--life-cyan)",
@@ -71,6 +117,7 @@ const MAP_STAGE_MAX_WIDTH = MAP_GRID_MAX_WIDTH +
 const MAP_STAGE_VIEWPORT_PADDING = 32;
 interface LifeCountState {
   locale: LifeCountLocale;
+  unit: LifeUnit;
   settingsTab: "me" | "biography";
   presetId: string;
   countryId: LifePresetCountryId;
@@ -464,21 +511,26 @@ function renderStaticCopy(
   setText(root, "[data-lifecount-settings-title]", messages.settingsTitle);
   setText(root, "[data-lifecount-birthday-label]", messages.birthday);
   setText(root, "[data-lifecount-display-age-label]", messages.displayAge);
+  setText(root, "[data-lifecount-biography-birthday-label]", messages.birthday);
+  setText(root, "[data-lifecount-biography-display-age-label]", messages.displayAge);
+  setText(root, "[data-lifecount-biography-field-label]", messages.biographyField);
   setText(
     root,
     "[data-lifecount-country-field-label]",
-    messages.selectCountry === "选择国家" ? "预设国家" : "Preset country"
+    messages.selectCountry === "选择国家" ? "国家" : "Country"
   );
   setText(
     root,
     "[data-lifecount-preset-field-label]",
-    messages.selectCase === "选择典型人生案例" ? "预设人生" : "Preset life path"
+    messages.selectCase === "选择典型人生案例" ? "模板" : "Template"
   );
   setLabel(root, "[data-lifecount-settings]", messages.settings);
   setLabel(root, "[data-lifecount-stages]", messages.stagesOpen);
   setLabel(root, "[data-lifecount-stages-close]", messages.close);
   setLabel(root, "[data-lifecount-country]", messages.selectCountry);
   setLabel(root, "[data-lifecount-preset]", messages.selectCase);
+  setLabel(root, "[data-lifecount-biography-birthday]", messages.birthday);
+  setLabel(root, "[data-lifecount-biography-display-age]", messages.displayAge);
   setLabel(root, "[data-lifecount-gender]", messages.selectGender);
   setLabel(root, "[data-lifecount-language]", messages.languageButtonLabel);
   setText(
@@ -599,11 +651,13 @@ function setupSettings(
 ) {
   const dialog = root.querySelector<HTMLDialogElement>("[data-lifecount-settings-dialog]");
   const button = root.querySelector<HTMLButtonElement>("[data-lifecount-settings]");
+  const closeButton = root.querySelector<HTMLButtonElement>("[data-lifecount-settings-cancel]");
   const birthday = root.querySelector<HTMLInputElement>("[data-lifecount-birthday]");
   const displayAge = root.querySelector<HTMLInputElement>("[data-lifecount-display-age]");
+  const biographyDisplayAge = root.querySelector<HTMLInputElement>("[data-lifecount-biography-display-age]");
   const country = root.querySelector<HTMLSelectElement>("[data-lifecount-country]");
   const preset = root.querySelector<HTMLSelectElement>("[data-lifecount-preset]");
-  if (!dialog || !button || !birthday || !displayAge || !country || !preset) return;
+  if (!dialog || !button || !birthday || !displayAge || !biographyDisplayAge || !country || !preset) return;
 
   const positionDialog = () => {
     if (!dialog.open) return;
@@ -625,6 +679,23 @@ function setupSettings(
   });
   window.addEventListener("resize", positionDialog);
 
+  window.addEventListener("wheel", (event) => {
+    if (!dialog.open) return;
+    const rect = dialog.getBoundingClientRect();
+    const insideDialog =
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom;
+    if (insideDialog) return;
+
+    event.preventDefault();
+    closeButton?.click();
+    requestAnimationFrame(() => {
+      window.scrollBy({ left: event.deltaX, top: event.deltaY, behavior: "auto" });
+    });
+  }, { capture: true, passive: false });
+
   const commitMeSettings = () => {
     if (!birthday.value || !displayAge.validity.valid) return;
     config.birthday = birthday.value;
@@ -632,11 +703,18 @@ function setupSettings(
     state.biographyId = null;
     state.settingsTab = "me";
     config.displayAge = Number(displayAge.value);
+    writePersistedSettings(config, state);
     renderPage();
   };
 
   birthday.addEventListener("input", commitMeSettings);
   displayAge.addEventListener("input", commitMeSettings);
+  biographyDisplayAge.addEventListener("input", () => {
+    if (!biographyDisplayAge.validity.valid) return;
+    config.displayAge = Number(biographyDisplayAge.value);
+    writePersistedSettings(config, state);
+    renderPage();
+  });
 
   country.addEventListener("change", () => {
     const countryId = country.value as LifePresetCountryId;
@@ -647,6 +725,7 @@ function setupSettings(
     state.biographyId = null;
     state.settingsTab = "me";
     updateUrl({ biography: "", preset: nextPreset.id });
+    writePersistedSettings(config, state);
     renderPage();
   });
 
@@ -657,16 +736,23 @@ function setupSettings(
     state.biographyId = null;
     state.settingsTab = "me";
     updateUrl({ biography: "", preset: nextPreset.id });
+    writePersistedSettings(config, state);
     renderPage();
   });
 }
 
-function setupLanguageSwitcher(root: HTMLElement, state: LifeCountState, renderPage: () => void) {
+function setupLanguageSwitcher(
+  root: HTMLElement,
+  config: LifeCountConfig,
+  state: LifeCountState,
+  renderPage: () => void
+) {
   const select = root.querySelector<HTMLSelectElement>("[data-lifecount-language]");
   if (!select) return;
   select.addEventListener("change", () => {
     state.locale = resolveLifeCountLocale(select.value);
     updateUrl({ lang: state.locale });
+    writePersistedSettings(config, state);
     renderPage();
   });
 }
@@ -737,6 +823,7 @@ function setupBiographyControls(
 
 function setupAnnotationToggles(
   root: HTMLElement,
+  config: LifeCountConfig,
   state: LifeCountState,
   renderPage: () => void
 ) {
@@ -746,10 +833,12 @@ function setupAnnotationToggles(
 
   stageToggle.addEventListener("click", () => {
     state.showStageAnnotations = !state.showStageAnnotations;
+    writePersistedSettings(config, state);
     renderPage();
   });
   celebrityToggle.addEventListener("click", () => {
     state.showCelebrityAnnotations = !state.showCelebrityAnnotations;
+    writePersistedSettings(config, state);
     renderPage();
   });
 }
@@ -1677,7 +1766,8 @@ function renderLifeAnnotations(
 
 function render(root: HTMLElement, config: LifeCountConfig, state: LifeCountState) {
   const url = new URL(window.location.href);
-  const unit = validUnit(url.searchParams.get("unit"), config.defaultUnit);
+  const unit = validUnit(url.searchParams.get("unit") ?? state.unit, config.defaultUnit);
+  state.unit = unit;
   const today = localDay();
   const preset = validPreset(config, state.presetId);
   const biography = biographyById(state.biographyId);
@@ -1691,6 +1781,10 @@ function render(root: HTMLElement, config: LifeCountConfig, state: LifeCountStat
   const elapsed = cells.filter((cell) => cell.end < lifeEnd).length;
   const age = ageAt(state.birthday, lifeEnd);
   const messages = lifeCountMessages[state.locale];
+  const elapsedPercentage = `${new Intl.NumberFormat(state.locale, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  }).format(cells.length ? elapsed / cells.length * 100 : 0)}%`;
   const unitLabel =
     cells.length === 1 ? messages.units[unit].one : messages.units[unit].other;
 
@@ -1726,7 +1820,8 @@ function render(root: HTMLElement, config: LifeCountConfig, state: LifeCountStat
     messages.summaryElapsed(
       elapsed.toLocaleString(state.locale),
       cells.length.toLocaleString(state.locale),
-      unitLabel
+      unitLabel,
+      elapsedPercentage
     )
   );
   renderStaticCopy(root, messages);
@@ -1763,6 +1858,10 @@ function render(root: HTMLElement, config: LifeCountConfig, state: LifeCountStat
   renderCountryOptions(root, config, state, messages);
   renderPresetOptions(root, config, state, messages, state.locale);
   renderBiographyOptions(root, state, messages);
+  const biographyBirthday = root.querySelector<HTMLInputElement>("[data-lifecount-biography-birthday]");
+  const biographyDisplayAge = root.querySelector<HTMLInputElement>("[data-lifecount-biography-display-age]");
+  if (biographyBirthday) biographyBirthday.value = biography?.birthDate ?? state.birthday;
+  if (biographyDisplayAge) biographyDisplayAge.value = String(config.displayAge);
   renderStages(root, stages, messages, state.locale, "[data-lifecount-stage-list]");
   renderStages(root, stages, messages, state.locale, "[data-lifecount-biography-stage-list]");
   renderLegend(root, stages, messages, preset.countryId, state.locale, biography);
@@ -1804,9 +1903,29 @@ export function initLifeCount() {
   if (!config) return;
 
   const url = new URL(window.location.href);
+  const persisted = readPersistedSettings();
   const requestedPresetId = url.searchParams.get("preset");
   const requestedBiography = biographyById(url.searchParams.get("biography"));
-  const preset = validPreset(config, requestedBiography?.basePresetId ?? requestedPresetId);
+  const cachedPresetId = persisted.presetId ??
+    (persisted.countryId
+      ? config.presets.find((item) => item.countryId === persisted.countryId)?.id
+      : undefined);
+  const preset = validPreset(
+    config,
+    requestedBiography?.basePresetId ?? requestedPresetId ?? cachedPresetId ?? null
+  );
+  if (
+    typeof persisted.displayAge === "number" &&
+    Number.isFinite(persisted.displayAge) &&
+    persisted.displayAge >= 1 &&
+    persisted.displayAge <= 120
+  ) {
+    config.displayAge = persisted.displayAge;
+  }
+  const cachedBirthday = typeof persisted.birthday === "string" && /^\d{4}-\d{2}-\d{2}$/.test(persisted.birthday)
+    ? persisted.birthday
+    : config.birthday;
+  const cachedUnit = persisted.unit ? validUnit(persisted.unit, config.defaultUnit) : config.defaultUnit;
   if (requestedPresetId && requestedPresetId !== preset.id) {
     updateUrl({ preset: preset.id });
   }
@@ -1814,31 +1933,34 @@ export function initLifeCount() {
     updateUrl({ gender: "" });
   }
   const state: LifeCountState = {
-    locale: resolveLifeCountLocale(url.searchParams.get("lang")),
+    locale: resolveLifeCountLocale(url.searchParams.get("lang") ?? persisted.locale ?? null),
+    unit: validUnit(url.searchParams.get("unit") ?? cachedUnit, config.defaultUnit),
     settingsTab: requestedBiography ? "biography" : "me",
     presetId: preset.id,
     countryId: preset.countryId,
-    birthday: requestedBiography?.birthDate ?? config.birthday,
+    birthday: requestedBiography?.birthDate ?? cachedBirthday,
     biographyId: requestedBiography?.id ?? null,
-    biographyRestoreBirthday: config.birthday,
-    biographyRestorePresetId: validPreset(config, requestedPresetId).id,
-    biographyRestoreShowStageAnnotations: false,
-    biographyRestoreShowCelebrityAnnotations: false,
+    biographyRestoreBirthday: cachedBirthday,
+    biographyRestorePresetId: preset.id,
+    biographyRestoreShowStageAnnotations: persisted.showStageAnnotations ?? false,
+    biographyRestoreShowCelebrityAnnotations: persisted.showCelebrityAnnotations ?? false,
     gender: "unspecified",
-    showStageAnnotations: false,
-    showCelebrityAnnotations: false
+    showStageAnnotations: requestedBiography ? false : persisted.showStageAnnotations ?? false,
+    showCelebrityAnnotations: requestedBiography ? false : persisted.showCelebrityAnnotations ?? false
   };
   const renderPage = () => render(root, config, state);
 
   setupCustomSelectMenus(root);
   setupSettings(root, config, state, renderPage);
-  setupLanguageSwitcher(root, state, renderPage);
+  setupLanguageSwitcher(root, config, state, renderPage);
   setupBiographyControls(root, config, state, renderPage);
-  setupAnnotationToggles(root, state, renderPage);
+  setupAnnotationToggles(root, config, state, renderPage);
 
   root.querySelector<HTMLSelectElement>("[data-lifecount-unit-select]")?.addEventListener("change", (event) => {
     const select = event.currentTarget as HTMLSelectElement;
-    updateUrl({ unit: validUnit(select.value, config.defaultUnit) });
+    state.unit = validUnit(select.value, config.defaultUnit);
+    updateUrl({ unit: state.unit });
+    writePersistedSettings(config, state);
     renderPage();
   });
 

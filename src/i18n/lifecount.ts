@@ -34,7 +34,7 @@ export interface LifeCountMessages {
   canvasView: Record<"day" | "week", string>;
   legend: string;
   summaryAge: (age: number) => string;
-  summaryElapsed: (elapsed: string, total: string, unit: string) => string;
+  summaryElapsed: (elapsed: string, total: string, unit: string, percentage: string) => string;
   dateRangeSeparator: string;
   ongoing: string;
   cellStatus: Record<"elapsed" | "current" | "future", string>;
@@ -45,6 +45,7 @@ export interface LifeCountMessages {
   celebrityDeaths: string;
   celebrityDeathsToggle: string;
   biography: string;
+  biographyField: string;
   biographyToggle: string;
   selectBiography: string;
   themeLight: string;
@@ -89,7 +90,7 @@ const zhCN: LifeCountMessages = {
   },
   legend: "图例",
   summaryAge: (age) => `${age} 岁`,
-  summaryElapsed: (elapsed, total, unit) => `已过去 ${elapsed} / ${total} ${unit}`,
+  summaryElapsed: (elapsed, total, unit, percentage) => `已过去 ${elapsed} / ${total} ${unit} · ${percentage}`,
   dateRangeSeparator: " 至 ",
   ongoing: "进行中",
   cellStatus: {
@@ -104,6 +105,7 @@ const zhCN: LifeCountMessages = {
   celebrityDeaths: "名人去世时间",
   celebrityDeathsToggle: "显示或隐藏名人去世时间",
   biography: "名人履历",
+  biographyField: "名人",
   biographyToggle: "显示或隐藏名人履历",
   selectBiography: "选择名人",
   themeLight: "切换到浅色模式",
@@ -182,7 +184,7 @@ const en: LifeCountMessages = {
   },
   legend: "Legend",
   summaryAge: (age) => `${age} ${age === 1 ? "year" : "years"} old`,
-  summaryElapsed: (elapsed, total, unit) => `${elapsed} / ${total} ${unit} elapsed`,
+  summaryElapsed: (elapsed, total, unit, percentage) => `${elapsed} / ${total} ${unit} elapsed · ${percentage}`,
   dateRangeSeparator: " to ",
   ongoing: "Present",
   cellStatus: {
@@ -197,6 +199,7 @@ const en: LifeCountMessages = {
   celebrityDeaths: "Celebrity death dates",
   celebrityDeathsToggle: "Show or hide celebrity death dates",
   biography: "Celebrity biographies",
+  biographyField: "Celebrity",
   biographyToggle: "Show or hide celebrity biography",
   selectBiography: "Choose a celebrity",
   themeLight: "Switch to light mode",
