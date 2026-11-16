@@ -6,7 +6,8 @@ import type {
   LifePresetCountryId,
   LifePresetPathId,
   LifeStage,
-  LifeUnit
+  LifeUnit,
+  VisualMode
 } from "@/data/lifecount";
 import {
   lifeCountMessages,
@@ -36,8 +37,13 @@ import {
   type LifeSpecialPeriod
 } from "@/data/lifecount-annotations";
 import { biographyById, lifeBiographyProfiles, type LifeBiographyProfile } from "@/data/lifecount-biographies";
+import {
+  setupVisualMode,
+  type VisualModeController
+} from "@/scripts/lifecount-visual";
 
 const UNITS: LifeUnit[] = ["day", "week", "month", "year"];
+const VISUAL_MODES: VisualMode[] = ["grid", "hourglass", "candle", "daylight"];
 const PERSISTED_SETTINGS_KEY = "lifecount-settings-v1";
 
 interface PersistedLifeCountSettings {
@@ -49,6 +55,7 @@ interface PersistedLifeCountSettings {
   showCelebrityAnnotations?: boolean;
   locale?: LifeCountLocale;
   unit?: LifeUnit;
+  visualMode?: VisualMode;
 }
 
 function readPersistedSettings(): PersistedLifeCountSettings {
@@ -77,7 +84,8 @@ function writePersistedSettings(
         showStageAnnotations: state.showStageAnnotations,
         showCelebrityAnnotations: state.showCelebrityAnnotations,
         locale: state.locale,
-        unit: state.unit
+        unit: state.unit,
+        visualMode: state.visualMode
       } satisfies PersistedLifeCountSettings)
     );
   } catch {
@@ -130,6 +138,7 @@ interface LifeCountState {
   gender: LifeGender;
   showStageAnnotations: boolean;
   showCelebrityAnnotations: boolean;
+  visualMode: VisualMode;
 }
 
 function fitGrid(width: number, minimumCell: number, gap: number) {
@@ -1764,7 +1773,12 @@ function renderLifeAnnotations(
   }
 }
 
-function render(root: HTMLElement, config: LifeCountConfig, state: LifeCountState) {
+function render(
+  root: HTMLElement,
+  config: LifeCountConfig,
+  state: LifeCountState,
+  visualController: VisualModeController
+) {
   const url = new URL(window.location.href);
   const unit = validUnit(url.searchParams.get("unit") ?? state.unit, config.defaultUnit);
   state.unit = unit;
@@ -1825,6 +1839,14 @@ function render(root: HTMLElement, config: LifeCountConfig, state: LifeCountStat
     )
   );
   renderStaticCopy(root, messages);
+  visualController.update({
+    mode: state.biographyId ? "grid" : state.visualMode,
+    birthday: state.birthday,
+    displayAge: config.displayAge,
+    locale: state.locale,
+    messages,
+    enabled: !state.biographyId
+  });
   const settingsButton = root.querySelector<HTMLButtonElement>("[data-lifecount-settings]");
   const stageAnnotationToggle = root.querySelector<HTMLButtonElement>("[data-lifecount-stage-annotations-toggle]");
   const celebrityAnnotationToggle = root.querySelector<HTMLButtonElement>("[data-lifecount-celebrity-annotations-toggle]");
@@ -1932,6 +1954,9 @@ export function initLifeCount() {
   if (url.searchParams.has("gender")) {
     updateUrl({ gender: "" });
   }
+  const persistedVisualMode = persisted.visualMode && VISUAL_MODES.includes(persisted.visualMode)
+    ? persisted.visualMode
+    : "grid";
   const state: LifeCountState = {
     locale: resolveLifeCountLocale(url.searchParams.get("lang") ?? persisted.locale ?? null),
     unit: validUnit(url.searchParams.get("unit") ?? cachedUnit, config.defaultUnit),
@@ -1946,9 +1971,17 @@ export function initLifeCount() {
     biographyRestoreShowCelebrityAnnotations: persisted.showCelebrityAnnotations ?? false,
     gender: "unspecified",
     showStageAnnotations: requestedBiography ? false : persisted.showStageAnnotations ?? false,
-    showCelebrityAnnotations: requestedBiography ? false : persisted.showCelebrityAnnotations ?? false
+    showCelebrityAnnotations: requestedBiography ? false : persisted.showCelebrityAnnotations ?? false,
+    visualMode: persistedVisualMode
   };
-  const renderPage = () => render(root, config, state);
+  let visualController: VisualModeController;
+  const renderPage = () => render(root, config, state, visualController);
+
+  visualController = setupVisualMode(root, (mode) => {
+    state.visualMode = mode;
+    writePersistedSettings(config, state);
+    renderPage();
+  });
 
   setupCustomSelectMenus(root);
   setupSettings(root, config, state, renderPage);
