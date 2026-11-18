@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><style>
+body{font:14px var(--font-sans);color:var(--foreground)}
+nav{display:flex;gap:8px;margin-bottom:12px}
+button{border:1px solid var(--border);border-radius:var(--radius);padding:8px 14px;background:var(--secondary);color:var(--foreground);cursor:pointer}
+button[aria-pressed=true]{background:var(--primary);color:var(--primary-foreground)}
+img[hidden]{display:none}img{width:100%;display:block;border-radius:var(--radius);background:white}
+p{color:var(--muted-foreground);line-height:1.5}
+</style><nav><button aria-pressed="false" onclick="show(0)">修改前</button><button aria-pressed="true" onclick="show(1)">高清 · 无地面投影</button><button aria-pressed="false" onclick="show(2)">浏览器实际画布</button></nav>
+<img hidden src="/Users/Vint/Repos/01_Project_Personal/011_LifeCount/docs/e2e/candle/quality-before.png"><img src="/Users/Vint/Repos/01_Project_Personal/011_LifeCount/docs/e2e/candle/quality-after.png"><img hidden src="/Users/Vint/Repos/01_Project_Personal/011_LifeCount/docs/e2e/candle/quality-browser.png"><p id="caption">同尺寸局部对比：原生高清素材、单帧轮廓，保留蜡自身的立体明暗。</p>
+<script>const paths=['/Users/Vint/Repos/01_Project_Personal/011_LifeCount/docs/e2e/candle/quality-before.png','/Users/Vint/Repos/01_Project_Personal/011_LifeCount/docs/e2e/candle/quality-after.png','/Users/Vint/Repos/01_Project_Personal/011_LifeCount/docs/e2e/candle/quality-browser.png'];const captions=['原来的640px素材放大并叠加相邻帧。','同尺寸局部对比：原生高清素材、单帧轮廓，保留蜡自身的立体明暗。','实际浏览器画布：672 × 557 CSS px，DPR 2，人生进度76.5266%。'];function show(i){document.querySelectorAll('img').forEach((img,n)=>img.hidden=n!==i);document.getElementById('caption').textContent=captions[i];document.querySelectorAll('button').forEach((b,n)=>b.setAttribute('aria-pressed',String(n===i)));}</script>

@@ -75,7 +75,7 @@ const schema = {
               class="lifecount-select-trigger"
               type="button"
               data-lifecount-visual-trigger
-              aria-haspopup="dialog"
+              aria-haspopup="listbox"
               aria-expanded="false"
               aria-label="人生视图"
               title="人生视图"
@@ -85,10 +85,7 @@ const schema = {
                 <circle cx="12" cy="12" r="2.5"></circle>
               </svg>
             </button>
-            <div class="lifecount-visual-menu" data-lifecount-visual-menu role="dialog" aria-label="人生视图" hidden>
-              <div class="lifecount-visual-menu-title" data-lifecount-visual-menu-title>人生视图</div>
-              <div class="lifecount-visual-options" data-lifecount-visual-options role="listbox"></div>
-            </div>
+            <div class="lifecount-select-menu lifecount-visual-menu" data-lifecount-visual-menu role="listbox" aria-label="人生视图" hidden></div>
           </div>
           <ButtonRoot
             class="lifecount-header-button lifecount-settings-button"
@@ -110,43 +107,19 @@ const schema = {
     </header>
 
     <div class="lifecount-toolbar slide-enter">
-      <div class="lifecount-summary" aria-live="polite">
+      <div class="lifecount-summary" data-lifecount-summary-region aria-live="polite">
         <strong data-lifecount-age></strong>
         <span data-lifecount-summary></span>
+        <span data-lifecount-visual-summary hidden></span>
       </div>
     </div>
 
-    <section class="lifecount-visual-stage" data-lifecount-visual-stage hidden aria-live="polite">
-      <div class="lifecount-visual-heading">
-        <strong data-lifecount-visual-title></strong>
-        <span data-lifecount-visual-description></span>
-      </div>
-      <div class="lifecount-hourglass-view lifecount-visual-art" data-lifecount-hourglass-view hidden>
-        <canvas data-lifecount-hourglass-canvas aria-hidden="true"></canvas>
-      </div>
-      <div class="lifecount-candle-view lifecount-visual-art" data-lifecount-candle-view hidden>
-        <svg class="lifecount-candle-svg" viewBox="0 0 240 280" role="img" aria-label="Candle life view">
-          <defs>
-            <linearGradient id="lifecount-candle-body-gradient" x1="0" x2="1" y1="0" y2="0">
-              <stop offset="0" stop-color="#e8b6a1"></stop>
-              <stop offset="0.5" stop-color="#fff1d8"></stop>
-              <stop offset="1" stop-color="#d78973"></stop>
-            </linearGradient>
-          </defs>
-          <ellipse cx="120" cy="250" rx="62" ry="12" fill="rgba(50, 45, 42, 0.18)"></ellipse>
-          <rect x="76" y="40" width="88" height="184" rx="18" fill="url(#lifecount-candle-body-gradient)" data-lifecount-candle-body></rect>
-          <path d="M120 38 C114 26 126 22 121 8 C137 23 137 37 120 48 C104 38 106 24 116 16 C110 28 115 34 120 38Z" fill="#e78c45" data-lifecount-candle-flame></path>
-          <path d="M78 90 C58 102 69 122 58 140 C76 136 83 119 78 90Z" fill="#d78973" data-lifecount-candle-drip-left></path>
-          <path d="M162 132 C183 140 172 160 184 176 C166 172 158 157 162 132Z" fill="#c77464" data-lifecount-candle-drip-right></path>
-          <rect x="65" y="224" width="110" height="16" rx="8" fill="#8d7468"></rect>
-        </svg>
-      </div>
-      <div class="lifecount-daylight-view lifecount-visual-art" data-lifecount-daylight-view hidden>
-        <div class="lifecount-daylight-stars" data-lifecount-daylight-stars aria-hidden="true"></div>
-        <div class="lifecount-daylight-sun" data-lifecount-daylight-sun aria-hidden="true"></div>
-        <div class="lifecount-daylight-horizon" aria-hidden="true"></div>
-      </div>
-      <div class="lifecount-visual-summary" data-lifecount-visual-summary></div>
+    <section class="lifecount-visual-stage" data-lifecount-visual-stage hidden>
+      <button type="button" class="lifecount-header-button lifecount-visual-fullscreen" data-lifecount-visual-fullscreen aria-label={messages.visualFullscreen} title={messages.visualFullscreen}>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>
+      </button>
+      <div class="lifecount-visual-status" data-lifecount-visual-status hidden role="status"><span data-lifecount-visual-status-text></span><button type="button" class="lifecount-header-button" data-lifecount-visual-retry hidden></button></div>
+      <canvas class="lifecount-hourglass-canvas" data-lifecount-hourglass-canvas aria-hidden="true"></canvas>
     </section>
 
     <div class="lifecount-panel slide-enter" data-lifecount-map-wrap>
@@ -458,97 +431,6 @@ const schema = {
     height: 2rem;
   }
 
-  .lifecount-visual-menu {
-    position: absolute;
-    top: calc(100% + 0.4rem);
-    right: 0;
-    z-index: 40;
-    width: min(21rem, calc(100vw - 2rem));
-    padding: 0.45rem;
-    border: 1px solid color-mix(in srgb, var(--fg-strong) 14%, transparent);
-    border-radius: var(--lifecount-control-radius);
-    background: var(--bg);
-    color: var(--fg-strong);
-    box-shadow: 0 0.8rem 2rem color-mix(in srgb, var(--fg-strong) 16%, transparent);
-  }
-
-  .lifecount-visual-menu[hidden] {
-    display: none;
-  }
-
-  .lifecount-visual-menu-title {
-    padding: 0.35rem 0.55rem 0.45rem;
-    color: var(--fg-muted);
-    font-size: 0.72rem;
-    line-height: 1rem;
-  }
-
-  .lifecount-visual-options {
-    display: grid;
-    gap: 0.15rem;
-  }
-
-  .lifecount-visual-option {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 1rem;
-    align-items: center;
-    gap: 0.65rem;
-    width: 100%;
-    min-height: 3.2rem;
-    padding: 0.45rem 0.55rem;
-    border: 0;
-    border-radius: 0.55rem;
-    background: transparent;
-    color: var(--fg-strong);
-    text-align: left;
-    cursor: pointer;
-  }
-
-  .lifecount-visual-option:hover,
-  .lifecount-visual-option:focus-visible {
-    background: var(--header-control-hover-bg);
-    outline: 0;
-  }
-
-  .lifecount-visual-option[aria-selected="true"] {
-    background: var(--fg-strong);
-    color: var(--bg);
-  }
-
-  .lifecount-visual-option-copy {
-    display: grid;
-    gap: 0.1rem;
-    min-width: 0;
-  }
-
-  .lifecount-visual-option-copy strong {
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.25rem;
-  }
-
-  .lifecount-visual-option-copy small {
-    overflow: hidden;
-    color: var(--fg-muted);
-    font-size: 0.68rem;
-    line-height: 1rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .lifecount-visual-option[aria-selected="true"] small {
-    color: color-mix(in srgb, var(--bg) 72%, transparent);
-  }
-
-  .lifecount-visual-option-check {
-    color: currentColor;
-    text-align: center;
-  }
-
-  .lifecount-visual-option:not([aria-selected="true"]) .lifecount-visual-option-check {
-    visibility: hidden;
-  }
-
   .lifecount-brand-title {
     display: block;
     color: var(--fg-strong);
@@ -559,131 +441,61 @@ const schema = {
   }
 
   .lifecount-visual-stage {
-    display: grid;
-    width: 100%;
-    max-width: var(--lifecount-map-max-width, 42rem);
-    min-height: 28rem;
-    margin: 0 auto 1.25rem;
-    padding: 1.25rem;
-    border: 1px solid color-mix(in srgb, var(--fg-strong) 12%, transparent);
-    border-radius: 1rem;
-    background: color-mix(in srgb, var(--bg) 94%, var(--fg-strong));
-    color: var(--fg-strong);
-  }
-
-  .lifecount-visual-stage[hidden] {
-    display: none;
-  }
-
-  .lifecount-visual-heading {
-    display: grid;
-    gap: 0.25rem;
-    align-content: start;
-    text-align: center;
-  }
-
-  .lifecount-visual-heading strong {
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.5rem;
-  }
-
-  .lifecount-visual-heading span {
-    color: var(--fg-muted);
-    font-size: 0.75rem;
-    line-height: 1.15rem;
-  }
-
-  .lifecount-visual-art {
     position: relative;
+    width: 100%;
+    margin: 0 auto 1.25rem;
+    background: #fff;
+    color: #171717;
+  }
+  .lifecount-visual-status { position: absolute; inset: 40% 0 auto; display: flex; justify-content: center; align-items: center; gap: .75rem; z-index: 1; font-size: 14px; }
+  .lifecount-visual-status[hidden], .lifecount-visual-status [hidden] { display: none; }
+  .lifecount-visual-stage[hidden] { display: none; }
+  .lifecount-visual-stage.is-fullscreen { position: fixed; inset: 0; z-index: 1000; margin: 0; }
+  body:has(.lifecount-visual-stage.is-fullscreen) { overflow: hidden; }
+  .lifecount-hourglass-canvas[hidden] { display: none; }
+  .lifecount-standalone-main:has([data-immersive]) {
+    height: 100dvh;
+    min-height: 0;
+    box-sizing: border-box;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .lifecount-page[data-immersive] {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+  }
+  [data-immersive] .lifecount-visual-stage:not([hidden]) {
     display: grid;
-    min-height: 22rem;
     place-items: center;
+    width: 100vw;
+    flex: 1;
+    min-height: 0;
+    margin: 0 calc(50% - 50vw);
+    padding: 0;
     overflow: hidden;
-    border-radius: 0.8rem;
+    container-type: size;
   }
-
-  .lifecount-visual-art[hidden] {
-    display: none;
+  [data-immersive] .lifecount-visual-stage:is(:fullscreen, .is-fullscreen) {
+    margin: 0;
+    height: 100dvh;
   }
-
-  .lifecount-hourglass-view {
-    background: color-mix(in srgb, var(--bg) 88%, var(--life-sand));
-  }
-
-  .lifecount-hourglass-view canvas {
-    display: block;
-    width: min(100%, 24rem);
-    height: 22rem;
-  }
-
-  .lifecount-candle-view {
-    background: color-mix(in srgb, var(--bg) 88%, var(--life-orange));
-  }
-
-  .lifecount-candle-svg {
-    width: min(100%, 18rem);
-    height: 22rem;
-  }
-
-  .lifecount-candle-flame,
-  .lifecount-candle-drip-left,
-  .lifecount-candle-drip-right {
-    transition: opacity 500ms ease;
-  }
-
-  .lifecount-daylight-view {
-    --daylight-top: #0b1024;
-    --daylight-bottom: #202b4b;
-    background: linear-gradient(180deg, var(--daylight-top), var(--daylight-bottom));
-    isolation: isolate;
-  }
-
-  .lifecount-daylight-horizon {
+  [data-immersive] .lifecount-visual-stage > canvas:not(.lifecount-daylight-canvas) {
     position: absolute;
-    right: -10%;
-    bottom: -25%;
-    left: -10%;
-    height: 45%;
-    border-radius: 50% 50% 0 0;
-    background: color-mix(in srgb, var(--fg-strong) 18%, transparent);
-    filter: blur(1px);
+    left: var(--frame-left);
+    top: var(--frame-top);
+    width: var(--frame-width);
+    height: var(--frame-height);
+    max-width: none;
   }
+  .lifecount-house-canvas, .lifecount-tree-canvas { image-rendering: pixelated; }
+  .lifecount-daylight-canvas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
+  body:has([data-immersive]) { overflow: hidden; }
 
-  .lifecount-daylight-sun {
-    position: absolute;
-    top: var(--sun-y, 50%);
-    left: var(--sun-x, 50%);
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 50%;
-    background: #ffe3a1;
-    box-shadow: 0 0 3rem rgb(255 220 145 / 0.62);
-    transform: translate(-50%, -50%);
-  }
+  .lifecount-visual-fullscreen { position: absolute; top: .5rem; right: .5rem; z-index: 1; }
 
-  .lifecount-daylight-stars {
-    position: absolute;
-    inset: 0;
-    opacity: var(--stars-opacity, 0.5);
-    background-image:
-      radial-gradient(circle at 12% 22%, #fff 0 1px, transparent 1.5px),
-      radial-gradient(circle at 34% 18%, #fff 0 1px, transparent 1.5px),
-      radial-gradient(circle at 65% 28%, #fff 0 1px, transparent 1.5px),
-      radial-gradient(circle at 84% 16%, #fff 0 1px, transparent 1.5px),
-      radial-gradient(circle at 74% 46%, #fff 0 1px, transparent 1.5px);
-    transition: opacity 1s ease;
-  }
-
-  .lifecount-visual-summary {
-    min-height: 1.5rem;
-    padding-top: 0.85rem;
-    color: var(--fg-muted);
-    font-family: "DM Mono", "SFMono-Regular", Consolas, monospace;
-    font-size: 0.72rem;
-    line-height: 1.25rem;
-    text-align: center;
-  }
 
   .lifecount-header p:last-child {
     margin: 0.65rem 0 0;
@@ -895,9 +707,23 @@ const schema = {
     cursor: pointer;
   }
 
+  .lifecount-unit-select:has(button:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .lifecount-unit-select button:disabled {
+    cursor: not-allowed;
+  }
+
   .lifecount-unit-select.is-english {
     width: 5.25rem;
     min-width: 5.25rem;
+  }
+
+  .lifecount-unit-select.is-english:has(button:disabled) {
+    width: 6rem;
+    min-width: 6rem;
   }
 
   .lifecount-unit-label {
@@ -1710,6 +1536,7 @@ const schema = {
   }
 
   @media (max-width: 640px) {
+
     .lifecount-header-meta {
       align-items: flex-start;
       flex-wrap: wrap;

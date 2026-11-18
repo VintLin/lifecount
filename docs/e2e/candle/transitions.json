@@ -1,0 +1,36 @@
+{
+  "results": [
+    {
+      "mode": "grid",
+      "stageHidden": true,
+      "mapHidden": false,
+      "canvasFrame": null
+    },
+    {
+      "mode": "hourglass",
+      "stageHidden": false,
+      "mapHidden": true,
+      "canvasFrame": null
+    },
+    {
+      "mode": "candle",
+      "stageHidden": false,
+      "mapHidden": true,
+      "canvasFrame": "37:38"
+    }
+  ],
+  "mobile": {
+    "width": 390,
+    "scrollWidth": 390,
+    "canvas": {
+      "x": 16,
+      "y": 209.59375,
+      "width": 358,
+      "height": 548.59375,
+      "top": 209.59375,
+      "right": 374,
+      "bottom": 758.1875,
+      "left": 16
+    }
+  }
+}

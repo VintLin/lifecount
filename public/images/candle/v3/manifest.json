@@ -1,0 +1,12 @@
+{
+  "version": 3,
+  "frames": 101,
+  "size": 1536,
+  "progress": "index / 100",
+  "rendering": "Cycles geometry; continuous life progress, no thermal fluid simulation",
+  "groundShadow": false,
+  "samples": 96,
+  "wick": "single tapered fibre, radius .012, height .16, flame root .13",
+  "terminal": "grounded approved wax sculpture, no flame",
+  "bytes": 3071354
+}

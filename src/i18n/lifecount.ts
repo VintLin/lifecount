@@ -49,14 +49,18 @@ export interface LifeCountMessages {
   biographyField: string;
   biographyToggle: string;
   selectBiography: string;
+  visualSeconds: string;
+  visualLoading: string;
+  visualLoadError: string;
+  visualRetry: string;
+  visualFullscreen: string;
+  visualExitFullscreen: string;
   visualModeButton: string;
   visualModeTitle: string;
   visualModes: Record<VisualMode, string>;
-  visualModeDescriptions: Record<VisualMode, string>;
   visualElapsed: (seconds: string) => string;
   visualRemaining: (seconds: string) => string;
   visualProgress: (percentage: string) => string;
-  visualLocalTime: (time: string, phase: string) => string;
   themeLight: string;
   themeDark: string;
   githubRepository: string;
@@ -117,24 +121,25 @@ const zhCN: LifeCountMessages = {
   biographyField: "名人",
   biographyToggle: "显示或隐藏名人履历",
   selectBiography: "选择名人",
+  visualSeconds: "秒",
+  visualLoading: "加载中…",
+  visualLoadError: "蜡烛加载失败",
+  visualRetry: "重试",
+  visualFullscreen: "全屏展示",
+  visualExitFullscreen: "退出全屏",
   visualModeButton: "人生视图",
   visualModeTitle: "人生视图",
   visualModes: {
     grid: "方块网格",
     hourglass: "沙漏",
     candle: "蜡烛",
-    daylight: "天光"
-  },
-  visualModeDescriptions: {
-    grid: "查看人生阶段和时间网格",
-    hourglass: "上方是剩余时间，下方是已过去时间",
-    candle: "用燃烧比例表达已经过去的人生",
-    daylight: "用本地时间表达一天的天色变化"
+    daylight: "天光",
+    homebuilding: "筑屋",
+    tree: "树",
   },
   visualElapsed: (seconds) => `已过去 ${seconds} 秒`,
   visualRemaining: (seconds) => `剩余 ${seconds} 秒`,
   visualProgress: (percentage) => `人生进度 ${percentage}`,
-  visualLocalTime: (time, phase) => `本地时间 ${time} · ${phase}`,
   themeLight: "切换到浅色模式",
   themeDark: "切换到深色模式",
   githubRepository: "在 GitHub 查看 LifeCount",
@@ -229,24 +234,25 @@ const en: LifeCountMessages = {
   biographyField: "Celebrity",
   biographyToggle: "Show or hide celebrity biography",
   selectBiography: "Choose a celebrity",
+  visualSeconds: "Seconds",
+  visualLoading: "Loading…",
+  visualLoadError: "Could not load candle",
+  visualRetry: "Retry",
+  visualFullscreen: "Fullscreen",
+  visualExitFullscreen: "Exit fullscreen",
   visualModeButton: "Life view",
   visualModeTitle: "Life view",
   visualModes: {
     grid: "Grid",
     hourglass: "Hourglass",
     candle: "Candle",
-    daylight: "Daylight"
-  },
-  visualModeDescriptions: {
-    grid: "View life stages and the time grid",
-    hourglass: "Remaining time above, elapsed time below",
-    candle: "Use the burn ratio to express elapsed life",
-    daylight: "Use local time to express the changing sky"
+    daylight: "Daylight",
+    homebuilding: "Homebuilding",
+    tree: "Tree",
   },
   visualElapsed: (seconds) => `${seconds} seconds elapsed`,
   visualRemaining: (seconds) => `${seconds} seconds remaining`,
   visualProgress: (percentage) => `Life progress ${percentage}`,
-  visualLocalTime: (time, phase) => `Local time ${time} · ${phase}`,
   themeLight: "Switch to light mode",
   themeDark: "Switch to dark mode",
   githubRepository: "View LifeCount on GitHub",

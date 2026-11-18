@@ -1,0 +1,73 @@
+{
+  "states": [
+    {
+      "name": "dawn",
+      "engine": "webgl",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900,
+        "top": 0,
+        "right": 1440,
+        "bottom": 900,
+        "left": 0
+      },
+      "progress": "0.27",
+      "tone": "night",
+      "scrollWidth": 1440
+    },
+    {
+      "name": "noon",
+      "engine": "webgl",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900,
+        "top": 0,
+        "right": 1440,
+        "bottom": 900,
+        "left": 0
+      },
+      "progress": "0.5",
+      "tone": "day",
+      "scrollWidth": 1440
+    },
+    {
+      "name": "sunset",
+      "engine": "webgl",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900,
+        "top": 0,
+        "right": 1440,
+        "bottom": 900,
+        "left": 0
+      },
+      "progress": "0.74",
+      "tone": "night",
+      "scrollWidth": 1440
+    },
+    {
+      "name": "night",
+      "engine": "webgl",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900,
+        "top": 0,
+        "right": 1440,
+        "bottom": 900,
+        "left": 0
+      },
+      "progress": "0.95",
+      "tone": "night",
+      "scrollWidth": 1440
+    }
+  ],
+  "errors": []
+}

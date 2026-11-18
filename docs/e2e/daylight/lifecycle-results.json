@@ -1,0 +1,87 @@
+{
+  "results": [
+    {
+      "name": "reduced motion static",
+      "value": true
+    },
+    {
+      "name": "cloud animation changes image",
+      "value": true
+    },
+    {
+      "name": "settings pause static",
+      "value": true
+    },
+    {
+      "name": "end static",
+      "value": true
+    },
+    {
+      "name": "English seconds",
+      "value": true
+    },
+    {
+      "name": "WebGL unavailable fallback",
+      "value": true
+    },
+    {
+      "name": "fallback menu usable",
+      "value": true
+    }
+  ],
+  "errors": [
+    {
+      "method": "Runtime.consoleAPICalled",
+      "params": {
+        "type": "error",
+        "args": [
+          {
+            "type": "string",
+            "value": "THREE.WebGLRenderer: THREE.WebGLRenderer: Error creating WebGL context."
+          }
+        ],
+        "executionContextId": 4,
+        "timestamp": 1794941123853.881,
+        "stackTrace": {
+          "callFrames": [
+            {
+              "functionName": "console.<computed>",
+              "scriptId": "5",
+              "url": "http://localhost:4321/@vite/client",
+              "lineNumber": 363,
+              "columnNumber": 3
+            },
+            {
+              "functionName": "error",
+              "scriptId": "109",
+              "url": "http://localhost:4321/node_modules/.vite/deps/three.module-Dl--ppud.js?v=b2a858a3",
+              "lineNumber": 1760,
+              "columnNumber": 15
+            },
+            {
+              "functionName": "WebGLRenderer",
+              "scriptId": "109",
+              "url": "http://localhost:4321/node_modules/.vite/deps/three.module-Dl--ppud.js?v=b2a858a3",
+              "lineNumber": 51491,
+              "columnNumber": 3
+            },
+            {
+              "functionName": "buildSky",
+              "scriptId": "40",
+              "url": "http://localhost:4321/src/scripts/visuals/daylight.ts?t=1794941047634",
+              "lineNumber": 94,
+              "columnNumber": 18
+            },
+            {
+              "functionName": "",
+              "scriptId": "40",
+              "url": "http://localhost:4321/src/scripts/visuals/daylight.ts?t=1794941047634",
+              "lineNumber": 59,
+              "columnNumber": 13
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

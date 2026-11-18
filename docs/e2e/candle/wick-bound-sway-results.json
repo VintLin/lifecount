@@ -1,0 +1,52 @@
+{
+  "results": [
+    {
+      "progress": 0,
+      "movedPixels": 2180,
+      "minY": 44,
+      "maxY": 154,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    },
+    {
+      "progress": 0.38,
+      "movedPixels": 2613,
+      "minY": 283,
+      "maxY": 403,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    },
+    {
+      "progress": 0.77,
+      "movedPixels": 3950,
+      "minY": 596,
+      "maxY": 737,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    },
+    {
+      "progress": 0.99,
+      "movedPixels": 7,
+      "minY": 876,
+      "maxY": 879,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    },
+    {
+      "progress": 1,
+      "movedPixels": 0,
+      "minY": 1160,
+      "maxY": 0,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    }
+  ],
+  "status": "ready",
+  "url": "file:///Users/Vint/Repos/01_Project_Personal/011_LifeCount/docs/e2e/candle/wick-bound-sway-review.html",
+  "text": "\u6682\u505c\u6447\u66f3"
+}

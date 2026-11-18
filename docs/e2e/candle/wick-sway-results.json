@@ -1,0 +1,52 @@
+{
+  "results": [
+    {
+      "progress": 0,
+      "movedPixels": 2245,
+      "minY": 44,
+      "maxY": 157,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    },
+    {
+      "progress": 0.38,
+      "movedPixels": 2678,
+      "minY": 283,
+      "maxY": 406,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    },
+    {
+      "progress": 0.77,
+      "movedPixels": 4046,
+      "minY": 596,
+      "maxY": 739,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    },
+    {
+      "progress": 0.99,
+      "movedPixels": 17,
+      "minY": 876,
+      "maxY": 884,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    },
+    {
+      "progress": 1,
+      "movedPixels": 0,
+      "minY": 1160,
+      "maxY": 0,
+      "pausedStable": true,
+      "waxStable": true,
+      "pass": true
+    }
+  ],
+  "status": "ready",
+  "url": "file:///Users/Vint/Repos/01_Project_Personal/011_LifeCount/docs/e2e/candle/wick-sway-review.html",
+  "text": "\u6682\u505c\u6447\u66f3"
+}

@@ -1,0 +1,181 @@
+{
+  "capturedAt": "2026-11-17T08:22:44.760Z",
+  "joins": [
+    {
+      "y": 40,
+      "before": 0.5,
+      "after": 0.5,
+      "slopeJump": 0
+    },
+    {
+      "y": 70,
+      "before": 0,
+      "after": 0,
+      "slopeJump": 0
+    },
+    {
+      "y": 95,
+      "before": -0.125,
+      "after": -0.125,
+      "slopeJump": 0
+    },
+    {
+      "y": 125,
+      "before": -0.5,
+      "after": -0.5,
+      "slopeJump": 0
+    },
+    {
+      "y": 160,
+      "before": -0.6875,
+      "after": -0.6875,
+      "slopeJump": 0
+    },
+    {
+      "y": 190,
+      "before": -0.8125,
+      "after": -0.875,
+      "slopeJump": 0.0625
+    },
+    {
+      "y": 210,
+      "before": -0.8125,
+      "after": -0.75,
+      "slopeJump": 0.0625
+    },
+    {
+      "y": 230,
+      "before": -0.4375,
+      "after": -0.375,
+      "slopeJump": 0.0625
+    },
+    {
+      "y": 255,
+      "before": 0.4375,
+      "after": 0.5625,
+      "slopeJump": 0.125
+    },
+    {
+      "y": 275,
+      "before": 0.875,
+      "after": 0.8125,
+      "slopeJump": 0.0625
+    },
+    {
+      "y": 305,
+      "before": 0.75,
+      "after": 0.6875,
+      "slopeJump": 0.0625
+    },
+    {
+      "y": 340,
+      "before": 0.5625,
+      "after": 0.625,
+      "slopeJump": 0.0625
+    },
+    {
+      "y": 380,
+      "before": 0.1875,
+      "after": 0.125,
+      "slopeJump": 0.0625
+    },
+    {
+      "y": 405,
+      "before": 0,
+      "after": 0,
+      "slopeJump": 0
+    },
+    {
+      "y": 430,
+      "before": -0.4375,
+      "after": -0.4375,
+      "slopeJump": 0
+    }
+  ],
+  "maxSlopeJump": 0.125,
+  "leftContacts": [
+    {
+      "y": 105,
+      "edge": 17.875,
+      "rim": 17,
+      "gap": 0.875
+    },
+    {
+      "y": 125,
+      "edge": 27,
+      "rim": 26,
+      "gap": 1
+    },
+    {
+      "y": 145,
+      "edge": 38,
+      "rim": 36,
+      "gap": 2
+    },
+    {
+      "y": 170,
+      "edge": 55.625,
+      "rim": 55,
+      "gap": 0.625
+    }
+  ],
+  "floorSamples": [
+    {
+      "x": 75,
+      "y": 473
+    },
+    {
+      "x": 110.5,
+      "y": 473.875
+    },
+    {
+      "x": 146,
+      "y": 473
+    }
+  ],
+  "roundFloor": false,
+  "cases": [
+    {
+      "progress": 0,
+      "elapsed": 0,
+      "total": 19703,
+      "correctCount": true
+    },
+    {
+      "progress": 0.0001,
+      "elapsed": 2,
+      "total": 19703,
+      "correctCount": true
+    },
+    {
+      "progress": 0.01,
+      "elapsed": 197,
+      "total": 19703,
+      "correctCount": true
+    },
+    {
+      "progress": 0.35,
+      "elapsed": 6896,
+      "total": 19703,
+      "correctCount": true
+    },
+    {
+      "progress": 0.75,
+      "elapsed": 14777,
+      "total": 19703,
+      "correctCount": true
+    },
+    {
+      "progress": 0.99,
+      "elapsed": 19506,
+      "total": 19703,
+      "correctCount": true
+    },
+    {
+      "progress": 1,
+      "elapsed": 19703,
+      "total": 19703,
+      "correctCount": true
+    }
+  ]
+}

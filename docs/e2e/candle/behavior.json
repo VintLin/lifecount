@@ -1,0 +1,13 @@
+{
+  "biography": {
+    "mode": "grid",
+    "triggerDisabled": true,
+    "mapVisible": true
+  },
+  "newborn": {
+    "progress": "0",
+    "summary": "0 seconds elapsed · 2,682,288,000 seconds remaining · Life progress 0.0%"
+  },
+  "reducedMotionStable": true,
+  "normalFlameChanges": true
+}

@@ -1,0 +1,61 @@
+{
+  "results": [
+    {
+      "name": "full viewport",
+      "value": true
+    },
+    {
+      "name": "night menu contrast",
+      "value": true
+    },
+    {
+      "name": "settings open",
+      "value": true
+    },
+    {
+      "name": "age updates sky",
+      "value": true
+    },
+    {
+      "name": "biography grid",
+      "value": true
+    },
+    {
+      "name": "Me restores sky",
+      "value": true
+    },
+    {
+      "name": "hourglass isolated",
+      "value": true
+    },
+    {
+      "name": "candle isolated",
+      "value": true
+    },
+    {
+      "name": "single sky canvas",
+      "value": true
+    },
+    {
+      "name": "mobile viewport",
+      "value": true
+    },
+    {
+      "name": "mobile settings fits",
+      "value": true
+    },
+    {
+      "name": "Escape restores grid scrolling",
+      "value": true
+    },
+    {
+      "name": "mode cached",
+      "value": true
+    },
+    {
+      "name": "animation running without errors",
+      "value": true
+    }
+  ],
+  "errors": []
+}

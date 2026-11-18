@@ -43,7 +43,7 @@ import {
 } from "@/scripts/lifecount-visual";
 
 const UNITS: LifeUnit[] = ["day", "week", "month", "year"];
-const VISUAL_MODES: VisualMode[] = ["grid", "hourglass", "candle", "daylight"];
+import { VISUAL_MODES } from "@/data/lifecount";
 const PERSISTED_SETTINGS_KEY = "lifecount-settings-v1";
 
 interface PersistedLifeCountSettings {
@@ -585,7 +585,7 @@ function syncCustomSelectMenus(root: HTMLElement) {
     const value = wrapper.querySelector<HTMLElement>(
       "[data-lifecount-language-label], [data-lifecount-unit-label], [data-lifecount-country-value], [data-lifecount-preset-value], [data-lifecount-biography-value]"
     );
-    if (value) value.textContent = selectedOption?.textContent ?? "";
+    if (value) value.textContent = select.dataset.displayLabel ?? selectedOption?.textContent ?? "";
     trigger.disabled = select.disabled;
     trigger.setAttribute("aria-label", select.getAttribute("aria-label") ?? "");
     trigger.setAttribute("aria-expanded", "false");
@@ -1892,6 +1892,14 @@ function render(
   if (unitSelect) {
     const isEnglish = state.locale === "en";
     unitSelect.value = unit;
+    const visualActive = !state.biographyId && state.visualMode !== "grid";
+    unitSelect.disabled = visualActive;
+    if (visualActive) {
+      unitSelect.dataset.displayLabel = messages.visualSeconds;
+      unitSelect.setAttribute("aria-label", messages.visualSeconds);
+    } else {
+      delete unitSelect.dataset.displayLabel;
+    }
     unitSelect.closest(".lifecount-unit-select")?.classList.toggle("is-english", isEnglish);
     setText(
       root,
@@ -1991,6 +1999,7 @@ export function initLifeCount() {
 
   root.querySelector<HTMLSelectElement>("[data-lifecount-unit-select]")?.addEventListener("change", (event) => {
     const select = event.currentTarget as HTMLSelectElement;
+    if (select.disabled) return;
     state.unit = validUnit(select.value, config.defaultUnit);
     updateUrl({ unit: state.unit });
     writePersistedSettings(config, state);

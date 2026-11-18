@@ -2,7 +2,8 @@ import { lifePresets } from "./lifecount-presets";
 
 export type LifeUnit = "day" | "week" | "month" | "year";
 
-export type VisualMode = "grid" | "hourglass" | "candle" | "daylight";
+export const VISUAL_MODES = ["grid", "hourglass", "candle", "daylight", "homebuilding", "tree"] as const;
+export type VisualMode = typeof VISUAL_MODES[number];
 
 export type LifeColor =
   | "blue"

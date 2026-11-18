@@ -1,0 +1,52 @@
+{
+  "progress": 0.7652657703691,
+  "cssPixels": [
+    672,
+    557
+  ],
+  "dpr": 2,
+  "canvasPixels": [
+    1344,
+    1114
+  ],
+  "sourcePixels": 1536,
+  "drawnPixels": 1114,
+  "upscale": 0.7252604166666666,
+  "blended": false,
+  "edgeTint": 0,
+  "pass": true,
+  "before": {
+    "sourcePixels": 640,
+    "drawnPixels": 1114,
+    "upscale": 1.740625,
+    "blended": true
+  },
+  "oversizedCanvas": {
+    "pixels": [
+      2198,
+      1800
+    ],
+    "source": 1536,
+    "drawn": 1536,
+    "pass": true
+  },
+  "mobile": {
+    "viewport": 390,
+    "scrollWidth": 390,
+    "state": "ready"
+  },
+  "birth": {
+    "progress": 0,
+    "frame": 0,
+    "state": "ready"
+  },
+  "terminal": {
+    "progress": 1,
+    "frame": 100,
+    "state": "ready"
+  },
+  "application": {
+    "asset": "images/candle/v2/038.webp",
+    "state": "ready"
+  }
+}

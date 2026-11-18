@@ -1,0 +1,7 @@
+{
+  "reducedMotionStable": true,
+  "normalFlameChanges": true,
+  "personalSettingsRestored": true,
+  "observationMs": 500,
+  "settling": "two animation frames after media change"
+}

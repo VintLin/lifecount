@@ -1,0 +1,32 @@
+const fs=require('fs');
+(async()=>{const port=fs.readFileSync((process.env.SKY_CDP_PROFILE || '/tmp/lifecount-daylight-cdp')+'/DevToolsActivePort','utf8').split('\n')[0];const tab=await(await fetch('http://127.0.0.1:'+port+'/json/new?about:blank',{method:'PUT'})).json();const ws=new WebSocket(tab.webSocketDebuggerUrl);await new Promise(r=>ws.onopen=r);let id=0;const pending=new Map(),errors=[];
+ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){pending.get(m.id)?.(m);pending.delete(m.id)}else if(m.method==='Runtime.exceptionThrown'||m.method==='Runtime.consoleAPICalled'&&m.params.type==='error')errors.push(m)};
+const call=(method,params={})=>new Promise(r=>{pending.set(++id,r);ws.send(JSON.stringify({id,method,params}))});
+const ev=async expression=>(await call('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true})).result;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+await call('Runtime.enable');await call('Page.enable');await call('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
+await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+await call('Page.addScriptToEvaluateOnNewDocument',{source:`localStorage.setItem('lifecount-settings-v1',JSON.stringify({birthday:'1995-01-01',displayAge:85,countryId:'cn',presetId:'cn-undergraduate-work',locale:'zh-CN',unit:'week',visualMode:'grid'}));window.testProgress=.29;Date.now=()=>Date.parse('1995-01-01T00:00:00Z')+(Date.parse('2080-01-01T00:00:00Z')-Date.parse('1995-01-01T00:00:00Z'))*window.testProgress;`});
+await call('Page.navigate',{url:'http://localhost:4321/lifecount/?lang=zh-CN'});await wait(6000);
+await ev("document.querySelector('[data-lifecount-visual-trigger]').click();document.querySelector('[role=option][data-visual-mode=homebuilding]').click()");
+const states=[];for(const [name,p] of [['start',0],['footings',.11],['walls',.44],['trusses',.60],['roof',.7],['finishing',.91],['complete',1],['mobile',.44]]){
+ if(name==='mobile')await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:false});
+ await ev('window.testProgress='+p);await wait(1800);
+ states.push({name,...(await ev(`(()=>{const s=document.querySelector('[data-lifecount-visual-stage]'),c=s.querySelector('.lifecount-house-canvas');return {canvas:c?.getBoundingClientRect().toJSON(),rect:s.getBoundingClientRect().toJSON(),progress:c?.dataset.progress,scrollWidth:document.documentElement.scrollWidth}})()`)).result?.value});
+ if(Math.abs(Number(states.at(-1).progress)-p)>1e-6||!states.at(-1).canvas)throw Error('incorrect progress');
+ const shot=await call('Page.captureScreenshot');fs.writeFileSync('docs/e2e/homebuilding/'+name+'.png',Buffer.from(shot.result.data,'base64'));
+}
+const drawing = async () => (await ev("document.querySelector('.lifecount-house-canvas').toDataURL()")).result.value;
+const mobileStill = await drawing();
+await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'no-preference'}]});
+await wait(1400);
+const moving = await drawing();
+if(mobileStill===moving)throw Error('Worker did not animate');
+await ev('window.testProgress=1');await wait(1500);
+const finished = await drawing();await wait(1200);
+if(finished!==await drawing())throw Error('Completed scene moved');
+await ev('document.dispatchEvent(new KeyboardEvent("keydown",{key:"Escape",bubbles:true}))');
+if((await ev("!!document.querySelector('.lifecount-house-canvas')")).result.value)throw Error('Grid did not restore');
+if(errors.length)throw Error(JSON.stringify(errors));
+fs.writeFileSync('docs/e2e/homebuilding/initial-results.json',JSON.stringify({states,errors},null,2));console.log(JSON.stringify({states,errors}));ws.close();
+})();
