@@ -6,6 +6,7 @@ const frames = {
     hourglass: { width: 220, height: 480, boundsW: 206, boundsH: 468, cx: 110, cy: 238, widthLimit: Infinity },
     candle: { width: 1536, height: 1536, boundsW: 1110, boundsH: 1251, cx: 768, cy: 689, widthLimit: Infinity },
     homebuilding: { width: 360, height: 250, boundsW: 280, boundsH: 185, cx: 180, cy: 115, widthLimit: 720 },
+    bamboo: { width: 360, height: 250, boundsW: 205, boundsH: 184, cx: 180, cy: 120, widthLimit: Infinity },
     tree: { width: 360, height: 250, boundsW: 218, boundsH: 185, cx: 184, cy: 118, widthLimit: Infinity },
 };
 

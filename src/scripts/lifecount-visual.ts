@@ -3,6 +3,7 @@ import type { LifeCountMessages, LifeCountLocale } from "@/i18n/lifecount";
 import { VISUAL_MODES, type VisualMode } from "@/data/lifecount";
 import { anniversary, parseDay } from "@/utils/lifecount";
 import { createHourglass, type HourglassRenderer } from "./visuals/hourglass";
+import { createBamboo } from "./visuals/bamboo";
 import { createTree } from "./visuals/tree";
 import { createHomebuilding } from "./visuals/homebuilding";
 import { createDaylight } from "./visuals/daylight";
@@ -163,7 +164,7 @@ export function setupVisualMode(root: HTMLElement, onModeChange: (mode: VisualMo
                 return;
             data = next;
             const skyActive = next.enabled && next.mode === "daylight";
-            const immersive = skyActive || (next.enabled && (next.mode === "homebuilding" || next.mode === "tree"));
+            const immersive = skyActive || (next.enabled && (next.mode === "homebuilding" || next.mode === "tree" || next.mode === "bamboo"));
             root.toggleAttribute("data-immersive", active());
             if (canvas) canvas.hidden = immersive;
             if (trigger) {
@@ -204,6 +205,8 @@ export function setupVisualMode(root: HTMLElement, onModeChange: (mode: VisualMo
             if (active() && canvas && !renderer) {
                 renderer = next.mode === "daylight" && stage
                     ? createDaylight(stage)
+                    : next.mode === "bamboo" && stage
+                    ? createBamboo(stage)
                     : next.mode === "tree" && stage
                     ? createTree(stage)
                     : next.mode === "homebuilding" && stage
