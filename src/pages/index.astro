@@ -80,13 +80,16 @@ const schema = {
               aria-label="人生视图"
               title="人生视图"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"></path>
-                <circle cx="12" cy="12" r="2.5"></circle>
+              <span class="lifecount-language-label lifecount-visual-label" data-lifecount-visual-label>{messages.visualModes.grid}</span>
+              <svg class="lifecount-language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m6 9 6 6 6-6" />
               </svg>
             </button>
             <div class="lifecount-select-menu lifecount-visual-menu" data-lifecount-visual-menu role="listbox" aria-label="人生视图" hidden></div>
           </div>
+          <button type="button" class="lifecount-header-button lifecount-visual-fullscreen" data-lifecount-visual-fullscreen hidden aria-label={messages.visualFullscreen} title={messages.visualFullscreen}>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>
+          </button>
           <ButtonRoot
             class="lifecount-header-button lifecount-settings-button"
             type="button"
@@ -115,9 +118,7 @@ const schema = {
     </div>
 
     <section class="lifecount-visual-stage" data-lifecount-visual-stage hidden>
-      <button type="button" class="lifecount-header-button lifecount-visual-fullscreen" data-lifecount-visual-fullscreen aria-label={messages.visualFullscreen} title={messages.visualFullscreen}>
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5" /></svg>
-      </button>
+
       <div class="lifecount-visual-status" data-lifecount-visual-status hidden role="status"><span data-lifecount-visual-status-text></span><button type="button" class="lifecount-header-button" data-lifecount-visual-retry hidden></button></div>
       <canvas class="lifecount-hourglass-canvas" data-lifecount-hourglass-canvas aria-hidden="true"></canvas>
     </section>
@@ -426,9 +427,9 @@ const schema = {
     position: relative;
   }
 
-  .lifecount-visual-select > .lifecount-select-trigger {
-    width: 2rem;
-    height: 2rem;
+  .lifecount-visual-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .lifecount-brand-title {
@@ -494,7 +495,8 @@ const schema = {
   .lifecount-daylight-canvas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
   body:has([data-immersive]) { overflow: hidden; }
 
-  .lifecount-visual-fullscreen { position: absolute; top: .5rem; right: .5rem; z-index: 1; }
+  .lifecount-visual-fullscreen[hidden] { display: none; }
+  .lifecount-visual-stage > .lifecount-visual-fullscreen { position: absolute; top: .5rem; right: .5rem; z-index: 1; }
 
 
   .lifecount-header p:last-child {
@@ -546,15 +548,26 @@ const schema = {
     height: 1rem;
   }
 
-  .lifecount-language-button {
-    width: 4rem;
-    min-width: 4rem;
+  .lifecount-language-button, .lifecount-visual-select {
     gap: 0.25rem;
     padding-inline: 0.5rem;
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 1.25rem;
   }
+
+  .lifecount-language-button {
+    width: 4rem;
+    min-width: 4rem;
+  }
+
+  .lifecount-visual-select {
+    width: auto;
+    min-width: 3rem;
+    padding: 0;
+  }
+
+  .lifecount-visual-select > button { padding-inline: 0.5rem; }
 
   .lifecount-language-select.is-english {
     width: 5.25rem;
@@ -1535,6 +1548,12 @@ const schema = {
     color: #000;
   }
 
+  @media (max-width: 375px) {
+    [data-immersive] .lifecount-header-actions { gap: .2rem; }
+    [data-immersive] .lifecount-unit-select:has(button:disabled) { width: auto; min-width: 0; }
+    [data-immersive] .lifecount-unit-select button:disabled svg { display: none; }
+  }
+
   @media (max-width: 640px) {
 
     .lifecount-header-meta {
@@ -1544,6 +1563,7 @@ const schema = {
 
     .lifecount-header-actions {
       width: 100%;
+      flex-wrap: nowrap;
       justify-content: flex-end;
     }
 

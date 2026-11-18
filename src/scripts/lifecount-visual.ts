@@ -30,12 +30,14 @@ export interface VisualModeController {
 }
 export function setupVisualMode(root: HTMLElement, onModeChange: (mode: VisualMode) => void): VisualModeController {
     const trigger = root.querySelector<HTMLButtonElement>("[data-lifecount-visual-trigger]");
+    const visualLabel = trigger?.querySelector<HTMLElement>("[data-lifecount-visual-label]");
     const menu = root.querySelector<HTMLElement>("[data-lifecount-visual-menu]");
     const map = root.querySelector<HTMLElement>("[data-lifecount-map-wrap]");
     const stage = root.querySelector<HTMLElement>("[data-lifecount-visual-stage]");
     const canvas = root.querySelector<HTMLCanvasElement>("[data-lifecount-hourglass-canvas]");
     const summary = root.querySelector<HTMLElement>("[data-lifecount-visual-summary]");
     const fullscreen = root.querySelector<HTMLButtonElement>("[data-lifecount-visual-fullscreen]");
+    const settingsButton = root.querySelector<HTMLButtonElement>("[data-lifecount-settings]");
     const settings = root.querySelector<HTMLDialogElement>("[data-lifecount-settings-dialog]");
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let data: VisualModeData | null = null;
@@ -87,6 +89,12 @@ export function setupVisualMode(root: HTMLElement, onModeChange: (mode: VisualMo
         compose();
         if (!data || !fullscreen)
             return;
+        const parent = isFullscreen() ? stage : settingsButton?.parentElement;
+        if (parent && fullscreen.parentElement !== parent) {
+            parent.insertBefore(fullscreen, parent === stage ? null : settingsButton);
+            fullscreen.focus({preventScroll: true});
+        }
+        fullscreen.hidden = !active();
         const label = isFullscreen() ? data.messages.visualExitFullscreen : data.messages.visualFullscreen;
         fullscreen.title = label;
         fullscreen.setAttribute("aria-label", label);
@@ -160,8 +168,10 @@ export function setupVisualMode(root: HTMLElement, onModeChange: (mode: VisualMo
             if (canvas) canvas.hidden = immersive;
             if (trigger) {
                 trigger.disabled = !next.enabled;
-                trigger.title = next.messages.visualModeButton;
-                trigger.setAttribute("aria-label", next.messages.visualModeButton);
+                const name = next.messages.visualModes[next.mode];
+                if (visualLabel) visualLabel.textContent = name;
+                trigger.title = name;
+                trigger.setAttribute("aria-label", next.messages.visualModeButton + " · " + name);
             }
             menu?.setAttribute("aria-label", next.messages.visualModeTitle);
             menu?.replaceChildren(...VISUAL_MODES.map(mode => {
