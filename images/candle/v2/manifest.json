@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "frames": 101,
+  "size": 1536,
+  "progress": "index / 100",
+  "rendering": "Cycles geometry; continuous life progress, no thermal fluid simulation",
+  "groundShadow": false,
+  "samples": 96,
+  "terminal": "grounded approved wax sculpture, no flame",
+  "bytes": 3207734
+}
