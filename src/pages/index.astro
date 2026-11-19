@@ -243,14 +243,17 @@ const schema = {
 
 <style is:global>
   .lifecount-page {
-    --life-blue: #5c6ef2;
-    --life-cyan: #1ca8b8;
-    --life-green: #4b9b68;
-    --life-orange: #d98332;
-    --life-pink: #d45b93;
-    --life-purple: #936bd1;
-    --life-red: #c85a5a;
-    --life-sand: #b88a55;
+    --lifecount-chalk: #f6f4f1;
+    --lifecount-today: #1677ff;
+    --lifecount-current: var(--lifecount-today);
+    --life-blue: #9be6ff;
+    --life-cyan: #aceebb;
+    --life-green: #8cf0e3;
+    --life-orange: #efdb91;
+    --life-pink: #ffc2ea;
+    --life-purple: #dfcfff;
+    --life-red: #ffc3bb;
+    --life-sand: #ffcf97;
     --lifecount-content-max-width: 42rem;
     --lifecount-control-radius: 0.75rem;
     --lifecount-control-font-size: 0.875rem;
@@ -1063,7 +1066,7 @@ const schema = {
   }
 
   .lifecount-map-year {
-    --lifecount-cell-gap: 5px;
+    --lifecount-cell-gap: 6px;
   }
 
   .lifecount-cell {
@@ -1074,20 +1077,27 @@ const schema = {
     height: var(--lifecount-cell-size);
     justify-self: stretch;
     padding: 0;
-    border: 1px solid color-mix(in srgb, var(--fg-muted) 14%, transparent);
-    border-radius: 0.26rem;
+    box-sizing: border-box;
+    border: var(--lifecount-cell-border-width, 0.5px) solid var(--cell-border-color, color-mix(in srgb, var(--fg-muted) 18%, transparent));
+    border-radius: var(--lifecount-cell-radius, 2px);
     background: var(--cell-color, var(--bg));
     cursor: pointer;
     transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
   }
 
   .lifecount-cell[data-status="current"] {
-    border-color: var(--fg-strong);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg-strong) 22%, transparent);
+    border-color: transparent;
+    box-shadow: inset 0 1px 0 color-mix(in srgb, white 28%, transparent);
+  }
+
+  .lifecount-cell[data-status="elapsed"] {
+    border-color: transparent;
+    box-shadow: none;
   }
 
   .lifecount-cell[data-status="future"] {
-    border-style: dashed;
+    background: transparent;
+    border-style: solid;
   }
 
   .lifecount-cell:hover,
@@ -1097,6 +1107,16 @@ const schema = {
     border-color: var(--fg-strong);
     outline: 0;
     box-shadow: 0 0 0 3px color-mix(in srgb, var(--fg-strong) 18%, transparent);
+  }
+
+  .lifecount-cell[data-status="elapsed"]:hover,
+  .lifecount-cell[data-status="elapsed"]:focus-visible,
+  .lifecount-cell[data-status="current"]:hover,
+  .lifecount-cell[data-status="current"]:focus-visible {
+    border-color: transparent;
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, white 28%, transparent),
+      0 0 0 3px color-mix(in srgb, var(--fg-strong) 18%, transparent);
   }
 
   .lifecount-legend {
@@ -1122,12 +1142,33 @@ const schema = {
     width: 0.65rem;
     height: 0.65rem;
     border: 0;
-    border-radius: 50%;
+    border-radius: 0.2rem;
     background: color-mix(in srgb, var(--legend-color) 72%, var(--bg));
   }
 
   .lifecount-legend-item i[style] {
     background: color-mix(in srgb, var(--legend-color) 72%, var(--bg));
+  }
+
+  .lifecount-status-legend-dot {
+    box-sizing: border-box;
+    background: var(--bg);
+    border: 1px solid color-mix(in srgb, var(--fg-muted) 52%, var(--bg));
+  }
+
+  .lifecount-status-legend-dot[data-status="elapsed"] {
+    background: color-mix(in srgb, var(--fg-muted) 42%, var(--bg));
+  }
+
+  .lifecount-status-legend-dot[data-status="current"] {
+    background: var(--lifecount-current);
+    border-color: transparent;
+    box-shadow: none;
+  }
+
+  .lifecount-status-legend-dot[data-status="future"] {
+    background: var(--bg);
+    border-color: color-mix(in srgb, var(--fg-muted) 62%, var(--bg));
   }
 
   .lifecount-legend-source {

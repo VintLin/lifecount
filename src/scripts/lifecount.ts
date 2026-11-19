@@ -103,14 +103,14 @@ const COLOR_VARIABLES: Record<LifeColor, string> = {
   sand: "var(--life-sand)"
 };
 const MIN_CELL_SIZE_BY_UNIT: Record<LifeUnit, number> = {
-  day: 4,
+  day: 5,
   week: 10,
-  month: 20,
-  year: 44
+  month: 10,
+  year: 20
 };
 const DOM_GRID_GAP_BY_UNIT: Record<"month" | "year", number> = {
   month: 3,
-  year: 5
+  year: 6
 };
 const MAP_GRID_MAX_WIDTH = 672;
 const FULL_ANNOTATION_RAIL_WIDTH = 168;
@@ -141,10 +141,25 @@ interface LifeCountState {
   visualMode: VisualMode;
 }
 
-function fitGrid(width: number, minimumCell: number, gap: number) {
+function fitGrid(width: number, minimumCell: number, preferredGap: number) {
+  for (let gap = preferredGap; gap >= 1; gap -= 1) {
+    const columns = Math.max(1, Math.floor((width + gap) / (minimumCell + gap)));
+    const cellSize = Math.max(1, (width - gap * (columns - 1)) / columns);
+    if (cellSize >= minimumCell) return { columns, cellSize, gap };
+  }
+
+  const gap = 1;
   const columns = Math.max(1, Math.floor((width + gap) / (minimumCell + gap)));
   const cellSize = Math.max(1, (width - gap * (columns - 1)) / columns);
-  return { columns, cellSize };
+  return { columns, cellSize, gap };
+}
+
+function cellRadius(cellSize: number) {
+  return Math.max(1, cellSize * 0.2);
+}
+
+function cellBorderWidth(cellSize: number) {
+  return Math.max(0.5, cellSize * 0.05);
 }
 
 function readConfig(root: HTMLElement): LifeCountConfig | null {
@@ -245,18 +260,48 @@ function setCellStyle(
 function cellBackground(
   key: ReturnType<typeof cellColorKey>,
   status: LifeCellStatus,
+  neutralFuture = false,
+  dense = false
+) {
+  const stageColor = key === "elapsed" || key === "future" || key === "current"
+    ? null
+    : COLOR_VARIABLES[key];
+  if (status === "current") {
+    return "var(--lifecount-current)";
+  }
+  if (neutralFuture || status === "future") {
+    return "transparent";
+  }
+  if (key === "elapsed") return dense
+    ? "color-mix(in srgb, var(--fg-muted) 32%, var(--lifecount-chalk))"
+    : "color-mix(in srgb, var(--fg-muted) 42%, var(--bg))";
+  if (key === "current") return "color-mix(in srgb, var(--fg-strong) 38%, var(--bg))";
+  if (stageColor) {
+    return dense
+      ? `color-mix(in srgb, ${stageColor} 76%, var(--lifecount-chalk))`
+      : `color-mix(in srgb, ${stageColor} 82%, var(--bg))`;
+  }
+  return "var(--bg)";
+}
+
+function cellBorderColor(
+  key: ReturnType<typeof cellColorKey>,
+  status: LifeCellStatus,
   neutralFuture = false
 ) {
-  if (neutralFuture) {
-    return "color-mix(in srgb, var(--fg-muted) 24%, var(--bg))";
+  const stageColor = key === "elapsed" || key === "future" || key === "current"
+    ? null
+    : COLOR_VARIABLES[key];
+  if (status === "elapsed" || status === "current" || key === "elapsed" || key === "current") {
+    return "transparent";
   }
-  if (key === "elapsed") return "color-mix(in srgb, var(--fg-muted) 30%, var(--bg))";
-  if (key === "future") return "color-mix(in srgb, var(--fg-muted) 10%, var(--bg))";
-  if (key === "current") return "color-mix(in srgb, var(--fg-strong) 38%, var(--bg))";
-  if (status === "future") {
-    return `color-mix(in srgb, ${COLOR_VARIABLES[key]} 34%, color-mix(in srgb, var(--fg-muted) 14%, var(--bg)))`;
+  if (neutralFuture || status === "future") {
+    if (neutralFuture || !stageColor) {
+      return "color-mix(in srgb, var(--fg-muted) 42%, transparent)";
+    }
+    return `color-mix(in srgb, ${stageColor} 68%, var(--fg-muted))`;
   }
-  return `color-mix(in srgb, ${COLOR_VARIABLES[key]} 72%, var(--bg))`;
+  return "color-mix(in srgb, var(--fg-strong) 14%, transparent)";
 }
 
 function resolveCssColor(element: HTMLElement, value: string) {
@@ -416,6 +461,25 @@ function renderLegend(
     label.textContent = locale === "en"
       ? stage.labelEn ?? messages.stageLabels[stage.id]
       : stage.labelZh ?? messages.stageLabels[stage.id];
+    item.append(dot, label);
+    legend.append(item);
+  }
+
+  const statusItems = [
+    ["elapsed", messages.cellStatus.elapsed],
+    ["current", messages.cellStatus.current],
+    ["future", messages.cellStatus.future]
+  ] as const;
+  for (const [status, labelText] of statusItems) {
+    const item = document.createElement("span");
+    item.className = "lifecount-legend-item lifecount-status-legend-item";
+    item.setAttribute("role", "listitem");
+    const dot = document.createElement("i");
+    dot.className = "lifecount-status-legend-dot";
+    dot.dataset.status = status;
+    dot.setAttribute("aria-hidden", "true");
+    const label = document.createElement("span");
+    label.textContent = labelText;
     item.append(dot, label);
     legend.append(item);
   }
@@ -869,14 +933,20 @@ function renderDomGrid(
   map.className = `lifecount-map lifecount-map-${unit}`;
   map.setAttribute("role", "group");
   map.setAttribute("aria-label", messages.views[unit]);
-  const gap = DOM_GRID_GAP_BY_UNIT[unit as "month" | "year"];
-  const { columns, cellSize } = fitGrid(map.clientWidth, MIN_CELL_SIZE_BY_UNIT[unit], gap);
+  const preferredGap = DOM_GRID_GAP_BY_UNIT[unit as "month" | "year"];
+  const { columns, cellSize, gap } = fitGrid(
+    map.clientWidth,
+    MIN_CELL_SIZE_BY_UNIT[unit],
+    preferredGap
+  );
   const rows = Math.ceil(cells.length / columns);
   map.dataset.columns = String(columns);
   map.dataset.cellSize = cellSize.toFixed(2);
   map.dataset.gap = String(gap);
   map.dataset.rows = String(rows);
   map.style.setProperty("--lifecount-cell-size", `${cellSize}px`);
+  map.style.setProperty("--lifecount-cell-radius", `${cellRadius(cellSize)}px`);
+  map.style.setProperty("--lifecount-cell-border-width", `${cellBorderWidth(cellSize)}px`);
   map.style.gridTemplateColumns = `repeat(${columns}, ${cellSize}px)`;
   map.style.gridAutoRows = `${cellSize}px`;
   map.style.justifyContent = "start";
@@ -907,6 +977,10 @@ function renderDomGrid(
     button.style.height = `${cellSize}px`;
     setCellStyle(button, key, status);
     button.style.background = cellBackground(key, status, neutralBiographyCell);
+    button.style.setProperty(
+      "--cell-border-color",
+      cellBorderColor(key, status, neutralBiographyCell)
+    );
     map.append(button);
   });
 
@@ -973,11 +1047,11 @@ function renderCanvas(
   const context = canvas.getContext("2d");
   if (!context) return;
 
-  const gap = unit === "day" ? 1 : 2;
-  const { columns, cellSize: cell } = fitGrid(
+  const preferredGap = unit === "day" ? 2 : 3;
+  const { columns, cellSize: cell, gap } = fitGrid(
     map.clientWidth,
     MIN_CELL_SIZE_BY_UNIT[unit],
-    gap
+    preferredGap
   );
   const rows = Math.ceil(cells.length / columns);
   map.dataset.columns = String(columns);
@@ -1012,20 +1086,35 @@ function renderCanvas(
       biography &&
       (status === "future" || (biography.deathDate && cellData.start > biography.deathDate))
     );
-    context.fillStyle = resolveColor(cellBackground(key, status, neutralBiographyCell));
-    context.fillRect(x, y, cell, cell);
-    if (status === "future") {
-      context.strokeStyle = resolveColor(
-        "color-mix(in srgb, var(--fg-muted) 35%, transparent)"
-      );
-      context.setLineDash([1, 1]);
-      context.strokeRect(x + 0.5, y + 0.5, cell - 1, cell - 1);
-      context.setLineDash([]);
-    }
+    context.fillStyle = resolveColor(
+      cellBackground(key, status, neutralBiographyCell, true)
+    );
+    context.beginPath();
+    context.roundRect(x, y, cell, cell, cellRadius(cell));
+    if (status !== "future") context.fill();
+    context.strokeStyle = resolveColor(
+      cellBorderColor(key, status, neutralBiographyCell)
+    );
+    context.lineWidth = cellBorderWidth(cell);
+    context.stroke();
     if (status === "current") {
-      context.strokeStyle = resolveColor("var(--fg-strong)");
-      context.lineWidth = 2;
-      context.strokeRect(x + 1, y + 1, cell - 2, cell - 2);
+      context.save();
+      context.beginPath();
+      context.roundRect(
+        x + 0.5,
+        y + 0.5,
+        Math.max(0, cell - 1),
+        Math.max(0, cell - 1),
+        Math.max(0.5, cellRadius(cell) - 0.5)
+      );
+      context.clip();
+      context.strokeStyle = resolveColor("color-mix(in srgb, white 28%, transparent)");
+      context.lineWidth = Math.max(0.5, cell * 0.08);
+      context.beginPath();
+      context.moveTo(x + cellRadius(cell), y + context.lineWidth / 2);
+      context.lineTo(x + cell - cellRadius(cell), y + context.lineWidth / 2);
+      context.stroke();
+      context.restore();
     }
   });
 
